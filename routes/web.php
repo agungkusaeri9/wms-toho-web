@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\AreaController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RackController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
@@ -36,4 +38,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('departments', DepartmentController::class)->except('show');
     Route::resource('units', UnitController::class)->except('show');
     Route::resource('categories', CategoryController::class)->except('show');
+    Route::resource('areas', AreaController::class)->except('show');
+    Route::resource('racks', RackController::class)->except('show');
 });

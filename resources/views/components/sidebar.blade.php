@@ -52,6 +52,30 @@
                 </div>
             </li>
         @endcanany
+        @canany(['Category Index', 'Product Index'])
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#product-ui" aria-expanded="false"
+                    aria-controls="product-ui">
+                    <i class="typcn typcn-briefcase menu-icon"></i>
+                    <span class="menu-title">Product</span>
+                    <i class="typcn typcn-chevron-right menu-arrow"></i>
+                </a>
+                <div class="collapse" id="product-ui">
+                    <ul class="nav flex-column sub-menu">
+                        @can('Category Index')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('categories.index') }}">Category</a>
+                            </li>
+                        @endcan
+                        @can('Product Index')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('categories.index') }}">Product</a>
+                            </li>
+                        @endcan
+                    </ul>
+                </div>
+            </li>
+        @endcanany
         @canany(['Department Index', 'Unit Index'])
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#master-ui" aria-expanded="false"
@@ -72,9 +96,9 @@
                                 <a class="nav-link" href="{{ route('units.index') }}">Unit</a>
                             </li>
                         @endcan
-                        @can('Category Index')
+                        @can('Area Index')
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('categories.index') }}">Category</a>
+                                <a class="nav-link" href="{{ route('areas.index') }}">Area</a>
                             </li>
                         @endcan
                     </ul>
