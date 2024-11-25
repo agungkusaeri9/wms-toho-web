@@ -16,7 +16,7 @@
                                 <div class="form-group">
                                     <input type="email"
                                         class="form-control @error('email')is-invalid @enderror form-control-lg"
-                                        placeholder="Email" name="email" id="email">
+                                        placeholder="Email" name="email" id="email" value="{{ old('email') }}">
                                     @error('email')
                                         <div class="invalid-feedback">
                                             {{ $message }}
