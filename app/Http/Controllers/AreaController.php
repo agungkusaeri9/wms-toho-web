@@ -68,7 +68,7 @@ class AreaController extends Controller
     public function update($id)
     {
         request()->validate([
-            'name' => ['required', 'unique:areas,name,' . $id . ''],
+            'code' => ['required', 'unique:areas,code,' . $id . ''],
             'name' => ['required'],
             'type' => ['required', 'in:Storage,Receiping,Shipping,Packing']
         ]);

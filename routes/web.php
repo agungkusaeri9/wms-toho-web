@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RackController;
 use App\Http\Controllers\RoleController;
@@ -40,4 +41,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('categories', CategoryController::class)->except('show');
     Route::resource('areas', AreaController::class)->except('show');
     Route::resource('racks', RackController::class)->except('show');
+    Route::resource('products', ProductController::class);
 });

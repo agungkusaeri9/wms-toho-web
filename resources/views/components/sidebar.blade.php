@@ -17,17 +17,17 @@
             </div>
         </li>
         @can('Dashboard')
-            <li class="nav-item">
+            <li class="nav-item @if (request()->is('/')) active @endif">
                 <a class="nav-link" href="{{ route('dashboard') }}">
-                    <i class="typcn typcn-device-desktop menu-icon"></i>
+                    <i class="typcn typcn-home menu-icon"></i>
                     <span class="menu-title">Dashboard </span>
                 </a>
             </li>
         @endcan
         @canany(['Role Index', 'Permission Index', 'User Index'])
-            <li class="nav-item">
+            <li class="nav-item  @if (request()->is('users') || request()->is('roles') || request()->is('permissions')) active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                    <i class="typcn typcn-briefcase menu-icon"></i>
+                    <i class="typcn typcn-group menu-icon"></i>
                     <span class="menu-title">Manajemen User</span>
                     <i class="typcn typcn-chevron-right menu-arrow"></i>
                 </a>
@@ -53,10 +53,10 @@
             </li>
         @endcanany
         @canany(['Category Index', 'Product Index'])
-            <li class="nav-item">
+            <li class="nav-item @if (request()->is('products') || request()->is('categories')) active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#product-ui" aria-expanded="false"
                     aria-controls="product-ui">
-                    <i class="typcn typcn-briefcase menu-icon"></i>
+                    <i class="typcn typcn-shopping-bag  menu-icon"></i>
                     <span class="menu-title">Product</span>
                     <i class="typcn typcn-chevron-right menu-arrow"></i>
                 </a>
@@ -69,7 +69,7 @@
                         @endcan
                         @can('Product Index')
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('categories.index') }}">Product</a>
+                                <a class="nav-link" href="{{ route('products.index') }}">Product</a>
                             </li>
                         @endcan
                     </ul>
@@ -77,10 +77,10 @@
             </li>
         @endcanany
         @canany(['Department Index', 'Unit Index'])
-            <li class="nav-item">
+            <li class="nav-item @if (request()->is('departments') || request()->is('units') || request()->is('areas')) active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#master-ui" aria-expanded="false"
                     aria-controls="master-ui">
-                    <i class="typcn typcn-briefcase menu-icon"></i>
+                    <i class="typcn typcn-database  menu-icon"></i>
                     <span class="menu-title">Master Data</span>
                     <i class="typcn typcn-chevron-right menu-arrow"></i>
                 </a>
