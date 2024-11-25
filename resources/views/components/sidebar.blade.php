@@ -62,12 +62,21 @@
                 </a>
                 <div class="collapse" id="master-ui">
                     <ul class="nav flex-column sub-menu">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('departments.index') }}">Department</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('units.index') }}">Unit</a>
-                        </li>
+                        @can('Department Index')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('departments.index') }}">Department</a>
+                            </li>
+                        @endcan
+                        @can('Unit Index')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('units.index') }}">Unit</a>
+                            </li>
+                        @endcan
+                        @can('Category Index')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('categories.index') }}">Category</a>
+                            </li>
+                        @endcan
                     </ul>
                 </div>
             </li>

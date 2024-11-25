@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PermissionController;
@@ -30,11 +31,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
-
-    // roles
     Route::resource('roles', RoleController::class)->except('show');
-    // permissions
     Route::resource('permissions', PermissionController::class)->except('show');
     Route::resource('departments', DepartmentController::class)->except('show');
     Route::resource('units', UnitController::class)->except('show');
+    Route::resource('categories', CategoryController::class)->except('show');
 });
