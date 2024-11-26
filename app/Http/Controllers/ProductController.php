@@ -132,4 +132,12 @@ class ProductController extends Controller
             return redirect()->back()->with('error', $th->getMessage());
         }
     }
+
+    public function getById()
+    {
+        if (request()->ajax()) {
+            $item = Product::with(['category', 'unit'])->find(request('id'));
+            return response()->json($item);
+        }
+    }
 }

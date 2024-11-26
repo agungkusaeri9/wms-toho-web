@@ -24,6 +24,24 @@
                 </a>
             </li>
         @endcan
+        @canany(['Stock In Index', 'Stock Out'])
+            <li class="nav-item @if (request()->is('stock-ins') || request()->is('stock-outs')) active @endif">
+                <a class="nav-link" data-toggle="collapse" href="#stock-ui" aria-expanded="false" aria-controls="stock-ui">
+                    <i class="typcn typcn-database  menu-icon"></i>
+                    <span class="menu-title">Stock</span>
+                    <i class="typcn typcn-chevron-right menu-arrow"></i>
+                </a>
+                <div class="collapse @if (request()->is('stock-ins') || request()->is('stock-outs')) show @endif" id="stock-ui">
+                    <ul class="nav flex-column sub-menu">
+                        @can('Stock In Index')
+                            <li class="nav-item @if (request()->is('stock-ins')) active @endif">
+                                <a class="nav-link" href="{{ route('stock-ins.index') }}">In</a>
+                            </li>
+                        @endcan
+                    </ul>
+                </div>
+            </li>
+        @endcanany
         @canany(['Role Index', 'Permission Index', 'User Index'])
             <li class="nav-item  @if (request()->is('users') || request()->is('roles') || request()->is('permissions')) active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
@@ -99,6 +117,11 @@
                         @can('Area Index')
                             <li class="nav-item @if (request()->is('areas')) active @endif">
                                 <a class="nav-link" href="{{ route('areas.index') }}">Area</a>
+                            </li>
+                        @endcan
+                        @can('Supplier Index')
+                            <li class="nav-item @if (request()->is('suppliers')) active @endif">
+                                <a class="nav-link" href="{{ route('suppliers.index') }}">Supplier</a>
                             </li>
                         @endcan
                     </ul>

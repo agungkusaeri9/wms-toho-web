@@ -9,6 +9,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RackController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\StockInController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use App\Models\Department;
@@ -41,5 +43,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('categories', CategoryController::class)->except('show');
     Route::resource('areas', AreaController::class)->except('show');
     Route::resource('racks', RackController::class)->except('show');
+    Route::get('products/getById', [ProductController::class, 'getById'])->name('products.getById');
     Route::resource('products', ProductController::class);
+    Route::resource('suppliers', SupplierController::class)->except('show');
+
+    Route::post('products/create', [StockInController::class, 'store'])->name('stock-ins.store');
+    Route::resource('stock-ins', StockInController::class)->except(['store', 'destroy']);
+    Route::resource('stock-outs', StockInController::class);
 });
