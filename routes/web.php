@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RackController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StockInController;
+use App\Http\Controllers\StockOutController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
@@ -47,7 +48,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('products', ProductController::class);
     Route::resource('suppliers', SupplierController::class)->except('show');
 
-    Route::post('products/create', [StockInController::class, 'store'])->name('stock-ins.store');
+    Route::post('stock-ins/create', [StockInController::class, 'store'])->name('stock-ins.store');
     Route::resource('stock-ins', StockInController::class)->except(['store', 'destroy']);
-    Route::resource('stock-outs', StockInController::class);
+    Route::post('stock-outs/create', [StockOutController::class, 'store'])->name('stock-outs.store');
+    Route::resource('stock-outs', StockOutController::class)->except(['store', 'destroy']);
 });

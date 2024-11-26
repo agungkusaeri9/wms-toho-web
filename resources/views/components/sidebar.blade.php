@@ -38,6 +38,11 @@
                                 <a class="nav-link" href="{{ route('stock-ins.index') }}">In</a>
                             </li>
                         @endcan
+                        @can('Stock Out Index')
+                            <li class="nav-item @if (request()->is('stock-outs')) active @endif">
+                                <a class="nav-link" href="{{ route('stock-outs.index') }}">Out</a>
+                            </li>
+                        @endcan
                     </ul>
                 </div>
             </li>
