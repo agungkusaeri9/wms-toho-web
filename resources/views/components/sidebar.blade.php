@@ -27,7 +27,7 @@
         @canany(['Stock In Index', 'Stock Out'])
             <li class="nav-item @if (request()->is('stock-ins') || request()->is('stock-outs')) active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#stock-ui" aria-expanded="false" aria-controls="stock-ui">
-                    <i class="typcn typcn-database  menu-icon"></i>
+                    <i class="typcn typcn-archive  menu-icon"></i>
                     <span class="menu-title">Stock</span>
                     <i class="typcn typcn-chevron-right menu-arrow"></i>
                 </a>
@@ -47,11 +47,35 @@
                 </div>
             </li>
         @endcanany
+        @canany(['Category Index', 'Product Index'])
+            <li class="nav-item @if (request()->is('products') || request()->is('categories')) active @endif">
+                <a class="nav-link" data-toggle="collapse" href="#product-ui" aria-expanded="false"
+                    aria-controls="product-ui">
+                    <i class="typcn typcn-shopping-bag  menu-icon"></i>
+                    <span class="menu-title">Product</span>
+                    <i class="typcn typcn-chevron-right menu-arrow"></i>
+                </a>
+                <div class="collapse  @if (request()->is('products') || request()->is('categories')) show @endif" id="product-ui">
+                    <ul class="nav flex-column sub-menu">
+                        @can('Category Index')
+                            <li class="nav-item @if (request()->is('categories')) active @endif">
+                                <a class="nav-link" href="{{ route('categories.index') }}">Category</a>
+                            </li>
+                        @endcan
+                        @can('Product Index')
+                            <li class="nav-item @if (request()->is('products')) active @endif">
+                                <a class="nav-link" href="{{ route('products.index') }}">Product</a>
+                            </li>
+                        @endcan
+                    </ul>
+                </div>
+            </li>
+        @endcanany
         @canany(['Report Stock In Index', 'Report Stock Out'])
             <li class="nav-item @if (request()->is('report/stock-ins') || request()->is('report/stock-outs')) active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#report-stock-ui" aria-expanded="false"
                     aria-controls="report-stock-ui">
-                    <i class="typcn typcn-database  menu-icon"></i>
+                    <i class="typcn typcn-document  menu-icon"></i>
                     <span class="menu-title">Report</span>
                     <i class="typcn typcn-chevron-right menu-arrow"></i>
                 </a>
@@ -98,30 +122,6 @@
                         @can('User Index')
                             <li class="nav-item @if (request()->is('users')) active @endif">
                                 <a class="nav-link" href="{{ route('users.index') }}">User</a>
-                            </li>
-                        @endcan
-                    </ul>
-                </div>
-            </li>
-        @endcanany
-        @canany(['Category Index', 'Product Index'])
-            <li class="nav-item @if (request()->is('products') || request()->is('categories')) active @endif">
-                <a class="nav-link" data-toggle="collapse" href="#product-ui" aria-expanded="false"
-                    aria-controls="product-ui">
-                    <i class="typcn typcn-shopping-bag  menu-icon"></i>
-                    <span class="menu-title">Product</span>
-                    <i class="typcn typcn-chevron-right menu-arrow"></i>
-                </a>
-                <div class="collapse  @if (request()->is('products') || request()->is('categories')) show @endif" id="product-ui">
-                    <ul class="nav flex-column sub-menu">
-                        @can('Category Index')
-                            <li class="nav-item @if (request()->is('categories')) active @endif">
-                                <a class="nav-link" href="{{ route('categories.index') }}">Category</a>
-                            </li>
-                        @endcan
-                        @can('Product Index')
-                            <li class="nav-item @if (request()->is('products')) active @endif">
-                                <a class="nav-link" href="{{ route('products.index') }}">Product</a>
                             </li>
                         @endcan
                     </ul>
