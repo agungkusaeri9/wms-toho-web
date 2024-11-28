@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\StockOutExport;
 use App\Models\Department;
 use App\Models\Product;
 use App\Models\StockOut;
+use App\Models\StockOutDetail;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StockOutController extends Controller
 {
@@ -128,6 +133,66 @@ class StockOutController extends Controller
             DB::rollBack();
             // throw $th;
             return redirect()->back()->with('error', $th->getMessage());
+        }
+    }
+
+    public function report_index()
+    {
+        $items = StockOut::orderBy('id', 'DESC')->get();
+        return view('pages.stock-out.report', [
+            'title' => 'Stock Out Report',
+            'items' => $items,
+            'departments' => Department::orderBy('name', 'DESC')->get()
+        ]);
+    }
+
+    public function report_action()
+    {
+        $start_date = request('start_date');
+        $end_date = request('end_date');
+        $department_id = request('department_id');
+        $action = request('action');
+
+        $items = StockOutDetail::with(['stock_out']);
+        if ($start_date && $end_date) {
+            $items->whereHas('stock_out', function ($q) use ($start_date, $end_date) {
+                $q->whereDate('date', '>=', $start_date)
+                    ->whereDate('date', '<=', $end_date);
+            });
+        } elseif ($start_date && !$end_date) {
+            $items->whereHas('stock_out', function ($q) use ($start_date, $end_date) {
+                $q->whereDate('date', $start_date);
+            });
+        }
+
+        if ($department_id) {
+            $items->whereHas('stock_out', function ($q) use ($department_id) {
+                $q->where('department_id', $department_id);
+            });
+        }
+
+        $data = $items->orderBy('id', 'DESC')->get();
+        $department = Department::find($department_id);
+
+        if ($action === 'export_pdf') {
+            $pdf = Pdf::loadView('pages.stock-out.export-pdf', [
+                'title' => 'Export PDF Stock Out',
+                'items' => $data,
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+                'department' => $department
+            ]);
+            $fileName = "StockOut-Report-" . Carbon::now()->format('d-m-Y H:i:s') . '.pdf';
+            return $pdf->download($fileName);
+        } elseif ($action === 'export_excel') {
+            $arr = [
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+                'department' => $department,
+                'items' => $data
+            ];
+            $fileName = "StockOut-Report-" . Carbon::now()->format('d-m-Y H:i:s') . '.xlsx';
+            return Excel::download(new StockOutExport($arr), $fileName);
         }
     }
 }

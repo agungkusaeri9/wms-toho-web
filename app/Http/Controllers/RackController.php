@@ -113,4 +113,12 @@ class RackController extends Controller
             return redirect()->back()->with('error', $th->getMessage());
         }
     }
+
+    public function getByAreaId()
+    {
+        if (request()->ajax()) {
+            $racks = Rack::where('area_id', request('area_id'))->orderBy('name', 'ASC')->get();
+            return response()->json($racks);
+        }
+    }
 }

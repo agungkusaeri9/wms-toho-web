@@ -8,6 +8,16 @@
                     <form action="{{ route('products.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class='form-group mb-3'>
+                            <label for='image' class='mb-2'>Image</label>
+                            <input type='file' name='image' id='image'
+                                class='form-control @error('image') is-invalid @enderror' value='{{ old('image') }}'>
+                            @error('image')
+                                <div class='invalid-feedback'>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class='form-group mb-3'>
                             <label for='code' class='mb-2'>Code</label>
                             <input type='text' name='code' id='code'
                                 class='form-control @error('code') is-invalid @enderror' value='{{ old('code') }}'>
@@ -97,11 +107,29 @@
                                 </div>
                             @enderror
                         </div>
-                        <div class='form-group mb-3'>
-                            <label for='image' class='mb-2'>Image</label>
-                            <input type='file' name='image' id='image'
-                                class='form-control @error('image') is-invalid @enderror' value='{{ old('image') }}'>
-                            @error('image')
+                        <div class='form-group'>
+                            <label for='area_id'>Area</label>
+                            <select name='area_id' id='area_id'
+                                class='form-control @error('area_id') is-invalid @enderror'>
+                                <option value='' selected disabled>Pilih Area</option>
+                                @foreach ($areas as $area)
+                                    <option @selected($area->id == old('area_id')) value='{{ $area->id }}'>{{ $area->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('area_id')
+                                <div class='invalid-feedback'>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class='form-group'>
+                            <label for='rack_id'>Rack</label>
+                            <select name='rack_id' id='rack_id'
+                                class='form-control @error('rack_id') is-invalid @enderror'>
+                                <option value='' selected disabled>Pilih Rack</option>
+                            </select>
+                            @error('rack_id')
                                 <div class='invalid-feedback'>
                                     {{ $message }}
                                 </div>
@@ -117,3 +145,36 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        $(function() {
+            $('#area_id').on('change', function() {
+                let area_id = $(this).val();
+
+                $.ajax({
+                    url: '{{ route('racks.getByAreaId') }}',
+                    type: 'GET',
+                    dataType: 'JSON',
+                    data: {
+                        area_id
+                    },
+                    success: function(data) {
+                        $('#rack_id').empty();
+                        $('#rack_id').append('<option selected disabled>Pilih Rack</option>');
+
+                        if (data.length > 0) {
+                            data.forEach(rack => {
+                                $('#rack_id').append(
+                                    `<option value="${rack.id}">${rack.name}</option>`
+                                )
+                            });
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                })
+            })
+        })
+    </script>
+@endpush

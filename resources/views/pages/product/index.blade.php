@@ -23,6 +23,8 @@
                                     <th>Department</th>
                                     <th>Initial Qty</th>
                                     <th>Qty</th>
+                                    <th>Area</th>
+                                    <th>Rack</th>
                                     @canany(['Product Edit', 'Product Delete', 'Rack Index'])
                                         <th>Aksi</th>
                                     @endcanany
@@ -44,6 +46,8 @@
                                         <td>{{ $item->department->name }}</td>
                                         <td>{{ $item->initial_qty }}</td>
                                         <td>{{ $item->qty }}</td>
+                                        <td>{{ $item->area->name ?? '-' }}</td>
+                                        <td>{{ $item->rack->name ?? '-' }}</td>
                                         @canany(['Product Edit', 'Product Delete'])
                                             <td>
                                                 @can('Product Show')

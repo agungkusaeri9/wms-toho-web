@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('units', UnitController::class)->except('show');
     Route::resource('categories', CategoryController::class)->except('show');
     Route::resource('areas', AreaController::class)->except('show');
+    Route::get('racks/getByArea', [RackController::class, 'getByAreaId'])->name('racks.getByAreaId');
     Route::resource('racks', RackController::class)->except('show');
     Route::get('products/getById', [ProductController::class, 'getById'])->name('products.getById');
     Route::resource('products', ProductController::class);
@@ -52,4 +53,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('stock-ins', StockInController::class)->except(['store', 'destroy']);
     Route::post('stock-outs/create', [StockOutController::class, 'store'])->name('stock-outs.store');
     Route::resource('stock-outs', StockOutController::class)->except(['store', 'destroy']);
+
+    // report
+    Route::get('report/stock-in', [StockInController::class, 'report_index'])->name('stock-ins.report.index');
+    Route::post('report/stock-in', [StockInController::class, 'report_action'])->name('stock-ins.report.action');
+    Route::post('report/stock-out', [StockOutController::class, 'report_action'])->name('stock-outs.report.action');
+    Route::get('report/stock-out', [StockOutController::class, 'report_index'])->name('stock-outs.report.index');
+
+    Route::post('report/product', [ProductController::class, 'report_action'])->name('products.report.action');
+    Route::get('report/product', [ProductController::class, 'report_index'])->name('products.report.index');
 });

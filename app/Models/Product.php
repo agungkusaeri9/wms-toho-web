@@ -34,4 +34,13 @@ class Product extends Model
             return asset('assets/images/image-placeholder.png');
         }
     }
+
+    public function area()
+    {
+        return $this->belongsTo(Area::class);
+    }
+    public function rack()
+    {
+        return $this->belongsTo(Rack::class);
+    }
 }

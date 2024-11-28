@@ -13,4 +13,9 @@ class StockOutDetail extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function stock_out()
+    {
+        return $this->belongsTo(StockOut::class);
+    }
 }

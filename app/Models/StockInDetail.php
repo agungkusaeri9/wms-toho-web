@@ -14,4 +14,9 @@ class StockInDetail extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function stock_in()
+    {
+        return $this->belongsTo(StockIn::class);
+    }
 }
