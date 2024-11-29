@@ -9,6 +9,7 @@ use App\Http\Controllers\PartNumberController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QrCodeGeneratorController;
 use App\Http\Controllers\RackController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StockInController;
@@ -69,4 +70,7 @@ Route::middleware('auth')->group(function () {
     Route::get('report/product', [ProductController::class, 'report_index'])->name('products.report.index');
 
     Route::get('/balance', [BalanceController::class])->name('balance.index');
+
+    Route::get('qrcode-generator/product', [QrCodeGeneratorController::class, 'index'])->name('qrcode-generator.product.index');
+    Route::get('qrcode-generator/product/print', [QrCodeGeneratorController::class, 'print'])->name('qrcode-generator.product.print');
 });

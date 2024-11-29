@@ -26,6 +26,24 @@
         @endcan
         @canany(['Stock In Index', 'Stock Out'])
             <li class="nav-item @if (request()->is('stock-ins') || request()->is('stock-outs')) active @endif">
+                <a class="nav-link" data-toggle="collapse" href="#qr-ui" aria-expanded="false" aria-controls="qr-ui">
+                    <i class="typcn typcn-image  menu-icon"></i>
+                    <span class="menu-title">Qr Generator</span>
+                    <i class="typcn typcn-chevron-right menu-arrow"></i>
+                </a>
+                <div class="collapse @if (request()->is('qrcode-generator.product') || request()->is('stock-outs')) show @endif" id="qr-ui">
+                    <ul class="nav flex-column sub-menu">
+                        @can('Qr Code Generator Index')
+                            <li class="nav-item @if (request()->is('qrcode-generator')) active @endif">
+                                <a class="nav-link" href="{{ route('qrcode-generator.product.index') }}">Product Qr</a>
+                            </li>
+                        @endcan
+                    </ul>
+                </div>
+            </li>
+        @endcanany
+        @canany(['Stock In Index', 'Stock Out'])
+            <li class="nav-item @if (request()->is('stock-ins') || request()->is('stock-outs')) active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#stock-ui" aria-expanded="false" aria-controls="stock-ui">
                     <i class="typcn typcn-archive  menu-icon"></i>
                     <span class="menu-title">Stock</span>
