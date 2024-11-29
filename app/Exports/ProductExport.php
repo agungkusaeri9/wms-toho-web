@@ -17,10 +17,14 @@ class ProductExport implements FromView
     public function view(): View
     {
         $items = $this->data['items'];
-        $category = $this->data['category'];
+        $type = $this->data['type'];
+        $lot_number = $this->data['lot_number'];
+        $part_number = $this->data['part_number'];
         return view('pages.product.export-excel', [
             'items' => $items,
-            'category' => $category
+            'type' => $type,
+            'lot_number' => $lot_number,
+            'part_number' => $part_number,
         ]);
     }
 }

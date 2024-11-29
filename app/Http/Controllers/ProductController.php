@@ -179,6 +179,25 @@ class ProductController extends Controller
         }
     }
 
+    public function getAllByTypePart()
+    {
+        if (request()->ajax()) {
+            $items = Product::with(['part_number', 'unit']);
+            $type_id  = request('type_id');
+            $part_number_id  = request('part_number_id');
+
+            if ($type_id) {
+                $items->where('type_id', request('type_id'));
+            }
+            if ($part_number_id) {
+                $items->where('part_number_id', request('part_number_id'));
+            }
+
+            $data = $items->orderBy('name', 'ASC')->get();
+            return response()->json($data);
+        }
+    }
+
     public function show($id)
     {
         $item = Product::findOrFail($id);
@@ -197,37 +216,55 @@ class ProductController extends Controller
         return view('pages.product.report', [
             'title' => 'Product Report',
             'part_numbers' => PartNumber::orderBy('name', 'ASC')->get(),
-            'items' => Product::orderBy('name', 'ASC')->get(),
+            'items' => [],
             'part_number_id' => null,
-            'part_number' => []
+            'part_numbers' => PartNumber::orderBy('name', 'ASC')->get(),
+            'types' => Type::orderBy('name', 'ASC')->get(),
+            'products' => Product::orderBy('name', 'ASC')->get(),
+            'type_id' => null,
+            'product_id' => null
         ]);
     }
 
     public function report_action()
     {
+        $type_id = request('type_id');
         $part_number_id = request('part_number_id');
+        $product_id = request('product_id');
         $action = request('action');
         $items = Product::with(['part_number', 'unit', 'department']);
 
+        if ($type_id) {
+            $items->where('type_id', $type_id);
+        }
         if ($part_number_id) {
             $items->where('part_number_id', $part_number_id);
         }
+        if ($product_id) {
+            $items->where('id', $product_id);
+        }
 
         $data = $items->orderBy('id', 'DESC')->get();
+        $type = Type::find(request('type_id'));
+        $lot_number = Product::find(request('product_id'));
         $part_number = PartNumber::find($part_number_id);
 
         if ($action === 'export_pdf') {
             $pdf = Pdf::loadView('pages.product.export-pdf', [
                 'title' => 'Export PDF Product',
                 'items' => $data,
-                'part_number' => $part_number
+                'part_number' => $part_number ? $part_number->name : '-',
+                'type' => $type ? $type->name : '-',
+                'lot_number' => $lot_number ? $lot_number->name : '-',
             ]);
             $fileName = "Product-Report-" . Carbon::now()->format('d-m-Y H:i:s') . '.pdf';
             return $pdf->download($fileName);
         } elseif ($action === 'export_excel') {
             $arr = [
-                'part_number' => $part_number,
-                'items' => $data
+                'items' => $data,
+                'part_number' => $part_number ? $part_number->name : '-',
+                'type' => $type ? $type->name : '-',
+                'lot_number' => $lot_number ? $lot_number->name : '-',
             ];
             $fileName = "Product-Report-" . Carbon::now()->format('d-m-Y H:i:s') . '.xlsx';
             return Excel::download(new ProductExport($arr), $fileName);
@@ -237,7 +274,11 @@ class ProductController extends Controller
                 'part_numbers' => PartNumber::orderBy('name', 'ASC')->get(),
                 'items' => $data,
                 'part_number_id' => $part_number_id,
-                'part_number' => $part_number
+                'part_number' => $part_number,
+                'types' => Type::orderBy('name', 'ASC')->get(),
+                'products' => Product::orderBy('name', 'ASC')->get(),
+                'type_id' => $type_id,
+                'product_id' => $product_id
             ]);
         }
     }
