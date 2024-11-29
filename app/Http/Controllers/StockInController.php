@@ -26,7 +26,7 @@ class StockInController extends Controller
 
     public function index()
     {
-        $items = StockIn::orderBy('code', 'ASC')->get();
+        $items = StockIn::orderBy('id', 'DESC')->get();
         return view('pages.stock-in.index', [
             'title' => 'Stock In',
             'items' => $items
@@ -45,56 +45,25 @@ class StockInController extends Controller
 
     public function store()
     {
-        $validator = Validator::make(request()->all(), [
-            'supplier_id' => ['required', 'exists:suppliers,id'],
-            'received_date' => ['required', 'date'],
-            'data_json' => ['required']
-        ], [
-            'supplier_id.required' => 'Supplier is required and must exist in the database.',
-            'received_date.required' => 'The received date is required.',
-            'received_date.date' => 'Please enter a valid date format for the received date.',
-            'data_json.required' => 'Product Not Found.',
+        request()->validate([
+            'product_id' => ['required', 'exists:products,id'],
+            'qty' => ['required', 'numeric']
         ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'code' => 422,
-                'errors' =>
-                $validator->errors()
-            ]);
-        }
 
         DB::beginTransaction();
         try {
-            $data = request()->only(['supplier_id', 'received_date', 'notes']);
-            $data_json = request('data_json');
-            $data_array = json_decode($data_json, true);
+            $data = request()->only(['product_id', 'qty']);
+            $data['received_date'] = Carbon::now()->format('Y-m-d');
             $data['user_id'] = auth()->id();
             $data['code'] = StockIn::getNewCode();
-            $stockIn  = StockIn::create($data);
-            foreach ($data_array as $item) {
-                $stockIn->details()->create([
-                    'product_id' => $item['product_id'],
-                    'qty' => $item['qty']
-                ]);
-
-                // update stok
-                $product = Product::find($item['product_id']);
-                $product->increment('qty', $item['qty']);
-            }
+            $stokIn = StockIn::create($data);
+            $stokIn->product->increment('qty', request('qty'));
 
             DB::commit();
-            return response()->json([
-                'status' => true,
-                'message' => 'Stock In berhasil dibuat'
-            ]);
+            return redirect()->route('stock-ins.index')->with('success', 'Stock In Berhasil dibuat.');
         } catch (\Throwable $th) {
             DB::rollBack();
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ]);
+            return redirect()->route('stock-ins.index')->with('error', $th->getMessage());
         }
     }
 
@@ -140,7 +109,11 @@ class StockInController extends Controller
     {
         return view('pages.stock-in.report', [
             'title' => 'Stock In Report',
-            'suppliers' => Supplier::orderBy('name', 'DESC')->get()
+            'suppliers' => Supplier::orderBy('name', 'DESC')->get(),
+            'items' => [],
+            'start_date' => null,
+            'end_date' => null,
+            'supplier_id' => null
         ]);
     }
 
@@ -151,20 +124,18 @@ class StockInController extends Controller
         $supplier_id = request('supplier_id');
         $action = request('action');
 
-        $items = StockInDetail::with(['stock_in']);
+        $items = StockIn::with(['product']);
         if ($start_date && $end_date) {
-            $items->whereHas('stock_in', function ($q) use ($start_date, $end_date) {
-                $q->whereDate('received_date', '>=', $start_date)
-                    ->whereDate('received_date', '<=', $end_date);
-            });
+            $items->whereDate('received_date', '>=', $start_date)
+                ->whereDate('received_date', '<=', $end_date);
         } elseif ($start_date && !$end_date) {
-            $items->whereHas('stock_in', function ($q) use ($start_date, $end_date) {
+            $items->whereHas('stock_in', function ($q) use ($start_date) {
                 $q->whereDate('received_date', $start_date);
             });
         }
 
         if ($supplier_id) {
-            $items->whereHas('stock_in', function ($q) use ($supplier_id) {
+            $items->whereHas('product', function ($q) use ($supplier_id) {
                 $q->where('supplier_id', $supplier_id);
             });
         }
@@ -191,6 +162,16 @@ class StockInController extends Controller
             ];
             $fileName = "StockIn-Report-" . Carbon::now()->format('d-m-Y H:i:s') . '.xlsx';
             return Excel::download(new StockInExport($arr), $fileName);
+        } else {
+            return view('pages.stock-in.report', [
+                'title' => 'Stock In Report',
+                'suppliers' => Supplier::orderBy('name', 'DESC')->get(),
+                'items' => $data,
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+                'supplier_id' => $supplier_id,
+                'supplier' => $supplier,
+            ]);
         }
     }
 }

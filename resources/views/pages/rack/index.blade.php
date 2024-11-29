@@ -17,8 +17,7 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Code</th>
-                                    <th>Name</th>
+                                    <th>Rack Name</th>
                                     <th>Description</th>
                                     <th>Status</th>
                                     @canany(['Rack Edit', 'Rack Delete'])
@@ -30,7 +29,6 @@
                                 @foreach ($items as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->code }}</td>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->description }}</td>
                                         <td>{!! $item->status() !!}</td>

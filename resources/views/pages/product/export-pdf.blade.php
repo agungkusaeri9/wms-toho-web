@@ -77,11 +77,6 @@
                         <td>PT. Toho Technology Indonesia</td>
                     </tr>
                     <tr>
-                        <td style="margin:0;padding:0">Category</td>
-                        <td>:</td>
-                        <td>{{ $category ? $category->name : '-' }}</td>
-                    </tr>
-                    <tr>
                         <td style="margin:0;padding:0">Date</td>
                         <td>:</td>
                         <td>{{ Carbon\Carbon::now()->translatedFormat('d-m-Y H:i:s') }}</td>
@@ -99,12 +94,10 @@
         <thead>
             <tr>
                 <th style="width:5px !important">No</th>
-                <th>Code</th>
-                <th>Name</th>
-                <th>Category</th>
+                <th>Part No.</th>
+                <th>Part Name</th>
+                <th>Lot No.</th>
                 <th>Unit</th>
-                <th>Description</th>
-                <th>Department</th>
                 <th>Qty</th>
                 <th>Area</th>
                 <th>Rack</th>
@@ -114,12 +107,10 @@
             @forelse ($items as $item)
                 <tr>
                     <td style="width:5px !important">{{ $loop->iteration }}</td>
-                    <td>{{ $item->code }}</td>
+                    <td>{{ $item->part_number->name ?? '-' }}</td>
                     <td>{{ $item->name }}</td>
-                    <td>{{ $item->category->name }}</td>
+                    <td>{{ $item->lot_number }}</td>
                     <td>{{ $item->unit->name }}</td>
-                    <td>{{ $item->description }}</td>
-                    <td>{{ $item->department->name }}</td>
                     <td>{{ $item->qty }}</td>
                     <td>{{ $item->area->name ?? '-' }}</td>
                     <td>{{ $item->rack->name ?? '-' }}</td>

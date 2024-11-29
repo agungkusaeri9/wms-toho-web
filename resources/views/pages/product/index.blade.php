@@ -15,16 +15,11 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Image</th>
-                                    <th>Code</th>
-                                    <th>Name</th>
-                                    <th>Category</th>
-                                    <th>Description</th>
+                                    <th>Part No.</th>
+                                    <th>Part Name</th>
+                                    <th>Lot No.</th>
                                     <th>Unit</th>
-                                    <th>Department</th>
-                                    <th>Initial Qty</th>
                                     <th>Qty</th>
-                                    <th>Area</th>
-                                    <th>Rack</th>
                                     @canany(['Product Edit', 'Product Delete', 'Rack Index'])
                                         <th>Aksi</th>
                                     @endcanany
@@ -38,16 +33,11 @@
                                             <img src="{{ $item->image() }}" class="img-fluid" style="max-height: 80px"
                                                 alt="">
                                         </td>
-                                        <td>{{ $item->code }}</td>
+                                        <td>{{ $item->part_number->name ?? '-' }}</td>
                                         <td>{{ $item->name }}</td>
-                                        <td>{{ $item->category->name }}</td>
-                                        <td>{{ $item->description }}</td>
+                                        <td>{{ $item->lot_number ?? '-' }}</td>
                                         <td>{{ $item->unit->name }}</td>
-                                        <td>{{ $item->department->name }}</td>
-                                        <td>{{ $item->initial_qty }}</td>
                                         <td>{{ $item->qty }}</td>
-                                        <td>{{ $item->area->name ?? '-' }}</td>
-                                        <td>{{ $item->rack->name ?? '-' }}</td>
                                         @canany(['Product Edit', 'Product Delete'])
                                             <td>
                                                 @can('Product Show')

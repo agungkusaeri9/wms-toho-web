@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('code');
             $table->foreignId('department_id')->constrained('departments');
+            $table->foreignId('product_id')->constrained('products');
             $table->date('date');
-            $table->text('notes')->nullable();
+            $table->integer('qty');
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });

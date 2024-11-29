@@ -38,7 +38,7 @@ class AreaController extends Controller
         request()->validate([
             'code' => ['required', 'unique:areas,code'],
             'name' => ['required'],
-            'type' => ['required', 'in:Storage,Receiping,Shipping,Packing']
+            'type' => ['required', 'in:Storage,Receiving,Shipping,Packing']
         ]);
 
         DB::beginTransaction();
@@ -70,7 +70,7 @@ class AreaController extends Controller
         request()->validate([
             'code' => ['required', 'unique:areas,code,' . $id . ''],
             'name' => ['required'],
-            'type' => ['required', 'in:Storage,Receiping,Shipping,Packing']
+            'type' => ['required', 'in:Storage,Receiving,Shipping,Packing']
         ]);
 
         DB::beginTransaction();

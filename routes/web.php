@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\PartNumberController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -12,6 +14,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StockInController;
 use App\Http\Controllers\StockOutController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use App\Models\Department;
@@ -41,8 +44,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('permissions', PermissionController::class)->except('show');
     Route::resource('departments', DepartmentController::class)->except('show');
     Route::resource('units', UnitController::class)->except('show');
-    Route::resource('categories', CategoryController::class)->except('show');
+    Route::resource('part-numbers', PartNumberController::class)->except('show');
     Route::resource('areas', AreaController::class)->except('show');
+    Route::resource('types', TypeController::class)->except('show');
     Route::get('racks/getByArea', [RackController::class, 'getByAreaId'])->name('racks.getByAreaId');
     Route::resource('racks', RackController::class)->except('show');
     Route::get('products/getById', [ProductController::class, 'getById'])->name('products.getById');
@@ -62,4 +66,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('report/product', [ProductController::class, 'report_action'])->name('products.report.action');
     Route::get('report/product', [ProductController::class, 'report_index'])->name('products.report.index');
+
+    Route::get('/balance', [BalanceController::class])->name('balance.index');
 });

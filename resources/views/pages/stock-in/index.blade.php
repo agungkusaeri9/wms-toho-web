@@ -14,37 +14,24 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Code</th>
-                                    <th>Supplier Name</th>
-                                    <th>Received Date</th>
-                                    <th>Notes</th>
-                                    <th>Created By</th>
-                                    @canany(['Stock In Edit', 'Stock In Delete'])
-                                        <th>Aksi</th>
-                                    @endcanany
+                                    <th>Part No.</th>
+                                    <th>Part Name</th>
+                                    <th>Lot No.</th>
+                                    <th>Qty</th>
+                                    <th>Unit</th>
+                                    <th>Receiving Date</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($items as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->code }}</td>
-                                        <td>{{ $item->supplier->name }}</td>
+                                        <td>{{ $item->product->part_number->name ?? '-' }}</td>
+                                        <td>{{ $item->product->name }}</td>
+                                        <td>{{ $item->product->lot_number }}</td>
+                                        <td>{{ $item->qty }}</td>
+                                        <td>{{ $item->product->unit->name }}</td>
                                         <td>{{ formatDate($item->received_date) }}</td>
-                                        <td>{{ $item->notes }}</td>
-                                        <td>{{ $item->user->name }}</td>
-                                        @canany(['Stock In Edit', 'Stock In Delete'])
-                                            <td>
-                                                @can('Stock In Detail')
-                                                    <a href="{{ route('stock-ins.show', $item->id) }}"
-                                                        class="btn btn-sm py-2 btn-warning">Detail</a>
-                                                @endcan
-                                                @can('Stock In Edit')
-                                                    <a href="{{ route('stock-ins.edit', $item->id) }}"
-                                                        class="btn btn-sm py-2 btn-info">Edit</a>
-                                                @endcan
-                                            </td>
-                                        @endcanany
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -53,24 +53,24 @@
     </tr>
     <tr>
         <th style="width:30px;text-align:center;font-weight:bold">No</th>
-        <th style="width:110px;font-weight:bold;text-align:center">Supplier</th>
-        <th style="width:110px;font-weight:bold;text-align:center">Received Date</th>
-        <th style="width:110px;font-weight:bold;text-align:center">Product Code</th>
-        <th style="width:110px;font-weight:bold;text-align:center">Product Name</th>
+        <th style="width:110px;font-weight:bold;text-align:center">Part No.</th>
+        <th style="width:110px;font-weight:bold;text-align:center">Part Name</th>
+        <th style="width:110px;font-weight:bold;text-align:center">Lot No.</th>
+        <th style="width:110px;font-weight:bold;text-align:center">Unit</th>
         <th style="width:80px;font-weight:bold;text-align:center">Qty</th>
-        <th style="width:110px;font-weight:bold;text-align:center">Area</th>
-        <th style="width:110px;font-weight:bold;text-align:center">Rack</th>
+        <th style="width:110px;font-weight:bold;text-align:center">Receiving Date</th>
+        <th style="width:110px;font-weight:bold;text-align:center">Supplier</th>
     </tr>
     @forelse ($items as $item)
         <tr>
             <td style="text-align: center">{{ $loop->iteration }}</td>
-            <td>{{ $item->stock_in->supplier->name }}</td>
-            <td>{{ formatDate($item->stock_in->received_date) }}</td>
-            <td>{{ $item->product->code }}</td>
+            <td>{{ $item->product->part_number->name ?? '-' }}</td>
             <td>{{ $item->product->name }}</td>
+            <td>{{ $item->product->lot_number }}</td>
+            <td>{{ $item->product->unit->name ?? '-' }}</td>
             <td style="text-align: center">{{ $item->qty }}</td>
-            <td>{{ $item->product->area->name ?? '-' }}</td>
-            <td>{{ $item->product->rack->name ?? '-' }}</td>
+            <td>{{ formatDate($item->received_date) }}</td>
+            <td>{{ $item->product->supplier->name ?? '-' }}</td>
         </tr>
     @empty
         <tr>

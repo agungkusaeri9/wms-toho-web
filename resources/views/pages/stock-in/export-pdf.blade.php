@@ -112,28 +112,26 @@
         <thead>
             <tr>
                 <th style="width:5px !important">No</th>
-                <th>Supplier</th>
-                <th>Received Date</th>
-                <th>Product Code</th>
-                <th>Product Name</th>
+                <th>Part No.</th>
+                <th>Part Name</th>
+                <th>Lot No.</th>
+                <th>Unit</th>
                 <th>Qty</th>
-                <th>Area</th>
-                <th>Rack</th>
+                <th>Receiving Date</th>
+                <th>Supplier</th>
             </tr>
         </thead>
         <tbody>
             @forelse ($items as $item)
                 <tr>
                     <td style="width:5px !important">{{ $loop->iteration }}</td>
-                    {{-- <td>{{ $item->stock_in->code }}</td> --}}
-                    <td>{{ $item->stock_in->supplier->name }}</td>
-                    <td>{{ formatDate($item->stock_in->received_date) }}</td>
-
-                    <td>{{ $item->product->code }}</td>
+                    <td>{{ $item->product->part_number->name ?? '-' }}</td>
                     <td>{{ $item->product->name }}</td>
+                    <td>{{ $item->product->lot_number }}</td>
+                    <td>{{ $item->product->unit->name }}</td>
                     <td>{{ $item->qty }}</td>
-                    <td>{{ $item->product->area->name ?? '-' }}</td>
-                    <td>{{ $item->product->rack->name ?? '-' }}</td>
+                    <td>{{ formatDate($item->received_date) }}</td>
+                    <td>{{ $item->product->supplier->name }}</td>
                 </tr>
             @empty
                 <tr>

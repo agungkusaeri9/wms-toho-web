@@ -47,19 +47,24 @@
                 </div>
             </li>
         @endcanany
-        @canany(['Category Index', 'Product Index'])
-            <li class="nav-item @if (request()->is('products') || request()->is('categories')) active @endif">
+        @canany(['Part Number Index', 'Product Index'])
+            <li class="nav-item @if (request()->is('products') || request()->is('part-numbers')) active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#product-ui" aria-expanded="false"
                     aria-controls="product-ui">
                     <i class="typcn typcn-shopping-bag  menu-icon"></i>
                     <span class="menu-title">Product</span>
                     <i class="typcn typcn-chevron-right menu-arrow"></i>
                 </a>
-                <div class="collapse  @if (request()->is('products') || request()->is('categories')) show @endif" id="product-ui">
+                <div class="collapse  @if (request()->is('products') || request()->is('part-numbers')) show @endif" id="product-ui">
                     <ul class="nav flex-column sub-menu">
-                        @can('Category Index')
-                            <li class="nav-item @if (request()->is('categories')) active @endif">
-                                <a class="nav-link" href="{{ route('categories.index') }}">Category</a>
+                        @can('Part Number Index')
+                            <li class="nav-item @if (request()->is('types')) active @endif">
+                                <a class="nav-link" href="{{ route('types.index') }}">Type</a>
+                            </li>
+                        @endcan
+                        @can('Part Number Index')
+                            <li class="nav-item @if (request()->is('part-numbers')) active @endif">
+                                <a class="nav-link" href="{{ route('part-numbers.index') }}">Part Number</a>
                             </li>
                         @endcan
                         @can('Product Index')

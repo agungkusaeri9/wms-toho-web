@@ -8,31 +8,38 @@
                     <form action="{{ route('products.report.action') }}" method="post">
                         @csrf
                         <div class="row">
-                            <div class="col-md-2">
-                                <div class='form-group'>
-                                    <label for='category_id'>Category</label>
-                                    <select name='category_id' id='category_id'
-                                        class='form-control py-2 @error('category_id') is-invalid @enderror'>
-                                        <option value='' selected disabled>Pilih Category</option>
-                                        @foreach ($categories as $category)
-                                            <option @selected($category->id == old('category_id')) value='{{ $category->id }}'>
-                                                {{ $category->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('category_id')
-                                        <div class='invalid-feedback'>
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                            </div>
                             <div class="col-md align-self-center">
                                 <button name="action" value="export_pdf" class="btn btn-danger">Export PDF</button>
                                 <button name="action" value="export_excel" class="btn btn-info">Export Excel</button>
                             </div>
                         </div>
                     </form>
+                    <div class="table-responsive">
+                        <table class="table dtTable table-hover nowrap">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Part No.</th>
+                                    <th>Part Name</th>
+                                    <th>Lot No.</th>
+                                    <th>Unit</th>
+                                    <th>Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($items as $item)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $item->part_number->name ?? '-' }}</td>
+                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->lot_number ?? '-' }}</td>
+                                        <td>{{ $item->unit->name }}</td>
+                                        <td>{{ $item->qty }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

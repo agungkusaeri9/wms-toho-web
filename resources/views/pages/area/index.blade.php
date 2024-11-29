@@ -14,8 +14,7 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Code</th>
-                                    <th>Name</th>
+                                    <th>Area Name</th>
                                     <th>Type</th>
                                     <th>Description</th>
                                     @canany(['Area Edit', 'Area Delete', 'Rack Index'])
@@ -27,7 +26,6 @@
                                 @foreach ($items as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->code }}</td>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->type }}</td>
                                         <td>{{ $item->description }}</td>

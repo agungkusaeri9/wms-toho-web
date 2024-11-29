@@ -5,7 +5,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title mb-3">Stock Out</h4>
-                    @can('Stock Out Create')
+                    @can('Stock In Create')
                         <a href="{{ route('stock-outs.create') }}" class="btn my-2 mb-3 btn-sm py-2 btn-primary">Create
                             Stock Out</a>
                     @endcan
@@ -14,37 +14,24 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Code</th>
-                                    <th>Department Name</th>
+                                    <th>Part No.</th>
+                                    <th>Part. Name</th>
+                                    <th>Lot No.</th>
+                                    <th>Qty</th>
+                                    <th>Unit</th>
                                     <th>Date</th>
-                                    <th>Notes</th>
-                                    <th>Created By</th>
-                                    @canany(['Stock Out Edit', 'Stock Out Delete'])
-                                        <th>Aksi</th>
-                                    @endcanany
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($items as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->code }}</td>
-                                        <td>{{ $item->department->name }}</td>
+                                        <td>{{ $item->product->part_number->name ?? '-' }}</td>
+                                        <td>{{ $item->product->name }}</td>
+                                        <td>{{ $item->product->lot_number }}</td>
+                                        <td>{{ $item->qty }}</td>
+                                        <td>{{ $item->product->unit->name }}</td>
                                         <td>{{ formatDate($item->date) }}</td>
-                                        <td>{{ $item->notes }}</td>
-                                        <td>{{ $item->user->name }}</td>
-                                        @canany(['Stock Out Edit', 'Stock Out Delete'])
-                                            <td>
-                                                @can('Stock Out Detail')
-                                                    <a href="{{ route('stock-outs.show', $item->id) }}"
-                                                        class="btn btn-sm py-2 btn-warning">Detail</a>
-                                                @endcan
-                                                @can('Stock Out Edit')
-                                                    <a href="{{ route('stock-outs.edit', $item->id) }}"
-                                                        class="btn btn-sm py-2 btn-info">Edit</a>
-                                                @endcan
-                                            </td>
-                                        @endcanany
                                     </tr>
                                 @endforeach
                             </tbody>

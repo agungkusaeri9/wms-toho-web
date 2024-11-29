@@ -21,11 +21,10 @@ class StockOut extends Model
         return $this->belongsTo(Department::class);
     }
 
-    public function details()
+    public function product()
     {
-        return $this->hasMany(StockOutDetail::class);
+        return $this->belongsTo(Product::class);
     }
-
     public static function getNewCode()
     {
         $prefix = 'SO';

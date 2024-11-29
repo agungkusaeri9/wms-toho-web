@@ -11,21 +11,27 @@
                         </li>
                         <li class="d-flex justify-content-between mb-1">
                             <div class="font-weight-bold">
-                                Code
+                                Part No.
                             </div>
-                            <div>{{ $item->code }}</div>
+                            <div>{{ $item->part_number->name ?? '-' }}</div>
                         </li>
                         <li class="d-flex justify-content-between mb-1">
                             <div class="font-weight-bold">
-                                Name
+                                Part Name
                             </div>
                             <div>{{ $item->name }}</div>
                         </li>
                         <li class="d-flex justify-content-between mb-1">
                             <div class="font-weight-bold">
-                                Category
+                                Lot No.
                             </div>
-                            <div>{{ $item->category->name }}</div>
+                            <div>{{ $item->lot_number }}</div>
+                        </li>
+                        <li class="d-flex justify-content-between mb-1">
+                            <div class="font-weight-bold">
+                                Type
+                            </div>
+                            <div>{{ $item->type->name ?? '-' }}</div>
                         </li>
                         <li class="d-flex justify-content-between mb-1">
                             <div class="font-weight-bold">
@@ -83,25 +89,24 @@
                                 <thead>
                                     <tr>
                                         <th>No.</th>
-                                        <th>Code</th>
-                                        <th>Product Name</th>
-                                        <th>Supplier Name</th>
+                                        <th>Part No.</th>
+                                        <th>Part Name</th>
+                                        <th>Lot No.</th>
                                         <th>Qty</th>
-                                        <th>Received Date</th>
-                                        <th>Created By</th>
+                                        <th>Unit</th>
+                                        <th>Receiving Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($stock_ins as $stockDetail)
+                                    @foreach ($stock_ins as $stock_in)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $stockDetail->stock_in->code }}</td>
-                                            <td>{{ $stockDetail->product->name }}</td>
-                                            <td>{{ $stockDetail->stock_in->supplier->name }}</td>
-                                            <td>{{ $stockDetail->qty . ' ' . $stockDetail->product->unit->name }}</td>
-                                            <td>{{ formatDate($stockDetail->stock_in->received_date) }}</td>
-                                            <td>{{ $stockDetail->stock_in->user->name }}</td>
-
+                                            <td>{{ $stock_in->product->part_number->name ?? '-' }}</td>
+                                            <td>{{ $stock_in->product->name }}</td>
+                                            <td>{{ $stock_in->product->lot_number }}</td>
+                                            <td>{{ $stock_in->qty }}</td>
+                                            <td>{{ $stock_in->product->unit->name }}</td>
+                                            <td>{{ formatDate($stock_in->received_date) }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -119,26 +124,24 @@
                                 <thead>
                                     <tr>
                                         <th>No.</th>
-                                        <th>Code</th>
-                                        <th>Product Name</th>
-                                        <th>Department</th>
+                                        <th>Part No.</th>
+                                        <th>Part Name</th>
+                                        <th>Lot No</th>
                                         <th>Qty</th>
+                                        <th>Unit</th>
                                         <th>Date</th>
-                                        <th>Created By</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($stock_outs as $stockOutDetail)
+                                    @foreach ($stock_outs as $stock_out)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $stockOutDetail->stock_out->code }}</td>
-                                            <td>{{ $stockOutDetail->product->name }}</td>
-                                            <td>{{ $stockOutDetail->stock_out->department->name }}</td>
-                                            <td>{{ $stockOutDetail->qty . ' ' . $stockOutDetail->product->unit->name }}
-                                            </td>
-                                            <td>{{ formatDate($stockOutDetail->stock_out->date) }}</td>
-                                            <td>{{ $stockOutDetail->stock_out->user->name }}</td>
-
+                                            <td>{{ $stock_out->product->part_number->name }}</td>
+                                            <td>{{ $stock_out->product->name }}</td>
+                                            <td>{{ $stock_out->product->lot_number }}</td>
+                                            <td>{{ $stock_out->qty }}</td>
+                                            <td>{{ $stock_out->product->unit->name }}</td>
+                                            <td>{{ formatDate($stock_out->date) }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

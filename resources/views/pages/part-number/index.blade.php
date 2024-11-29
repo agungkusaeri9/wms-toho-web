@@ -4,22 +4,18 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-3">Supplier</h4>
-                    @can('Supplier Create')
-                        <a href="{{ route('suppliers.create') }}" class="btn my-2 mb-3 btn-sm py-2 btn-primary">Create
-                            Supplier</a>
+                    <h4 class="card-title mb-3">Part Number</h4>
+                    @can('Part Number Create')
+                        <a href="{{ route('part-numbers.create') }}" class="btn my-2 mb-3 btn-sm py-2 btn-primary">Create
+                            Part Number</a>
                     @endcan
                     <div class="table-responsive">
                         <table class="table dtTable table-hover">
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Supplier Name</th>
-                                    <th>Address</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Contact Person</th>
-                                    @canany(['Supplier Edit', 'Supplier Delete'])
+                                    <th>Part No.</th>
+                                    @canany(['Part Number Edit', 'Part Number Delete'])
                                         <th>Aksi</th>
                                     @endcanany
                                 </tr>
@@ -29,23 +25,19 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $item->name }}</td>
-                                        <td>{{ $item->address }}</td>
-                                        <td>{{ $item->email }}</td>
-                                        <td>{{ $item->phone }}</td>
-                                        <td>{{ $item->contact_person }}</td>
-                                        @canany(['Supplier Edit', 'Supplier Delete'])
+                                        @canany(['Part Number Edit', 'Part Number Delete'])
                                             <td>
-                                                @can('Supplier Edit')
-                                                    <a href="{{ route('suppliers.edit', $item->id) }}"
+                                                @can('Part Number Edit')
+                                                    <a href="{{ route('part-numbers.edit', $item->id) }}"
                                                         class="btn btn-sm py-2 btn-info">Edit</a>
                                                 @endcan
-                                                @can('Supplier Delete')
+                                                @can('Part Number Delete')
                                                     <form action="javascript:void(0)" method="post" class="d-inline"
                                                         id="formDelete">
                                                         @csrf
                                                         @method('delete')
                                                         <button class="btn btnDelete btn-sm py-2 btn-danger"
-                                                            data-action="{{ route('suppliers.destroy', $item->id) }}">Delete</button>
+                                                            data-action="{{ route('part-numbers.destroy', $item->id) }}">Delete</button>
                                                     </form>
                                                 @endcan
                                             </td>

@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('stock_in_details', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('stock_in_id')->constrained('stock_ins');
-            $table->foreignId('product_id')->constrained('products');
-            $table->integer('qty');
-            $table->timestamps();
+        Schema::table('products', function (Blueprint $table) {
+            $table->foreignId('part_number_id')->nullable()->constrained('part_numbers', 'id');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stock_in_details');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropConstrainedForeignId('part_number_id');
+        });
     }
 };

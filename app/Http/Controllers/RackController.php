@@ -83,7 +83,7 @@ class RackController extends Controller
         DB::beginTransaction();
         try {
             $item = Rack::findOrFail($id);
-            $data = request()->only(['code', 'name', 'type', 'description']);
+            $data = request()->only(['code', 'name', 'type', 'description', 'status']);
             $item->update($data);
             DB::commit();
             return redirect()->route('racks.index', [

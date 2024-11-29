@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 mb-3">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title mb-3">Stock Out Report</h4>
@@ -13,7 +13,7 @@
                                     <label for='start_date' class='mb-2'>Start Date</label>
                                     <input type='date' name='start_date' id='start_date'
                                         class='form-control @error('start_date') is-invalid @enderror'
-                                        value='{{ old('start_date') }}'>
+                                        value='{{ formatDate($start_date, 'Y-m-d') ?? old('start_date') }}'>
                                     @error('start_date')
                                         <div class='invalid-feedback'>
                                             {{ $message }}
@@ -26,7 +26,7 @@
                                     <label for='end_date' class='mb-2'>End Date</label>
                                     <input type='date' name='end_date' id='end_date'
                                         class='form-control @error('end_date') is-invalid @enderror'
-                                        value='{{ old('end_date') }}'>
+                                        value='{{ formatDate($end_date, 'Y-m-d') ?? old('end_date') }}'>
                                     @error('end_date')
                                         <div class='invalid-feedback'>
                                             {{ $message }}
@@ -39,9 +39,9 @@
                                     <label for='department_id'>Department</label>
                                     <select name='department_id' id='department_id'
                                         class='form-control py-2 @error('department_id') is-invalid @enderror'>
-                                        <option value='' selected disabled>Pilih Department</option>
+                                        <option value='' selected>Pilih Department</option>
                                         @foreach ($departments as $department)
-                                            <option @selected($department->id == old('department_id')) value='{{ $department->id }}'>
+                                            <option @selected($department->id == $department_id ?? old('department_id')) value='{{ $department->id }}'>
                                                 {{ $department->code . ' | ' . $department->name }}
                                             </option>
                                         @endforeach
@@ -54,11 +54,47 @@
                                 </div>
                             </div>
                             <div class="col-md align-self-center">
+                                <button name="action" value="filter" class="btn btn-secondary">Filter</button>
                                 <button name="action" value="export_pdf" class="btn btn-danger">Export PDF</button>
                                 <button name="action" value="export_excel" class="btn btn-info">Export Excel</button>
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">Stock Out</h4>
+                    <div class="table-responsive">
+                        <table class="table dtTable nowrap table-hover">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Part No.</th>
+                                    <th>Part Name</th>
+                                    <th>Lot No.</th>
+                                    <th>Qty</th>
+                                    <th>Unit</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($items as $item)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $item->product->part_number->name ?? '' }}</td>
+                                        <td>{{ $item->product->name }}</td>
+                                        <td>{{ $item->product->lot_number }}</td>
+                                        <td>{{ $item->qty }}</td>
+                                        <td>{{ $item->product->unit->name }}</td>
+                                        <td>{{ formatDate($item->date) }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

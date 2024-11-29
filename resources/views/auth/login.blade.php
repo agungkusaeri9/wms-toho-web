@@ -9,7 +9,11 @@
                 <div class="row w-100 mx-0">
                     <div class="col-lg-4 mx-auto">
                         <div class="auth-form-light text-left py-5 px-4 px-sm-5">
-                            <h4>WMS Sanwa</h4>
+                            <div class="text-center mb-4">
+                                <img src="{{ asset('assets/images/logo-toho2.png') }}" class="img-fluid"
+                                    style="max-height:80px" alt="">
+                            </div>
+                            <h3 class="text-center mb-4">WAREHOUSE MANAGEMENT SYSTEM</h3>
                             <h6 class="font-weight-light">Sign in to continue.</h6>
                             <form class="pt-3" method="post" action="{{ route('login') }}">
                                 @csrf

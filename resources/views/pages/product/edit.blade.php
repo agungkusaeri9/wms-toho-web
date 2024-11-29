@@ -9,11 +9,11 @@
                         @csrf
                         @method('patch')
                         <div class='form-group mb-3'>
-                            <label for='code' class='mb-2'>Code</label>
-                            <input type='text' name='code' id='code'
-                                class='form-control @error('code') is-invalid @enderror'
-                                value='{{ $item->code ?? old('code') }}'>
-                            @error('code')
+                            <label for='lot_number' class='mb-2'>Lot Number</label>
+                            <input type='number' name='lot_number' id='lot_number'
+                                class='form-control @error('lot_number') is-invalid @enderror'
+                                value='{{ $item->lot_number ?? old('lot_number') }}'>
+                            @error('lot_number')
                                 <div class='invalid-feedback'>
                                     {{ $message }}
                                 </div>
@@ -30,16 +30,33 @@
                             @enderror
                         </div>
                         <div class='form-group'>
-                            <label for='category_id'>Category</label>
-                            <select name='category_id' id='category_id'
-                                class='form-control @error('category_id') is-invalid @enderror'>
-                                <option value='' selected disabled>Pilih Category</option>
-                                @foreach ($categories as $category)
-                                    <option @selected($category->id == $item->category_id ?? old('category_id')) value='{{ $category->id }}'>{{ $category->name }}
+                            <label for='part_number_id'>Part No.</label>
+                            <select name='part_number_id' id='part_number_id'
+                                class='form-control @error('part_number_id') is-invalid @enderror'>
+                                <option value='' selected disabled>Pilih Part No.</option>
+                                @foreach ($part_numbers as $part_number)
+                                    <option @selected($part_number->id == $item->part_number_id ?? old('part_number_id')) value='{{ $part_number->id }}'>
+                                        {{ $part_number->name }}
                                     </option>
                                 @endforeach
                             </select>
-                            @error('category_id')
+                            @error('part_number_id')
+                                <div class='invalid-feedback'>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class='form-group'>
+                            <label for='type_id'>Type</label>
+                            <select name='type_id' id='type_id'
+                                class='form-control @error('type_id') is-invalid @enderror'>
+                                <option value='' selected disabled>Pilih Type</option>
+                                @foreach ($types as $type)
+                                    <option @selected($type->id == $item->type_id ?? old('type_id')) value='{{ $type->id }}'>{{ $type->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('type_id')
                                 <div class='invalid-feedback'>
                                     {{ $message }}
                                 </div>
@@ -89,6 +106,22 @@
                             @enderror
                         </div>
                         <div class='form-group'>
+                            <label for='supplier_id'>Supplier</label>
+                            <select name='supplier_id' id='supplier_id'
+                                class='form-control @error('supplier_id') is-invalid @enderror'>
+                                <option value='' selected>Pilih Supplier</option>
+                                @foreach ($suppliers as $supplier)
+                                    <option @selected($supplier->id == $item->supplier_id ?? old('supplier_id')) value='{{ $supplier->id }}'>{{ $supplier->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('supplier_id')
+                                <div class='invalid-feedback'>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class='form-group'>
                             <label for='area_id'>Area</label>
                             <select name='area_id' id='area_id'
                                 class='form-control @error('area_id') is-invalid @enderror'>
@@ -123,7 +156,8 @@
                             </div>
                             <div class="col-md align-self-center">
                                 <input type='file' name='image' id='image'
-                                    class='form-control @error('image') is-invalid @enderror' value='{{ old('image') }}'>
+                                    class='form-control @error('image') is-invalid @enderror'
+                                    value='{{ old('image') }}'>
                                 @error('image')
                                     <div class='invalid-feedback'>
                                         {{ $message }}

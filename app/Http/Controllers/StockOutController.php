@@ -26,7 +26,7 @@ class StockOutController extends Controller
 
     public function index()
     {
-        $items = StockOut::orderBy('code', 'ASC')->get();
+        $items = StockOut::orderBy('id', 'DESC')->get();
         return view('pages.stock-out.index', [
             'title' => 'Stock Out',
             'items' => $items
@@ -45,56 +45,30 @@ class StockOutController extends Controller
 
     public function store()
     {
-        $validator = Validator::make(request()->all(), [
-            'department_id' => ['required', 'exists:departments,id'],
-            'date' => ['required', 'date'],
-            'data_json' => ['required']
-        ], [
-            'department_id.required' => 'Department is required and must exist in the database.',
-            'date.required' => 'The received date is required.',
-            'date.date' => 'Please enter a valid date format for the received date.',
-            'data_json.required' => 'Product Not Found.',
+        request()->validate([
+            'product_id' => ['required', 'exists:products,id'],
+            'qty' => ['required', 'numeric']
         ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'code' => 422,
-                'errors' =>
-                $validator->errors()
-            ]);
-        }
 
         DB::beginTransaction();
         try {
-            $data = request()->only(['department_id', 'date', 'notes']);
-            $data_json = request('data_json');
-            $data_array = json_decode($data_json, true);
+            $product = Product::findOrFail(request('product_id'));
+            if ($product->qty < request('qty')) {
+                return redirect()->back()->with('error', 'Qty tidak boleh melebihi stock');
+            }
+            $data = request()->only(['product_id', 'qty']);
+            $data['department_id'] = $product->department_id;
+            $data['date'] = Carbon::now()->format('Y-m-d');
             $data['user_id'] = auth()->id();
             $data['code'] = StockOut::getNewCode();
-            $stockOut  = StockOut::create($data);
-            foreach ($data_array as $item) {
-                $stockOut->details()->create([
-                    'product_id' => $item['product_id'],
-                    'qty' => $item['qty']
-                ]);
-
-                // update stok
-                $product = Product::find($item['product_id']);
-                $product->decrement('qty', $item['qty']);
-            }
+            $stockOut = StockOut::create($data);
+            $stockOut->product->decrement('qty', request('qty'));
 
             DB::commit();
-            return response()->json([
-                'status' => true,
-                'message' => 'Stock Out berhasil dibuat'
-            ]);
+            return redirect()->route('stock-outs.index')->with('success', 'Stock Out Berhasil dibuat.');
         } catch (\Throwable $th) {
             DB::rollBack();
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ]);
+            return redirect()->route('stock-outs.index')->with('error', $th->getMessage());
         }
     }
 
@@ -138,11 +112,13 @@ class StockOutController extends Controller
 
     public function report_index()
     {
-        $items = StockOut::orderBy('id', 'DESC')->get();
         return view('pages.stock-out.report', [
             'title' => 'Stock Out Report',
-            'items' => $items,
-            'departments' => Department::orderBy('name', 'DESC')->get()
+            'items' => [],
+            'departments' => Department::orderBy('name', 'DESC')->get(),
+            'start_date' => null,
+            'end_date' => null,
+            'department_id' => null,
         ]);
     }
 
@@ -153,12 +129,10 @@ class StockOutController extends Controller
         $department_id = request('department_id');
         $action = request('action');
 
-        $items = StockOutDetail::with(['stock_out']);
+        $items = StockOut::with(['product']);
         if ($start_date && $end_date) {
-            $items->whereHas('stock_out', function ($q) use ($start_date, $end_date) {
-                $q->whereDate('date', '>=', $start_date)
-                    ->whereDate('date', '<=', $end_date);
-            });
+            $items->whereDate('date', '>=', $start_date)
+                ->whereDate('date', '<=', $end_date);
         } elseif ($start_date && !$end_date) {
             $items->whereHas('stock_out', function ($q) use ($start_date, $end_date) {
                 $q->whereDate('date', $start_date);
@@ -166,9 +140,7 @@ class StockOutController extends Controller
         }
 
         if ($department_id) {
-            $items->whereHas('stock_out', function ($q) use ($department_id) {
-                $q->where('department_id', $department_id);
-            });
+            $items->where('department_id', $department_id);
         }
 
         $data = $items->orderBy('id', 'DESC')->get();
@@ -180,7 +152,7 @@ class StockOutController extends Controller
                 'items' => $data,
                 'start_date' => $start_date,
                 'end_date' => $end_date,
-                'department' => $department
+                'department' => $department,
             ]);
             $fileName = "StockOut-Report-" . Carbon::now()->format('d-m-Y H:i:s') . '.pdf';
             return $pdf->download($fileName);
@@ -193,6 +165,16 @@ class StockOutController extends Controller
             ];
             $fileName = "StockOut-Report-" . Carbon::now()->format('d-m-Y H:i:s') . '.xlsx';
             return Excel::download(new StockOutExport($arr), $fileName);
+        } else {
+            return view('pages.stock-out.report', [
+                'title' => 'Stock Out Report',
+                'departments' => Department::orderBy('name', 'DESC')->get(),
+                'items' => $data,
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+                'department_id' => $department_id,
+                'department' => $department,
+            ]);
         }
     }
 }

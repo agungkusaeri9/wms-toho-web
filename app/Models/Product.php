@@ -16,9 +16,9 @@ class Product extends Model
         return $this->belongsTo(Unit::class);
     }
 
-    public function category()
+    public function part_number()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(PartNumber::class);
     }
 
     public function department()
@@ -42,5 +42,10 @@ class Product extends Model
     public function rack()
     {
         return $this->belongsTo(Rack::class);
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
     }
 }

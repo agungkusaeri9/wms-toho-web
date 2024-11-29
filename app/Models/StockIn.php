@@ -16,14 +16,9 @@ class StockIn extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function supplier()
+    public function product()
     {
-        return $this->belongsTo(Supplier::class);
-    }
-
-    public function details()
-    {
-        return $this->hasMany(StockInDetail::class);
+        return $this->belongsTo(Product::class);
     }
 
     public static function getNewCode()
