@@ -36,17 +36,17 @@
                             </div>
                             <div class="col-md-2">
                                 <div class='form-group'>
-                                    <label for='supplier_id'>Supplier</label>
-                                    <select name='supplier_id' id='supplier_id'
-                                        class='form-control py-2 @error('supplier_id') is-invalid @enderror'>
-                                        <option value='' selected>Pilih Supplier</option>
-                                        @foreach ($suppliers as $supplier)
-                                            <option @selected($supplier->id == $supplier_id ?? '') value='{{ $supplier->id }}'>
-                                                {{ $supplier->code . ' | ' . $supplier->name }}
+                                    <label for='product_id'>Part/Lot</label>
+                                    <select name='product_id' id='product_id'
+                                        class='form-control py-2 @error('product_id') is-invalid @enderror'>
+                                        <option value='' selected>Pilih Part/lot</option>
+                                        @foreach ($products as $product)
+                                            <option @selected($product->id == $product_id ?? '') value='{{ $product->id }}'>
+                                                {{ $product->name . '/' . $product->lot_number }}
                                             </option>
                                         @endforeach
                                     </select>
-                                    @error('supplier_id')
+                                    @error('product_id')
                                         <div class='invalid-feedback'>
                                             {{ $message }}
                                         </div>
@@ -73,6 +73,7 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
+                                    <th>Code</th>
                                     <th>Part No.</th>
                                     <th>Part Name</th>
                                     <th>Lot No.</th>
@@ -85,12 +86,13 @@
                                 @foreach ($items as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $item->code }}</td>
                                         <td>{{ $item->product->part_number->name ?? '-' }}</td>
                                         <td>{{ $item->product->name }}</td>
                                         <td>{{ $item->product->lot_number }}</td>
                                         <td>{{ $item->qty }}</td>
                                         <td>{{ $item->product->unit->name }}</td>
-                                        <td>{{ formatDate($item->received_date) }}</td>
+                                        <td>{{ formatDate($item->created_at, 'd-m-Y H:i') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -139,7 +141,7 @@
     <script src="{{ asset('assets/vendors/select2/select2.min.js') }}"></script>
 
     <script>
-        $('#supplier_id').select2({
+        $('#product_id').select2({
             theme: 'bootstrap'
         });
     </script>

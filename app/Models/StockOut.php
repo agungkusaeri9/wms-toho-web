@@ -27,9 +27,9 @@ class StockOut extends Model
     }
     public static function getNewCode()
     {
-        $prefix = 'SO';
+        $prefix = '';
         $lastCode = self::query()
-            ->orderBy('id', 'desc')
+            ->orderBy('code', 'desc')
             ->value('code');
 
         if ($lastCode) {
@@ -42,5 +42,13 @@ class StockOut extends Model
         }
         // Format angka menjadi tiga digit, misalnya 001, 002
         return $prefix . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+    }
+
+    public static function booted()
+    {
+        static::creating(function ($model) {
+            $model->uuid = \Str::uuid()->toString();
+            $model->code = self::getNewCode();
+        });
     }
 }

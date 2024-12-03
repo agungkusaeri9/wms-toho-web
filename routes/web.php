@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('types', TypeController::class)->except('show');
     Route::get('racks/getByArea', [RackController::class, 'getByAreaId'])->name('racks.getByAreaId');
     Route::resource('racks', RackController::class)->except('show');
+    Route::get('products/getByCode', [ProductController::class, 'getByCode'])->name('products.getByCode');
     Route::get('products/getById', [ProductController::class, 'getById'])->name('products.getById');
     Route::get('products/getAllByTypePart', [ProductController::class, 'getAllByTypePart'])->name('products.getAllByTypePart');
     Route::resource('products', ProductController::class);

@@ -44,6 +44,11 @@ class Product extends Model
         return $this->belongsTo(Rack::class);
     }
 
+    public function type()
+    {
+        return $this->belongsTo(Type::class);
+    }
+
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
@@ -57,5 +62,48 @@ class Product extends Model
     public function stock_out()
     {
         return $this->hasMany(StockOut::class);
+    }
+
+    public static function getNewCode()
+    {
+        $prefix = '';
+        $lastCode = self::query()
+            ->orderBy('code', 'desc')
+            ->value('code');
+
+        if ($lastCode) {
+            // Ambil angka terakhir dari kode (misal SPL001 -> 001)
+            $lastNumber = intval(substr($lastCode, strlen($prefix)));
+            $newNumber = $lastNumber + 1; // Tambahkan 1
+        } else {
+            // Jika belum ada data, mulai dari 1
+            $newNumber = 1;
+        }
+        // Format angka menjadi tiga digit, misalnya 001, 002
+        return $prefix . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+    }
+
+    public static function booted()
+    {
+        static::updating(function ($model) {
+            $model->uuid = \Str::uuid()->toString();
+            $model->code = self::getNewCode();
+        });
+    }
+
+    public function dataQr($qty)
+    {
+        $qr = $this->code . '-' . $this->part_number->name . '-' . $this->name . '-' . $this->lot_number . '-' . $qty;
+        return $qr;
+    }
+
+
+
+    public function remains()
+    {
+        $stock_out = StockOut::where('product_id', $this->id)->sum('qty');
+        $stock_in = StockIn::where('product_id', $this->id)->sum('qty');
+        $remains = $stock_in - $stock_out;
+        return $remains;
     }
 }

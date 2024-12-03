@@ -74,12 +74,12 @@
                     <tr>
                         <td style="margin:0;padding:0">Company Name</td>
                         <td>:</td>
-                        <td>PT. Toho Technology Indonesia</td>
+                        <td>{{ env('REPORT_COMPANY_NAME') }}</td>
                     </tr>
                     <tr>
-                        <td style="margin:0;padding:0">Department</td>
+                        <td style="margin:0;padding:0">Part/Lot</td>
                         <td>:</td>
-                        <td>{{ $department ? $department->name : '-' }}</td>
+                        <td>{{ $product ? $product->name . '/' . $product->lot_number : '-' }}</td>
                     </tr>
                     <tr>
                         <td style="margin:0;padding:0">Date Range</td>
@@ -102,7 +102,7 @@
                 </table>
             </td>
             <td style="vertical-align: top; text-align: right;">
-                <img src="{{ public_path('assets/images/logo-toho.png') }}" style="max-height: 50px;" alt="">
+                <img src="{{ public_path(env('REPORT_IMAGE_PATH')) }}" style="max-height: 50px;" alt="">
             </td>
         </tr>
     </table>
@@ -112,26 +112,26 @@
         <thead>
             <tr>
                 <th style="width:5px !important">No</th>
+                <th>Code</th>
                 <th>Part No.</th>
                 <th>Part Name</th>
                 <th>Lot No.</th>
                 <th>Unit</th>
                 <th>Qty</th>
                 <th>Date</th>
-                <th>Department</th>
             </tr>
         </thead>
         <tbody>
             @forelse ($items as $item)
                 <tr>
                     <td style="width:5px !important">{{ $loop->iteration }}</td>
+                    <td>{{ $item->code }}</td>
                     <td>{{ $item->product->part_number->name ?? '-' }}</td>
                     <td>{{ $item->product->name }}</td>
                     <td>{{ $item->product->lot_number }}</td>
                     <td>{{ $item->product->unit->name }}</td>
                     <td>{{ $item->qty }}</td>
-                    <td>{{ formatDate($item->date) }}</td>
-                    <td>{{ $item->department->name }}</td>
+                    <td>{{ formatDate($item->date, 'd-m-Y H:i') }}</td>
                 </tr>
             @empty
                 <tr>

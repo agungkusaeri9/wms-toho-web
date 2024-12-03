@@ -1,71 +1,98 @@
 @extends('layouts.app')
 @section('content')
-    <div class="row">
-        <div class="col-md-12">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="mb-4">Create Stock Out</h4>
+                    <h4 class="mb-4">Scan Qr Code Stock Out</h4>
                     <form action="{{ route('stock-outs.store') }}" method="post">
                         @csrf
                         <div class='form-group mb-3'>
-                            <label for='received_date' class='mb-2'>Date</label>
-                            <input type='date' name='received_date' id='received_date'
-                                class='form-control @error('received_date') is-invalid @enderror'
-                                value='{{ Carbon\Carbon::now()->format('Y-m-d') ?? old('received_date') }}' readonly>
-                            @error('received_date')
-                                <div class='invalid-feedback'>
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-                        <div class='form-group'>
-                            <label for='product_id'>Product</label>
-                            <select name='product_id' id='product_id'
-                                class='form-control @error('product_id') is-invalid @enderror'>
-                                <option value='' selected disabled>Pilih Product</option>
-                                @foreach ($products as $product)
-                                    <option @selected($product->id == old('product_id')) value='{{ $product->id }}'>
-                                        {{ $product->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('product_id')
-                                <div class='invalid-feedback'>
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-                        <div class='form-group mb-3'>
-                            <label for='product_code' class='mb-2'>Part No.</label>
+                            <label for='product_code' class='mb-2'>Scan</label>
                             <input type='text' name='product_code' id='product_code'
                                 class='form-control @error('product_code') is-invalid @enderror'
-                                value='{{ old('product_code') }}' readonly>
+                                value='{{ old('product_code') }}' placeholder="Scan Qr Code" autofocus="true">
+                            @error('product_code')
+                                <div class='invalid-feedback'>
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
-                        <div class='form-group mb-3'>
-                            <label for='product_lot_number' class='mb-2'>Lot No.</label>
-                            <input type='text' name='product_lot_number' id='product_lot_number'
-                                class='form-control @error('product_lot_number') is-invalid @enderror'
-                                value='{{ old('product_lot_number') }}' readonly>
-                        </div>
-
-                        <div class='form-group mb-3'>
-                            <label for='product_name' class='mb-2'>Part Name</label>
-                            <input type='text' name='product_name' id='product_name'
-                                class='form-control @error('product_name') is-invalid @enderror'
-                                value='{{ old('product_name') }}' readonly>
-                        </div>
-                        <div class='form-group mb-3'>
+                        <div class='form-group mb-3 d-none'>
                             <label for='qty' class='mb-2'>Qty</label>
                             <input type='number' name='qty' id='qty'
-                                class='form-control @error('qty') is-invalid @enderror' value='{{ old('qty') }}'>
+                                class='form-control @error('qty') is-invalid @enderror' value='{{ 1 ?? old('qty') }}'>
                             @error('qty')
                                 <div class='invalid-feedback'>
                                     {{ $message }}
                                 </div>
                             @enderror
                         </div>
+                        <ul class="list-unstyled">
+                            <li class="d-flex justify-content-between mb-3">
+                                <div class="font-weight-normal">
+                                    Part No.
+                                </div>
+                                <span id="part_number">-</span>
+                            </li>
+                            <li class="d-flex justify-content-between mb-3">
+                                <div class="font-weight-normal">
+                                    Part Name
+                                </div>
+                                <span id="part_name">-</span>
+                            </li>
+                            <li class="d-flex justify-content-between mb-3">
+                                <div class="font-weight-normal">
+                                    Lot No.
+                                </div>
+                                <span id="lot_number">-</span>
+                            </li>
+                            <li class="d-flex justify-content-between mb-3">
+                                <div class="font-weight-normal">
+                                    Type
+                                </div>
+                                <span id="type">-</span>
+                            </li>
+                            <li class="d-flex justify-content-between mb-3">
+                                <div class="font-weight-normal">
+                                    Unit
+                                </div>
+                                <span id="unit">-</span>
+                            </li>
+                            <li class="d-flex justify-content-between mb-3">
+                                <div class="font-weight-normal">
+                                    Description
+                                </div>
+                                <span id="description">-</span>
+                            </li>
+                            <li class="d-flex justify-content-between mb-3">
+                                <div class="font-weight-normal">
+                                    Department
+                                </div>
+                                <span id="department">-</span>
+                            </li>
+                            {{-- <li class="d-flex justify-content-between mb-3">
+                                <div class="font-weight-normal">
+                                    Qty
+                                </div>
+                                <span id="qty">-</span>
+                            </li> --}}
+                            <li class="d-flex justify-content-between mb-3">
+                                <div class="font-weight-normal">
+                                    Area
+                                </div>
+                                <span id="area">-</span>
+                            </li>
+                            <li class="d-flex justify-content-between mb-3">
+                                <div class="font-weight-normal">
+                                    Rack
+                                </div>
+                                <span id="rack">-</span>
+                            </li>
+                        </ul>
+
                         <div class="form-group">
-                            <button class="btn btn-primary float-right">Create Stock Out</button>
+                            <button class="btn btn-primary float-right">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -110,32 +137,58 @@
     <script src="{{ asset('assets/vendors/select2/select2.min.js') }}"></script>
 
     <script>
-        $('#product_id').select2({
-            theme: 'bootstrap'
-        });
-        $('#department_id').select2({
-            theme: 'bootstrap'
-        });
+        let typingTimer;
+        const doneTypingInterval = 200;
 
-        $('#product_id').on('change', function() {
-            let id = $(this).val();
-
-            $.ajax({
-                url: '{{ route('products.getById') }}',
-                type: 'GET',
-                dataType: 'JSON',
-                data: {
-                    id
-                },
-                success: function(data) {
-                    $('#product_lot_number').val(data.lot_number);
-                    $('#product_name').val(data.name);
-                    $('#product_code').val(data.part_number.name);
-                },
-                error: function(err) {
-                    console.log(err);
+        $('#product_code').on('input', function() {
+            clearTimeout(typingTimer);
+            let data = $(this).val();
+            let arr = data.split('-');
+            let code = arr[0];
+            let qty = arr[arr.length - 1];
+            $('#qty').val(qty);
+            typingTimer = setTimeout(function() {
+                if (code.length > 0) {
+                    $.ajax({
+                        url: '{{ route('products.getByCode') }}',
+                        type: 'GET',
+                        dataType: 'JSON',
+                        data: {
+                            code
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            if (response.status) {
+                                let data = response.data;
+                                $('#part_number').html(data.part_number.name);
+                                $('#part_name').html(data.name);
+                                $('#lot_number').html(data.lot_number);
+                                $('#type').html(data.type.name);
+                                $('#unit').html(data.unit.name);
+                                $('#description').html(data.description);
+                                $('#department').html(data.department.name);
+                                // $('#qty').html(data.qty);
+                                $('#area').html(data.area.name);
+                                $('#rack').html(data.rack.name);
+                            } else {
+                                $('#part_number').html('Not Found');
+                                $('#part_name').html('Not Found');
+                                $('#lot_number').html('Not Found');
+                                $('#type').html('Not Found');
+                                $('#unit').html('Not Found');
+                                $('#description').html('Not Found');
+                                $('#department').html('Not Found');
+                                // $('#qty').html('Not Found');
+                                $('#area').html('Not Found');
+                                $('#rack').html('Not Found');
+                            }
+                        },
+                        error: function(err) {
+                            console.log(err);
+                        }
+                    })
                 }
-            })
+            }, doneTypingInterval);
         })
     </script>
 @endpush

@@ -65,7 +65,7 @@
 
 <body onload="print()">
 
-    <h3 style="margin-bottom:20px !important;font-size:15px !important">Product Report</h3>
+    <h3 style="margin-bottom:20px !important;font-size:15px !important">Balance Report</h3>
 
     <table width="100%" style="border-collapse: collapse; margin-bottom: 10px;">
         <tr>
@@ -74,7 +74,20 @@
                     <tr>
                         <td style="margin:0;padding:0">Company Name</td>
                         <td>:</td>
-                        <td>PT. Toho Technology Indonesia</td>
+                        <td>{{ env('REPORT_COMPANY_NAME') }}</td>
+                    </tr>
+                    <tr>
+                        <td style="margin:0;padding:0">Date Range</td>
+                        <td>:</td>
+                        <td>
+                            @if ($start_date && $end_date)
+                                {{ formatDate($start_date) . ' to ' . formatDate($end_date) }}
+                            @elseif($start_date && !$end_date)
+                                {{ formatDate($start_date) }}
+                            @else
+                                -
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td style="margin:0;padding:0">Type</td>
@@ -99,7 +112,7 @@
                 </table>
             </td>
             <td style="vertical-align: top; text-align: right;">
-                <img src="{{ public_path('assets/images/logo-toho.png') }}" style="max-height: 50px;" alt="">
+                <img src="{{ public_path(env('REPORT_IMAGE_PATH')) }}" style="max-height: 50px;" alt="">
             </td>
         </tr>
     </table>
@@ -113,7 +126,6 @@
                 <th>Part Name</th>
                 <th>Lot No.</th>
                 <th>Unit</th>
-                <th>Initial Qty</th>
                 <th>Stock In</th>
                 <th>Stock Out</th>
                 <th>Remains Qty</th>
@@ -129,10 +141,9 @@
                     <td>{{ $item->name }}</td>
                     <td>{{ $item->lot_number }}</td>
                     <td>{{ $item->unit->name }}</td>
-                    <td>{{ $item->initial_qty }}</td>
                     <td>{{ $item->stock_in->sum('qty') }}</td>
                     <td>{{ $item->stock_out->sum('qty') }}</td>
-                    <td>{{ $item->qty }}</td>
+                    <td>{{ $item->remains() }}</td>
                     <td>{{ $item->area->name ?? '-' }}</td>
                     <td>{{ $item->rack->name ?? '-' }}</td>
                 </tr>

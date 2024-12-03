@@ -17,13 +17,13 @@ class StockOutExport implements FromView
     {
         $items = $this->data['items'];
         $start_date = $this->data['start_date'];
-        $department = $this->data['department'];
+        $product = $this->data['product'];
         $end_date = $this->data['end_date'];
         return view('pages.stock-out.export-excel', [
             'items' => $items,
             'start_date' => $start_date,
             'end_date' => $end_date,
-            'department' => $department
+            'product' => $product
         ]);
     }
 }

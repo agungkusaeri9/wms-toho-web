@@ -1,9 +1,10 @@
 <table>
     <tr>
-        <th rowspan="2" colspan="8" style="text-align: center;font-weight:bold;vertical-align:middle">Stock In Report
+        <th rowspan="2" colspan="9" style="text-align: center;font-weight:bold;vertical-align:middle">Stock In Report
         </th>
     </tr>
     <tr>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -19,9 +20,9 @@
         <td>PT. Toho Technology Indonesia</td>
     </tr>
     <tr>
-        <td style="margin:0;padding:0" colspan="2">Supplier</td>
+        <td style="margin:0;padding:0" colspan="2">Part/Lot</td>
         <td>:</td>
-        <td>{{ $supplier ? $supplier->name : '-' }}</td>
+        <td>{{ $product ? $product->name . '/' . $product->lot_number : '-' }}</td>
     </tr>
     <tr>
         <td style="margin:0;padding:0" colspan="2">Date Range</td>
@@ -50,9 +51,11 @@
         <td></td>
         <td></td>
         <td></td>
+        <td></td>
     </tr>
     <tr>
         <th style="width:30px;text-align:center;font-weight:bold">No</th>
+        <th style="width:110px;font-weight:bold;text-align:center">Code</th>
         <th style="width:110px;font-weight:bold;text-align:center">Part No.</th>
         <th style="width:110px;font-weight:bold;text-align:center">Part Name</th>
         <th style="width:110px;font-weight:bold;text-align:center">Lot No.</th>
@@ -64,17 +67,18 @@
     @forelse ($items as $item)
         <tr>
             <td style="text-align: center">{{ $loop->iteration }}</td>
+            <td>'{{ $item->code }}</td>
             <td>{{ $item->product->part_number->name ?? '-' }}</td>
             <td>{{ $item->product->name }}</td>
             <td>{{ $item->product->lot_number }}</td>
             <td>{{ $item->product->unit->name ?? '-' }}</td>
             <td style="text-align: center">{{ $item->qty }}</td>
-            <td>{{ formatDate($item->received_date) }}</td>
+            <td>{{ formatDate($item->created_at, 'd-m-Y H:i') }}</td>
             <td>{{ $item->product->supplier->name ?? '-' }}</td>
         </tr>
     @empty
         <tr>
-            <td colspan="8" style="text-align:center;padding:5px 0;">Stock In Not Found!</td>
+            <td colspan="9" style="text-align:center;padding:5px 0;">Stock In Not Found!</td>
         </tr>
     @endforelse
 </table>

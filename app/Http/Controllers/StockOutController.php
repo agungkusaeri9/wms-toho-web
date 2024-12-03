@@ -46,29 +46,31 @@ class StockOutController extends Controller
     public function store()
     {
         request()->validate([
-            'product_id' => ['required', 'exists:products,id'],
+            'product_code' => ['required'],
             'qty' => ['required', 'numeric']
         ]);
 
         DB::beginTransaction();
         try {
-            $product = Product::findOrFail(request('product_id'));
+            $arr = explode('-', request('product_code'));
+            $product = Product::where('code', $arr[0])->first();
             if ($product->qty < request('qty')) {
                 return redirect()->back()->with('error', 'Qty tidak boleh melebihi stock');
             }
-            $data = request()->only(['product_id', 'qty']);
+            $data = request()->only(['qty']);
             $data['department_id'] = $product->department_id;
             $data['date'] = Carbon::now()->format('Y-m-d');
+            $data['product_id'] = $product->id;
             $data['user_id'] = auth()->id();
             $data['code'] = StockOut::getNewCode();
             $stockOut = StockOut::create($data);
             $stockOut->product->decrement('qty', request('qty'));
 
             DB::commit();
-            return redirect()->route('stock-outs.index')->with('success', 'Stock Out Berhasil dibuat.');
+            return redirect()->back()->with('success', 'Stock Out Berhasil dibuat.');
         } catch (\Throwable $th) {
             DB::rollBack();
-            return redirect()->route('stock-outs.index')->with('error', $th->getMessage());
+            return redirect()->back()->with('error', $th->getMessage());
         }
     }
 
@@ -115,10 +117,10 @@ class StockOutController extends Controller
         return view('pages.stock-out.report', [
             'title' => 'Stock Out Report',
             'items' => [],
-            'departments' => Department::orderBy('name', 'DESC')->get(),
+            'products' => Product::orderBy('name', 'ASC')->get(),
             'start_date' => null,
             'end_date' => null,
-            'department_id' => null,
+            'product_id' => null,
         ]);
     }
 
@@ -126,25 +128,23 @@ class StockOutController extends Controller
     {
         $start_date = request('start_date');
         $end_date = request('end_date');
-        $department_id = request('department_id');
+        $product_id = request('product_id');
         $action = request('action');
 
         $items = StockOut::with(['product']);
         if ($start_date && $end_date) {
-            $items->whereDate('date', '>=', $start_date)
-                ->whereDate('date', '<=', $end_date);
+            $items->whereDate('created_at', '>=', $start_date)
+                ->whereDate('created_at', '<=', $end_date);
         } elseif ($start_date && !$end_date) {
-            $items->whereHas('stock_out', function ($q) use ($start_date, $end_date) {
-                $q->whereDate('date', $start_date);
-            });
+            $items->whereDate('created_at', $start_date);
         }
 
-        if ($department_id) {
-            $items->where('department_id', $department_id);
+        if ($product_id) {
+            $items->where('product_id', $product_id);
         }
 
         $data = $items->orderBy('id', 'DESC')->get();
-        $department = Department::find($department_id);
+        $product = Product::find($product_id);
 
         if ($action === 'export_pdf') {
             $pdf = Pdf::loadView('pages.stock-out.export-pdf', [
@@ -152,15 +152,15 @@ class StockOutController extends Controller
                 'items' => $data,
                 'start_date' => $start_date,
                 'end_date' => $end_date,
-                'department' => $department,
+                'product' => $product,
             ]);
             $fileName = "StockOut-Report-" . Carbon::now()->format('d-m-Y H:i:s') . '.pdf';
-            return $pdf->download($fileName);
+            return $pdf->stream($fileName);
         } elseif ($action === 'export_excel') {
             $arr = [
                 'start_date' => $start_date,
                 'end_date' => $end_date,
-                'department' => $department,
+                'product' => $product,
                 'items' => $data
             ];
             $fileName = "StockOut-Report-" . Carbon::now()->format('d-m-Y H:i:s') . '.xlsx';
@@ -168,12 +168,12 @@ class StockOutController extends Controller
         } else {
             return view('pages.stock-out.report', [
                 'title' => 'Stock Out Report',
-                'departments' => Department::orderBy('name', 'DESC')->get(),
+                'products' => product::orderBy('name', 'DESC')->get(),
                 'items' => $data,
                 'start_date' => $start_date,
                 'end_date' => $end_date,
-                'department_id' => $department_id,
-                'department' => $department,
+                'product_id' => $product_id,
+                'product' => $product,
             ]);
         }
     }

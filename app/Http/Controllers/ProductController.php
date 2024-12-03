@@ -178,6 +178,23 @@ class ProductController extends Controller
             return response()->json($item);
         }
     }
+    public function getByCode()
+    {
+        if (request()->ajax()) {
+            $item = Product::with(['part_number', 'unit', 'type', 'supplier', 'department', 'area', 'rack'])->where('code', request('code'))->first();
+            if ($item) {
+                return response()->json([
+                    'status' => true,
+                    'data' => $item
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'data' => []
+                ]);
+            }
+        }
+    }
 
     public function getAllByTypePart()
     {
@@ -222,18 +239,28 @@ class ProductController extends Controller
             'types' => Type::orderBy('name', 'ASC')->get(),
             'products' => Product::orderBy('name', 'ASC')->get(),
             'type_id' => null,
-            'product_id' => null
+            'product_id' => null,
+            'start_date' => null,
+            'end_date' => null
         ]);
     }
 
     public function report_action()
     {
         $type_id = request('type_id');
+        $start_date = request('start_date');
+        $end_date = request('end_date');
         $part_number_id = request('part_number_id');
         $product_id = request('product_id');
         $action = request('action');
         $items = Product::with(['part_number', 'unit', 'department']);
 
+        if ($start_date && $end_date) {
+            $items->whereDate('created_at', '>=', $start_date)
+                ->whereDate('created_at', '<=', $end_date);
+        } elseif ($start_date && !$end_date) {
+            $items->whereDate('created_at', $start_date);
+        }
         if ($type_id) {
             $items->where('type_id', $type_id);
         }
@@ -256,13 +283,17 @@ class ProductController extends Controller
                 'part_number' => $part_number ? $part_number->name : '-',
                 'type' => $type ? $type->name : '-',
                 'lot_number' => $lot_number ? $lot_number->name : '-',
+                'start_date' => $start_date,
+                'end_date' => $end_date,
             ]);
             $fileName = "Product-Report-" . Carbon::now()->format('d-m-Y H:i:s') . '.pdf';
-            return $pdf->download($fileName);
+            return $pdf->stream($fileName);
         } elseif ($action === 'export_excel') {
             $arr = [
                 'items' => $data,
                 'part_number' => $part_number ? $part_number->name : '-',
+                'start_date' => $start_date,
+                'end_date' => $end_date,
                 'type' => $type ? $type->name : '-',
                 'lot_number' => $lot_number ? $lot_number->name : '-',
             ];
@@ -278,7 +309,9 @@ class ProductController extends Controller
                 'types' => Type::orderBy('name', 'ASC')->get(),
                 'products' => Product::orderBy('name', 'ASC')->get(),
                 'type_id' => $type_id,
-                'product_id' => $product_id
+                'product_id' => $product_id,
+                'start_date' => $start_date,
+                'end_date' => $end_date
             ]);
         }
     }

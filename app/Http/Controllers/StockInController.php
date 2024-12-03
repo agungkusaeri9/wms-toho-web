@@ -46,13 +46,15 @@ class StockInController extends Controller
     public function store()
     {
         request()->validate([
-            'product_id' => ['required', 'exists:products,id'],
+            'product_code' => ['required'],
             'qty' => ['required', 'numeric']
         ]);
 
         DB::beginTransaction();
         try {
-            $data = request()->only(['product_id', 'qty']);
+            $arr = explode('-', request('product_code'));
+            $data = request()->only(['qty']);
+            $data['product_id'] = Product::where('code', $arr[0])->first()->id;
             $data['received_date'] = Carbon::now()->format('Y-m-d');
             $data['user_id'] = auth()->id();
             $data['code'] = StockIn::getNewCode();
@@ -60,10 +62,10 @@ class StockInController extends Controller
             $stokIn->product->increment('qty', request('qty'));
 
             DB::commit();
-            return redirect()->route('stock-ins.index')->with('success', 'Stock In Berhasil dibuat.');
+            return redirect()->back()->with('success', 'Stock In Berhasil dibuat.');
         } catch (\Throwable $th) {
             DB::rollBack();
-            return redirect()->route('stock-ins.index')->with('error', $th->getMessage());
+            return redirect()->back()->with('error', $th->getMessage());
         }
     }
 
@@ -109,11 +111,11 @@ class StockInController extends Controller
     {
         return view('pages.stock-in.report', [
             'title' => 'Stock In Report',
-            'suppliers' => Supplier::orderBy('name', 'DESC')->get(),
+            'products' => Product::orderBy('name', 'ASC')->get(),
             'items' => [],
             'start_date' => null,
             'end_date' => null,
-            'supplier_id' => null
+            'product_id' => null
         ]);
     }
 
@@ -121,27 +123,23 @@ class StockInController extends Controller
     {
         $start_date = request('start_date');
         $end_date = request('end_date');
-        $supplier_id = request('supplier_id');
+        $product_id = request('product_id');
         $action = request('action');
 
         $items = StockIn::with(['product']);
         if ($start_date && $end_date) {
-            $items->whereDate('received_date', '>=', $start_date)
-                ->whereDate('received_date', '<=', $end_date);
+            $items->whereDate('created_at', '>=', $start_date)
+                ->whereDate('created_at', '<=', $end_date);
         } elseif ($start_date && !$end_date) {
-            $items->whereHas('stock_in', function ($q) use ($start_date) {
-                $q->whereDate('received_date', $start_date);
-            });
+            $items->whereDate('created_at', $start_date);
         }
 
-        if ($supplier_id) {
-            $items->whereHas('product', function ($q) use ($supplier_id) {
-                $q->where('supplier_id', $supplier_id);
-            });
+        if ($product_id) {
+            $items->where('product_id', $product_id);
         }
 
         $data = $items->orderBy('id', 'DESC')->get();
-        $supplier = Supplier::find($supplier_id);
+        $product = Product::find($product_id);
 
         if ($action === 'export_pdf') {
             $pdf = Pdf::loadView('pages.stock-in.export-pdf', [
@@ -149,7 +147,7 @@ class StockInController extends Controller
                 'items' => $data,
                 'start_date' => $start_date,
                 'end_date' => $end_date,
-                'supplier' => $supplier
+                'product' => $product
             ]);
             $fileName = "StockIn-Report-" . Carbon::now()->format('d-m-Y H:i:s') . '.pdf';
             return $pdf->download($fileName);
@@ -157,7 +155,7 @@ class StockInController extends Controller
             $arr = [
                 'start_date' => $start_date,
                 'end_date' => $end_date,
-                'supplier' => $supplier,
+                'product' => $product,
                 'items' => $data
             ];
             $fileName = "StockIn-Report-" . Carbon::now()->format('d-m-Y H:i:s') . '.xlsx';
@@ -165,12 +163,12 @@ class StockInController extends Controller
         } else {
             return view('pages.stock-in.report', [
                 'title' => 'Stock In Report',
-                'suppliers' => Supplier::orderBy('name', 'DESC')->get(),
+                'products' => Product::orderBy('name', 'DESC')->get(),
                 'items' => $data,
                 'start_date' => $start_date,
                 'end_date' => $end_date,
-                'supplier_id' => $supplier_id,
-                'supplier' => $supplier,
+                'product_id' => $product_id,
+                'product' => $product,
             ]);
         }
     }

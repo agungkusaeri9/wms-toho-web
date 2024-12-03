@@ -9,48 +9,43 @@
     @vite(['resources/js'])
     <style>
         body {
-            font-size: 17px;
+            font-size: 8px;
+            font-family: "Arial Narrow", sans-serif;
+            /* letter-spacing: 0.5px; */
+            /* line-height: 1.2; */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .kotak {
             /* border: 1px solid black; */
-            width: 340px;
-            /* height: 219px; */
-            display: flex;
-            padding: 20px;
-            gap: 35px;
-            justify-content: space-between;
-            margin-top: 30px;
+            width: 80px;
+            /* height: 28px; */
+            padding: 5px;
+            margin-top: -8px !important;
             page-break-inside: avoid;
             page-break-after: auto;
+            margin-left: 137px;
+            justify-content: start;
+            margin-bottom: -10px;
+            display: flex;
+            justify-content: center;
+            text-align: center;
         }
 
         .bagian1 {
-            width: 70%;
-        }
-
-        .bagian2 {
-            width: 30%;
-            /* border: 1px solid black; */
+            width: 100%;
         }
 
         svg {
-            max-height: 88px;
-            border: 0.001px solid black;
-            width: 100%;
+            /* max-height: 88px; */
+            /* border: 0.001px solid black; */
+            /* width: 100%; */
             /* padding: 2px; */
             padding: 5px 0;
-            ;
+
         }
 
-        .amount {
-            text-align: center;
-            /* margin-right: 5px; */
-            width: 100%;
-            padding: 0;
-            margin: 0;
-            border: 0.001px solid black;
-        }
 
         .kotak-amount {
             border: 0.001px solid black;
@@ -74,91 +69,19 @@
 </head>
 
 <body onload="print()">
-    @foreach ($products as $key => $product)
-        @if ($key == 0)
-            @for ($i = 1; $i < $amount + 1; $i++)
-                @if ($i == 1)
-                    <div class="kotak" style="margin-top:10px;">
-                        <div class="bagian1">
-                            <div class="product_name">
-                                {{ $product->name }}
-                            </div>
-                            <table>
-                                <tr>
-                                    <td style="width:100px">Material Code</td>
-                                    <td>:</td>
-                                    <td>{{ $product->part_number->name }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Qty</td>
-                                    <td>:</td>
-                                    <td>{{ $product->qty }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Unit</td>
-                                    <td>:</td>
-                                    <td>{{ $product->unit->name }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Lot No</td>
-                                    <td>:</td>
-                                    <td>{{ $product->lot_number }}</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="bagian2">
-                            {{-- <img src="{{ asset('assets/images/contoh-qrcode.png') }}" alt="" class="gambar-qr"> --}}
-                            <div class="gambar-qr">
-                                {!! QrCode::size(80)->generate('https://google.com') !!}
-                            </div>
-
-                            <h1 class="amount">1/{{ $i }}</h1>
-                        </div>
-                    </div>
-                @endif
-            @endfor
-        @else
-            @for ($i = 1; $i < $amount + 1; $i++)
-                <div class="kotak">
-                    <div class="bagian1">
-                        <div class="product_name">
-                            {{ $product->name }}
-                        </div>
-                        <table>
-                            <tr>
-                                <td style="width:100px">Material Code</td>
-                                <td>:</td>
-                                <td>{{ $product->part_number->name }}</td>
-                            </tr>
-                            <tr>
-                                <td>Qty</td>
-                                <td>:</td>
-                                <td>{{ $product->qty }}</td>
-                            </tr>
-                            <tr>
-                                <td>Unit</td>
-                                <td>:</td>
-                                <td>{{ $product->unit->name }}</td>
-                            </tr>
-                            <tr>
-                                <td>Lot No</td>
-                                <td>:</td>
-                                <td>{{ $product->lot_number }}</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="bagian2">
-                        {{-- <img src="{{ asset('assets/images/contoh-qrcode.png') }}" alt="" class="gambar-qr"> --}}
-                        <div class="gambar-qr">
-                            {!! QrCode::size(80)->generate('https://google.com') !!}
-                        </div>
-
-                        <h1 class="amount">1/{{ $i }}</h1>
+    @for ($i = 1; $i < $amount + 1; $i++)
+        @if ($i == 1)
+            <div class="kotak" style="margin-top:10px;">
+                <div class="bagian1">
+                    <div style="font-weight-bold">
+                        {{ Carbon\Carbon::now()->translatedFormat('d-m-Y') . ' - ' . $product->code }}</div>
+                    <div class="text-align:center !important;">
+                        {!! QrCode::size(32)->generate($product->dataQr($qty)) !!}
                     </div>
                 </div>
-            @endfor
+            </div>
         @endif
-    @endforeach
+    @endfor
 </body>
 
 </html>

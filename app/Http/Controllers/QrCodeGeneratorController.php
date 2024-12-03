@@ -42,16 +42,18 @@ class QrCodeGeneratorController extends Controller
 
     public function print()
     {
-        $products_ids = request('product_ids');
-        if (count($products_ids) < 1) {
-            return redirect()->back('error', 'Pilih Product terlebih dahulu.');
-        }
-        $products = Product::with(['unit', 'part_number'])->whereIn('id', $products_ids)->get();
+        request()->validate([
+            'product_id' => ['required', 'numeric'],
+            'qty' => ['required', 'numeric'],
+            'amount' => ['required', 'numeric']
+        ]);
+        $product = Product::with(['unit', 'part_number'])->where('id', request('product_id'))->first();
         $amount = request('amount') ?? 1;
         return view('pages.product.print-qrcode', [
             'title' => 'Generate Qr Code',
             'amount' => $amount,
-            'products' => $products
+            'product' => $product,
+            'qty' => request('qty')
         ]);
     }
 }
