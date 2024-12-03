@@ -28,69 +28,77 @@
                                 </div>
                             @enderror
                         </div>
-                        <ul class="list-unstyled">
-                            <li class="d-flex justify-content-between mb-3">
-                                <div class="font-weight-normal">
-                                    Part No.
-                                </div>
-                                <span id="part_number">-</span>
-                            </li>
-                            <li class="d-flex justify-content-between mb-3">
-                                <div class="font-weight-normal">
-                                    Part Name
-                                </div>
-                                <span id="part_name">-</span>
-                            </li>
-                            <li class="d-flex justify-content-between mb-3">
-                                <div class="font-weight-normal">
-                                    Lot No.
-                                </div>
-                                <span id="lot_number">-</span>
-                            </li>
-                            <li class="d-flex justify-content-between mb-3">
-                                <div class="font-weight-normal">
-                                    Type
-                                </div>
-                                <span id="type">-</span>
-                            </li>
-                            <li class="d-flex justify-content-between mb-3">
-                                <div class="font-weight-normal">
-                                    Unit
-                                </div>
-                                <span id="unit">-</span>
-                            </li>
-                            <li class="d-flex justify-content-between mb-3">
-                                <div class="font-weight-normal">
-                                    Description
-                                </div>
-                                <span id="description">-</span>
-                            </li>
-                            <li class="d-flex justify-content-between mb-3">
-                                <div class="font-weight-normal">
-                                    Department
-                                </div>
-                                <span id="department">-</span>
-                            </li>
-                            {{-- <li class="d-flex justify-content-between mb-3">
-                                <div class="font-weight-normal">
-                                    Qty
-                                </div>
-                                <span id="qty">-</span>
-                            </li> --}}
-                            <li class="d-flex justify-content-between mb-3">
-                                <div class="font-weight-normal">
-                                    Area
-                                </div>
-                                <span id="area">-</span>
-                            </li>
-                            <li class="d-flex justify-content-between mb-3">
-                                <div class="font-weight-normal">
-                                    Rack
-                                </div>
-                                <span id="rack">-</span>
-                            </li>
-                        </ul>
+                        <div class="row">
+                            <div class="col-md">
+                                <table class="table table-sm table-borderless">
+                                    <tr class="mb-5">
+                                        <th style="width: 150px">Part No</th>
+                                        <td width="10">:</td>
+                                        <td style="width:400px" id="part_number">
+                                            <span id="part_number"></span>
+                                        </td>
+                                    </tr>
+                                    <tr class="mb-5">
+                                        <th style="width: 150px">Part Name</th>
+                                        <td width="10">:</td>
+                                        <td style="width:400px">
+                                            <span id="part_name"></span>
+                                        </td>
+                                    </tr>
+                                    <tr class="mb-5">
+                                        <th style="width: 150px">Lot No.</th>
+                                        <td width="10">:</td>
+                                        <td style="width:400px">
+                                            <span id="lot_number"></span>
+                                        </td>
+                                    </tr>
+                                    <tr class="mb-5">
+                                        <th style="width: 150px">Type</th>
+                                        <td width="10">:</td>
+                                        <td style="width:400px">
+                                            <span id="type"></span>
+                                        </td>
+                                    </tr>
+                                    <tr class="mb-5">
+                                        <th style="width: 150px">Unit</th>
+                                        <td width="10">:</td>
+                                        <td style="width:400px">
+                                            <span id="unit"></span>
+                                        </td>
+                                    </tr>
+                                    <tr class="mb-5">
+                                        <th style="width: 150px">Description</th>
+                                        <td width="10">:</td>
+                                        <td style="width:400px">
+                                            <span id="description"></span>
+                                        </td>
+                                    </tr>
+                                    <tr class="mb-5">
+                                        <th style="width: 150px">Department</th>
+                                        <td width="10">:</td>
+                                        <td style="width:400px">
+                                            <span id="department"></span>
+                                        </td>
+                                    </tr>
+                                    <tr class="mb-5">
+                                        <th style="width: 150px">Area</th>
+                                        <td width="10">:</td>
+                                        <td style="width:400px">
+                                            <span id="area"></span>
+                                        </td>
+                                    </tr>
+                                    <tr class="mb-5">
+                                        <th style="width: 150px">Rack</th>
+                                        <td width="10">:</td>
+                                        <td style="width:400px">
+                                            <span id="rack"></span>
+                                        </td>
+                                    </tr>
+                                </table>
 
+                                </ul>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <button class="btn btn-primary float-right">Submit</button>
                         </div>

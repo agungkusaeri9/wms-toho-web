@@ -60,11 +60,9 @@ class ProductController extends Controller
             'name' => ['required'],
             'unit_id' => ['required', 'exists:units,id'],
             'department_id' => ['required', 'exists:departments,id'],
-            'initial_qty' => ['required', 'numeric'],
             'image' => ['image', 'mimes:jpg,jpeg,png,svg', 'max:2048'],
             'area_id' => ['required', 'exists:areas,id'],
             'rack_id' => ['required', 'exists:racks,id'],
-            'lot_number' => ['required', 'unique:products,lot_number'],
             'supplier_id' => ['required', 'exists:suppliers,id'],
             'type_id' => ['required', 'exists:types,id'],
         ]);
@@ -77,12 +75,9 @@ class ProductController extends Controller
 
         DB::beginTransaction();
         try {
-            $data = request()->only(['code', 'name', 'part_number_id', 'unit_id', 'department_id', 'initial_qty', 'description', 'area_id', 'rack_id', 'lot_number', 'supplier_id', 'type_id']);
+            $data = request()->only(['code', 'name', 'part_number_id', 'unit_id', 'department_id', 'initial_qty', 'description', 'area_id', 'rack_id', 'supplier_id', 'type_id']);
             if (request()->file('image')) {
                 $data['image'] = request()->file('image')->store('prduct', 'public');
-            }
-            if (request('initial_qty')) {
-                $data['qty'] = request('initial_qty');
             }
             Product::create($data);
 
@@ -120,22 +115,14 @@ class ProductController extends Controller
             'image' => ['image', 'mimes:jpg,jpeg,png,svg', 'max:2048'],
             'area_id' => ['required', 'exists:areas,id'],
             'rack_id' => ['required', 'exists:racks,id'],
-            'lot_number' => ['required', 'unique:products,lot_number,' . $id . ''],
             'supplier_id' => ['required', 'exists:suppliers,id'],
             'type_id' => ['required', 'exists:types,id'],
         ]);
 
-        // cek lot dan part number
-        $cekLotPart = Product::where('lot_number', request('lot_number'))->where('part_number_id', request('part_number_id'))->whereNot('id', $id)->first();
-        if ($cekLotPart) {
-            return redirect()->back()->with('errors', 'Lot No. sudah sudah ada di product lain.');
-        }
-
-
         DB::beginTransaction();
         try {
             $item = Product::findOrFail($id);
-            $data = request()->only(['code', 'name', 'part_number_id', 'unit_id', 'department_id', 'initial_qty', 'description', 'area_id', 'rack_id', 'lot_number', 'supplier_id', 'type_id']);
+            $data = request()->only(['code', 'name', 'part_number_id', 'unit_id', 'department_id', 'description', 'area_id', 'rack_id', 'supplier_id', 'type_id']);
             if (request()->file('image')) {
                 if ($item->image) {
                     Storage::disk('public')->delete($item->image);

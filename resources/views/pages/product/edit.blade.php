@@ -9,17 +9,6 @@
                         @csrf
                         @method('patch')
                         <div class='form-group mb-3'>
-                            <label for='lot_number' class='mb-2'>Lot Number</label>
-                            <input type='number' name='lot_number' id='lot_number'
-                                class='form-control @error('lot_number') is-invalid @enderror'
-                                value='{{ $item->lot_number ?? old('lot_number') }}'>
-                            @error('lot_number')
-                                <div class='invalid-feedback'>
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-                        <div class='form-group mb-3'>
                             <label for='name' class='mb-2'>Name</label>
                             <input type='text' name='name' class='form-control @error('name') is-invalid @enderror'
                                 value='{{ $item->name ?? old('name') }}'>
@@ -156,8 +145,7 @@
                             </div>
                             <div class="col-md align-self-center">
                                 <input type='file' name='image' id='image'
-                                    class='form-control @error('image') is-invalid @enderror'
-                                    value='{{ old('image') }}'>
+                                    class='form-control @error('image') is-invalid @enderror' value='{{ old('image') }}'>
                                 @error('image')
                                     <div class='invalid-feedback'>
                                         {{ $message }}

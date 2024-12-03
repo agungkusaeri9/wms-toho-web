@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            // $table->dropColumn('code');
+            $table->dropColumn('initial_qty');
+            $table->dropColumn('qty');
+            $table->string('lot_number')->nullable()->change();
         });
     }
 
@@ -22,7 +24,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            // $table->string('code')->nullable()->unique();
+            $table->integer('initial_qty')->default(0);
+            $table->integer('qty')->default(0);
+            $table->integer('lot_number')->nullable()->change();
         });
     }
 };

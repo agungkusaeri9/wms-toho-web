@@ -18,17 +18,6 @@
                             @enderror
                         </div>
                         <div class='form-group mb-3'>
-                            <label for='lot_number' class='mb-2'>Lot Number</label>
-                            <input type='number' name='lot_number' id='lot_number'
-                                class='form-control @error('lot_number') is-invalid @enderror'
-                                value='{{ old('lot_number') }}'>
-                            @error('lot_number')
-                                <div class='invalid-feedback'>
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-                        <div class='form-group mb-3'>
                             <label for='name' class='mb-2'>Name</label>
                             <input type='text' name='name' class='form-control @error('name') is-invalid @enderror'
                                 value='{{ old('name') }}'>
@@ -126,17 +115,6 @@
                                 @endforeach
                             </select>
                             @error('supplier_id')
-                                <div class='invalid-feedback'>
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-                        <div class='form-group mb-3'>
-                            <label for='initial_qty' class='mb-2'>Initial Qty</label>
-                            <input type='number' name='initial_qty' id='initial_qty'
-                                class='form-control @error('initial_qty') is-invalid @enderror'
-                                value='{{ old('initial_qty') }}'>
-                            @error('initial_qty')
                                 <div class='invalid-feedback'>
                                     {{ $message }}
                                 </div>

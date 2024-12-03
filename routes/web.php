@@ -74,4 +74,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('qrcode-generator/product', [QrCodeGeneratorController::class, 'index'])->name('qrcode-generator.product.index');
     Route::get('qrcode-generator/product/print', [QrCodeGeneratorController::class, 'print'])->name('qrcode-generator.product.print');
+
+    Route::get('dashboard/chart', [DashboardController::class, 'getStockData'])->name('dashboard.chart');
+    Route::get('/product-qty', [DashboardController::class, 'getProductQtyData'])->name('dashboard.product-qty');
 });

@@ -17,9 +17,7 @@
                                     <th>Image</th>
                                     <th>Part No.</th>
                                     <th>Part Name</th>
-                                    <th>Lot No.</th>
                                     <th>Unit</th>
-                                    <th>Qty</th>
                                     @canany(['Product Edit', 'Product Delete', 'Rack Index'])
                                         <th>Aksi</th>
                                     @endcanany
@@ -35,9 +33,7 @@
                                         </td>
                                         <td>{{ $item->part_number->name ?? '-' }}</td>
                                         <td>{{ $item->name }}</td>
-                                        <td>{{ $item->lot_number ?? '-' }}</td>
                                         <td>{{ $item->unit->name }}</td>
-                                        <td>{{ $item->qty }}</td>
                                         @canany(['Product Edit', 'Product Delete'])
                                             <td>
                                                 @can('Product Show')
