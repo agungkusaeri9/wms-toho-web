@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\API\V1\AuthController;
 use App\Http\Controllers\API\V1\QrGeneratorController;
+use App\Http\Controllers\API\V1\StockInController;
+use App\Http\Controllers\API\V1\StockOutController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,4 +26,6 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 Route::middleware(['auth.jwt'])->group(function () {
     Route::post('me', [AuthController::class, 'me']);
     Route::post('check-qr', [QrGeneratorController::class, 'checkQr']);
+    Route::post('stock-in/create', [StockInController::class, 'store']);
+    Route::post('stock-out/create', [StockOutController::class, 'store']);
 });
