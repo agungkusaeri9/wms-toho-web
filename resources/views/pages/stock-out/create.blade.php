@@ -1,27 +1,38 @@
 @extends('layouts.app')
 @section('content')
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-5">
             <div class="card">
                 <div class="card-body">
                     <h4 class="mb-4">Scan Qr Code Stock Out</h4>
                     <form action="{{ route('stock-outs.store') }}" method="post">
                         @csrf
                         <div class='form-group mb-3'>
-                            <label for='product_code' class='mb-2'>Scan</label>
-                            <input type='text' name='product_code' id='product_code'
-                                class='form-control @error('product_code') is-invalid @enderror'
-                                value='{{ old('product_code') }}' placeholder="Scan Qr Code" autofocus="true">
-                            @error('product_code')
+                            <label for='generate_code' class='mb-2'>Scan</label>
+                            <input type='text' name='generate_code' id='generate_code'
+                                class='form-control @error('generate_code') is-invalid @enderror'
+                                value='{{ old('generate_code') }}' placeholder="Scan Qr Code" autofocus="true">
+                            @error('generate_code')
                                 <div class='invalid-feedback'>
                                     {{ $message }}
                                 </div>
                             @enderror
                         </div>
-                        <div class='form-group mb-3 d-none'>
+                        <div class='form-group mb-3'>
+                            <label for='stock' class='mb-2'>Stock</label>
+                            <input type='number' name='stock' id='stock'
+                                class='form-control @error('stock') is-invalid @enderror' readonly
+                                value='{{ old('stock') }}'>
+                            @error('stock')
+                                <div class='invalid-feedback'>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class='form-group mb-3'>
                             <label for='qty' class='mb-2'>Qty</label>
                             <input type='number' name='qty' id='qty'
-                                class='form-control @error('qty') is-invalid @enderror' value='{{ 1 ?? old('qty') }}'>
+                                class='form-control @error('qty') is-invalid @enderror' value='{{ old('qty') }}'>
                             @error('qty')
                                 <div class='invalid-feedback'>
                                     {{ $message }}
@@ -99,6 +110,7 @@
                                 </ul>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <button class="btn btn-primary float-right">Submit</button>
                         </div>
@@ -146,28 +158,26 @@
 
     <script>
         let typingTimer;
-        const doneTypingInterval = 200;
+        const doneTypingInterval = 500;
 
-        $('#product_code').on('input', function() {
+        $('#generate_code').on('input', function() {
             clearTimeout(typingTimer);
-            let data = $(this).val();
-            let arr = data.split('-');
-            let code = arr[0];
-            let qty = arr[arr.length - 1];
-            $('#qty').val(qty);
+            let code = $(this).val();
+            $('#generate_code').attr('readonly', true);
             typingTimer = setTimeout(function() {
                 if (code.length > 0) {
                     $.ajax({
-                        url: '{{ route('products.getByCode') }}',
+                        url: '{{ route('qrcode-generator.product.getByCode') }}',
                         type: 'GET',
                         dataType: 'JSON',
                         data: {
                             code
                         },
                         success: function(response) {
-                            console.log(response);
+
                             if (response.status) {
-                                let data = response.data;
+                                let data = response.data.product;
+                                $('#stock').val(response.data.qty);
                                 $('#part_number').html(data.part_number.name);
                                 $('#part_name').html(data.name);
                                 $('#lot_number').html(data.lot_number);
@@ -195,6 +205,8 @@
                             console.log(err);
                         }
                     })
+                } else {
+                    Swal.fire('Error', 'Qr Code Not Found.', 'error')
                 }
             }, doneTypingInterval);
         })

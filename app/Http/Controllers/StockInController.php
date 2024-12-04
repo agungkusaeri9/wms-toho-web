@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\StockInExport;
+use App\Models\Generate;
 use App\Models\Product;
 use App\Models\StockIn;
 use App\Models\StockInDetail;
@@ -46,24 +47,24 @@ class StockInController extends Controller
     public function store()
     {
         request()->validate([
-            'product_code' => ['required'],
+            'generate_code' => ['required'],
             'qty' => ['required', 'numeric']
         ]);
 
         DB::beginTransaction();
         try {
-            $arr = explode('-', request('product_code'));
+            $generate = Generate::where('code', request('generate_code'))->first();
             $data = request()->only(['qty']);
-            $data['product_id'] = Product::where('code', $arr[0])->first()->id;
+            $data['product_id'] = $generate->product_id;
             $data['received_date'] = Carbon::now()->format('Y-m-d');
             $data['user_id'] = auth()->id();
             $data['code'] = StockIn::getNewCode();
             $stokIn = StockIn::create($data);
-            $stokIn->product->increment('qty', request('qty'));
 
             DB::commit();
             return redirect()->back()->with('success', 'Stock In Berhasil dibuat.');
         } catch (\Throwable $th) {
+            // throw $th;
             DB::rollBack();
             return redirect()->back()->with('error', $th->getMessage());
         }

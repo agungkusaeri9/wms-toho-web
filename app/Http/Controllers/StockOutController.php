@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\StockOutExport;
 use App\Models\Department;
+use App\Models\Generate;
 use App\Models\Product;
 use App\Models\StockOut;
 use App\Models\StockOutDetail;
@@ -46,26 +47,32 @@ class StockOutController extends Controller
     public function store()
     {
         request()->validate([
-            'product_code' => ['required'],
+            'generate_code' => ['required'],
             'qty' => ['required', 'numeric']
         ]);
+        $generate = Generate::where('code', request('generate_code'))->first();
 
+        if ($generate->qty < request('qty')) {
+            return redirect()->back()->with('error', 'Qty melebihi stock');
+        }
         DB::beginTransaction();
         try {
-            $arr = explode('-', request('product_code'));
-            $product = Product::where('code', $arr[0])->first();
-            if ($product->qty < request('qty')) {
-                return redirect()->back()->with('error', 'Qty tidak boleh melebihi stock');
-            }
             $data = request()->only(['qty']);
-            $data['department_id'] = $product->department_id;
+            $data['product_id'] = $generate->product_id;
             $data['date'] = Carbon::now()->format('Y-m-d');
-            $data['product_id'] = $product->id;
             $data['user_id'] = auth()->id();
             $data['code'] = StockOut::getNewCode();
-            $stockOut = StockOut::create($data);
-            $stockOut->product->decrement('qty', request('qty'));
+            $data['department_id'] = $generate->product->department_id;
+            $stokIn = StockOut::create($data);
 
+            if ($generate->qty != request('qty')) {
+                // jika qty tidak sama dengan stock
+                // update sisa stok di generate
+                $sisa = $generate->qty - request('qty');
+                $generate->update([
+                    'qty' => $sisa
+                ]);
+            }
             DB::commit();
             return redirect()->back()->with('success', 'Stock Out Berhasil dibuat.');
         } catch (\Throwable $th) {

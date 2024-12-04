@@ -2,58 +2,129 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Generate;
 use App\Models\PartNumber;
 use App\Models\Product;
 use App\Models\Type;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class QrCodeGeneratorController extends Controller
 {
     public function index()
     {
         $type_id = request('type_id');
-        $part_number_id = request('part_number_id');
         $product_id = request('product_id');
-        $action = request('action');
         $data = Product::with(['part_number', 'unit', 'department']);
 
         if ($type_id) {
             $data->where('type_id', $type_id);
         }
-        if ($part_number_id) {
-            $data->where('part_number_id', $part_number_id);
-        }
         if ($product_id) {
             $data->where('id', $product_id);
         }
         $items = $data->orderBy('name', 'ASC')->get();
-
-        return view('pages.product.qrcode', [
+        $generates = Generate::with('product')->whereHas('product', function ($q) {
+            $q->orderBy('name', 'ASC');
+        })->get();
+        return view('pages.generate.qrcode', [
             'title' => 'Generate Qr Code',
             'items' => $items,
-            'part_numbers' => PartNumber::orderBy('name', 'ASC')->get(),
-            'types' => Type::orderBy('name', 'ASC')->get(),
-            'products' => Product::orderBy('name', 'ASC')->get(),
-            'type_id' => request('type_id'),
-            'part_number_id' => request('part_number_id'),
+            'generates' => $generates,
             'product_id' => request('product_id')
         ]);
     }
 
-    public function print()
+    public function store()
     {
         request()->validate([
             'product_id' => ['required', 'numeric'],
-            'qty' => ['required', 'numeric'],
-            'amount' => ['required', 'numeric']
+            'lot_number' => ['required'],
+            'qty' => ['required', 'numeric']
         ]);
+
+        // cek lot number
+        $cekLot = Product::where('lot_number', request('lot_number'))->first();
+        if ($cekLot) {
+            return redirect()->back()->with('error', 'Lot No. sudah terpakai.');
+        }
         $product = Product::with(['unit', 'part_number'])->where('id', request('product_id'))->first();
-        $amount = request('amount') ?? 1;
-        return view('pages.product.print-qrcode', [
-            'title' => 'Generate Qr Code',
-            'amount' => $amount,
-            'product' => $product,
-            'qty' => request('qty')
+
+        // cek product in generate
+        $cekGenerate = Generate::where('product_id', request('product_id'))->first();
+        if ($cekGenerate) {
+            return redirect()->back()->with('error', 'Product sudah di generate.');
+        }
+
+        DB::beginTransaction();
+        try {
+            // generate
+            $generate =  Generate::create([
+                'product_id' => $product->id,
+                'qty' => request('qty')
+            ]);
+            $generate->product->update([
+                'lot_number' => request('lot_number')
+            ]);
+            DB::commit();
+            return redirect()->back()->with('success', 'Qr berhasil di generate.');
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return redirect()->back()->with('error', $th->getMessage());
+        }
+    }
+
+
+    public function edit($id)
+    {
+        $item = Generate::with('product')->where('id', $id)->first();
+        return view('pages.generate.edit', [
+            'title' => 'Edit Qr Code',
+            'item' => $item
         ]);
+    }
+
+    public function update($id)
+    {
+        request()->validate([
+            'qty' => ['required', 'numeric']
+        ]);
+        try {
+            $item = Generate::findOrFail($id);
+            $data = request()->only(['qty']);
+            $item->update($data);
+            return redirect()->route('qrcode-generator.product.index')->with('success', 'Qr berhasil diupdate.');
+        } catch (\Throwable $th) {
+            //throw $th;
+            return redirect()->back()->with('error', $th->getMessage());
+        }
+    }
+
+    public function print($code)
+    {
+        $item = Generate::with('product')->where('code', $code)->first();
+        return view('pages.generate.print-qrcode', [
+            'title' => 'Generate Qr Code',
+            'item' => $item
+        ]);
+    }
+
+    public function getByCode()
+    {
+        if (request()->ajax()) {
+            $item = Generate::with(['product.part_number', 'product.type', 'product.unit', 'product.department', 'product.rack', 'product.area'])->where('code', request('code'))->first();
+            if ($item) {
+                return response()->json([
+                    'status' => true,
+                    'data' => $item
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'data' => []
+                ]);
+            }
+        }
     }
 }

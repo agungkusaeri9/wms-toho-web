@@ -97,6 +97,11 @@ class Product extends Model
         return $qr;
     }
 
+    public function generate()
+    {
+        $this->hasOne(Generate::class);
+    }
+
 
 
     public function remains()
@@ -105,5 +110,22 @@ class Product extends Model
         $stock_in = StockIn::where('product_id', $this->id)->sum('qty');
         $remains = $stock_in - $stock_out;
         return $remains;
+    }
+
+    public function remains2()
+    {
+        $stock_out = $this->stockOuts()->sum('qty');  // Menggunakan relasi stockOuts
+        $stock_in = $this->stockIns()->sum('qty');    // Menggunakan relasi stockIns
+        return $stock_in - $stock_out;
+    }
+
+    public function stockIns()
+    {
+        return $this->hasMany(StockIn::class, 'product_id');
+    }
+
+    public function stockOuts()
+    {
+        return $this->hasMany(StockOut::class, 'product_id');
     }
 }

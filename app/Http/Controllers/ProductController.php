@@ -274,7 +274,7 @@ class ProductController extends Controller
                 'end_date' => $end_date,
             ]);
             $fileName = "Product-Report-" . Carbon::now()->format('d-m-Y H:i:s') . '.pdf';
-            return $pdf->stream($fileName);
+            return $pdf->download($fileName);
         } elseif ($action === 'export_excel') {
             $arr = [
                 'items' => $data,

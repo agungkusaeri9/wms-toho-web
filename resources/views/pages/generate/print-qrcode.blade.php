@@ -69,19 +69,15 @@
 </head>
 
 <body onload="print()">
-    @for ($i = 1; $i < $amount + 1; $i++)
-        @if ($i == 1)
-            <div class="kotak" style="margin-top:10px;">
-                <div class="bagian1">
-                    <div style="font-weight-bold">
-                        {{ Carbon\Carbon::now()->translatedFormat('d-m-Y') . ' - ' . $product->code }}</div>
-                    <div class="text-align:center !important;">
-                        {!! QrCode::size(32)->generate($product->dataQr($qty)) !!}
-                    </div>
-                </div>
+    <div class="kotak" style="margin-top:10px;">
+        <div class="bagian1">
+            <div style="font-weight-bold">
+                {{ Carbon\Carbon::now()->translatedFormat('d-m-Y') . ' - ' . $item->product->code }}</div>
+            <div class="text-align:center !important;">
+                {!! QrCode::size(32)->generate($item->code) !!}
             </div>
-        @endif
-    @endfor
+        </div>
+    </div>
 </body>
 
 </html>

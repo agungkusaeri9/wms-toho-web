@@ -4,45 +4,36 @@
         <div class="col-xl-3">
             <div class="card">
                 <div class="card-body text-center">
-                    <h4 class="card-title mb-3">Stock In Today</h4>
-                    <h1 class="display-1">0</h1>
+                    <h5 class=" mb-3">Stock In Today</h5>
+                    <h1 class="display-3">{{ $count['stock_in_today'] }}</h1>
                 </div>
             </div>
         </div>
         <div class="col-xl-3">
             <div class="card">
                 <div class="card-body text-center">
-                    <h4 class="card-title mb-3">Stock Out Today</h4>
-                    <h1 class="display-1">0</h1>
+                    <h5 class=" mb-3">Stock Out Today</h5>
+                    <h1 class="display-3">{{ $count['stock_out_today'] }}</h1>
+
                 </div>
             </div>
         </div>
         <div class="col-xl-3">
             <div class="card">
                 <div class="card-body text-center">
-                    <h4 class="card-title mb-3">Total Product</h4>
-                    <h1 class="display-1">0</h1>
+                    <h5 class=" mb-3">Total Product</h5>
+                    <h1 class="display-3">{{ $count['product'] }}</h1>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-8 d-flex grid-margin stretch-card">
+        <div class="col-lg-12 d-flex grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex flex-wrap justify-content-between">
-                        <h4 class="card-title mb-3">Statistic</h4>
+                        <h5 class=" mb-3">Statistic</h5>
                         <canvas id="stockChart" width="400" height="200"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 d-flex grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex flex-wrap justify-content-between">
-                        <h4 class="card-title mb-3">Product Stock</h4>
-                        <canvas id="doughnutChart"></canvas>
                     </div>
                 </div>
             </div>
