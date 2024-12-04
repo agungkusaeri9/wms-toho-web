@@ -39,8 +39,7 @@
                         </div>
                         <div class='form-group mb-3'>
                             <label for='roles' class='mb-2'>Roles</label>
-                            <select name="roles[]" multiple id="roles"
-                                class="form-control @error('roles') is-invalid @enderror">
+                            <select name="roles" id="roles" class="form-control @error('roles') is-invalid @enderror">
                                 @foreach ($roles as $role)
                                     <option value="{{ $role->name }}">{{ $role->name }}</option>
                                 @endforeach

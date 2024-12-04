@@ -62,15 +62,16 @@ class RoleController extends Controller
 
         request()->validate([
             'name' => ['required', 'unique:roles,name'],
-            'permissions' => ['required', 'array']
+            'guard_name' => ['required', 'in:web,api'],
+            // 'permissions' => ['required', 'array']
         ]);
 
         DB::beginTransaction();
         try {
             $permissions = request('permissions');
-            $data = request()->only(['name']);
+            $data = request()->only(['name', 'guard_name']);
             $role  = Role::create($data);
-            $role->givePermissionTo($permissions);
+            // $role->givePermissionTo($permissions);
             DB::commit();
             return redirect()->route('roles.index')->with('success', 'Role berhasil ditambahkan.');
         } catch (\Throwable $th) {
@@ -114,13 +115,14 @@ class RoleController extends Controller
     {
         request()->validate([
             'name' => ['required', 'unique:roles,name,' . $id . ''],
+            'guard_name' => ['required', 'in:web,api'],
             'permissions' => ['required', 'array']
         ]);
 
         DB::beginTransaction();
         try {
             $item = Role::findOrFail($id);
-            $data = request()->only(['name']);
+            $data = request()->only(['name', 'guard_name']);
             $permissions = request('permissions');
             $item->update($data);
             $item->syncPermissions($permissions);
@@ -135,7 +137,6 @@ class RoleController extends Controller
 
     public function destroy($id)
     {
-
         DB::beginTransaction();
         try {
             $item = Role::findById($id);

@@ -42,23 +42,23 @@ class UserController extends Controller
             'name' => ['required', 'min:3'],
             'email' => ['required', 'unique:users,email'],
             'password' => ['min:5', 'confirmed'],
-            'roles' => ['required', 'array'],
+            'roles' => ['required'],
             'avatar' => ['image', 'mimes:jpg,jpeg,png,svg', 'max:2048']
         ]);
 
         DB::beginTransaction();
         try {
-            $roles = request('roles');
+            $role = Role::where('name', request('roles'))->firstOrFail();
             $data = request()->only(['name', 'email']);
             $data['password'] = bcrypt(request('password'));
             request()->file('avatar') ? $data['avatar'] = request()->file('avatar')->store('users', 'public') : NULL;
             $user = User::create($data);
-            $user->assignRole($roles);
+            $user->assignRole($role);
             DB::commit();
             return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan.');
         } catch (\Throwable $th) {
-            DB::rollBack();
-            // throw $th;
+            // DB::rollBack();
+            throw $th;
             return redirect()->back()->with('error', $th->getMessage());
         }
     }

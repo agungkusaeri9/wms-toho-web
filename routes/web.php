@@ -19,6 +19,7 @@ use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use App\Models\Department;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*

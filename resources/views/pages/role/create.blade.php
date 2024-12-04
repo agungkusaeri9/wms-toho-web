@@ -17,6 +17,20 @@
                                 </div>
                             @enderror
                         </div>
+                        <div class='form-group'>
+                            <label for='guard_name'>Guard</label>
+                            <select name='guard_name' id='guard_name'
+                                class='form-control py-3 @error('guard_name') is-invalid @enderror'>
+                                <option value='' selected disabled>Pilih Guard</option>
+                                <option value="web">Web</option>
+                                <option value="api">Api</option>
+                            </select>
+                            @error('guard_name')
+                                <div class='invalid-feedback'>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
                         <table class="table table-borderless permissionTable overflow-hidden my-4 p-4">
                             <th class="px-4">
                                 Grup
