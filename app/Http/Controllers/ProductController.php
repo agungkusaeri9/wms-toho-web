@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ProductExport;
+use App\Imports\ProductImport;
 use App\Models\Area;
 use App\Models\Department;
 use App\Models\PartNumber;
@@ -301,5 +302,15 @@ class ProductController extends Controller
                 'end_date' => $end_date
             ]);
         }
+    }
+
+    public function import()
+    {
+        // request()->validate([
+        //     'file' => ['required', 'file', 'mimes:xls,xlsx', 'max:12048']
+        // ]);
+
+        Excel::import(new ProductImport, request()->file('file'));
+        return redirect()->route('products.index')->with('success', 'Product has been imported successfully.');
     }
 }

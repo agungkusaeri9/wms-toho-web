@@ -85,9 +85,9 @@ class Product extends Model
 
     public static function booted()
     {
-        static::updating(function ($model) {
+        static::created(function ($model) {
             $model->uuid = \Str::uuid()->toString();
-            $model->code = self::getNewCode();
+            // $model->code = self::getNewCode();
         });
     }
 

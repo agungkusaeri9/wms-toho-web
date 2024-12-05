@@ -64,7 +64,7 @@
             </div>
         @endcan
         @can('Qr Generator Index')
-            <div class="col-md">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title mb-3">Qr Generator List</h4>

@@ -54,6 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::get('products/getByCode', [ProductController::class, 'getByCode'])->name('products.getByCode');
     Route::get('products/getById', [ProductController::class, 'getById'])->name('products.getById');
     Route::get('products/getAllByTypePart', [ProductController::class, 'getAllByTypePart'])->name('products.getAllByTypePart');
+    Route::post('products/import', [ProductController::class, 'import'])->name('products.import');
     Route::resource('products', ProductController::class);
     Route::resource('suppliers', SupplierController::class)->except('show');
 
