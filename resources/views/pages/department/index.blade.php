@@ -6,7 +6,7 @@
                 <div class="card-body">
                     <h4 class="card-title mb-3">Department</h4>
                     @can('Department Create')
-                        <a href="{{ route('departments.create') }}" class="btn my-2 mb-3 btn-sm py-2 btn-primary">Tambah
+                        <a href="{{ route('departments.create') }}" class="btn my-2 mb-3 btn-sm py-2 btn-primary">Create
                             Department</a>
                     @endcan
                     <div class="table-responsive">
@@ -17,7 +17,7 @@
                                     <th>Code</th>
                                     <th>Name</th>
                                     @canany(['Department Edit', 'Department Delete'])
-                                        <th>Aksi</th>
+                                        <th>Action</th>
                                     @endcanany
                                 </tr>
                             </thead>
@@ -39,7 +39,7 @@
                                                         @csrf
                                                         @method('delete')
                                                         <button class="btn btnDelete btn-sm py-2 btn-danger"
-                                                            data-action="{{ route('departments.destroy', $item->id) }}">Hapus</button>
+                                                            data-action="{{ route('departments.destroy', $item->id) }}">Delete</button>
                                                     </form>
                                                 @endcan
                                             </td>

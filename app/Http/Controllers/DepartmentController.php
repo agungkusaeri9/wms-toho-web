@@ -28,7 +28,7 @@ class DepartmentController extends Controller
     public function create()
     {
         return view('pages.department.create', [
-            'title' => 'Tambah item'
+            'title' => 'Create item'
         ]);
     }
 
@@ -41,7 +41,7 @@ class DepartmentController extends Controller
 
         DB::beginTransaction();
         try {
-            $data = request()->only(['name','code']);
+            $data = request()->only(['name', 'code']);
             Department::create($data);
 
             DB::commit();
@@ -72,7 +72,7 @@ class DepartmentController extends Controller
         DB::beginTransaction();
         try {
             $item = Department::findOrFail($id);
-            $data = request()->only(['name','code']);
+            $data = request()->only(['name', 'code']);
             $item->update($data);
 
             DB::commit();

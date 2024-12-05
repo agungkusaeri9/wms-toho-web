@@ -16,7 +16,7 @@
                                     <th>No.</th>
                                     <th>Part No.</th>
                                     @canany(['Part Number Edit', 'Part Number Delete'])
-                                        <th>Aksi</th>
+                                        <th>Action</th>
                                     @endcanany
                                 </tr>
                             </thead>

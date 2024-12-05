@@ -13,7 +13,7 @@
         </button>
     </div>
     <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-        <ul class="mx-auto navbar-nav ">
+        <ul class="mx-auto navbar-nav text-center">
             <li>
                 WAREHOUSE MANAGEMENT SYSTEM
             </li>

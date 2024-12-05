@@ -4,7 +4,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-5">Tambah Role</h4>
+                    <h4 class="card-title mb-5">Create Role</h4>
                     <form action="{{ route('roles.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class='form-group mb-3'>
@@ -80,7 +80,7 @@
                         </table>
                         <div class="form-group text-right">
                             <a href="{{ route('roles.index') }}" class="btn btn-warning">Batal</a>
-                            <button class="btn btn-primary">Tambah Role</button>
+                            <button class="btn btn-primary">Create Role</button>
                         </div>
                     </form>
                 </div>

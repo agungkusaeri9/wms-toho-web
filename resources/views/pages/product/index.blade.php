@@ -19,7 +19,7 @@
                                     <th>Part Name</th>
                                     <th>Unit</th>
                                     @canany(['Product Edit', 'Product Delete', 'Rack Index'])
-                                        <th>Aksi</th>
+                                        <th>Action</th>
                                     @endcanany
                                 </tr>
                             </thead>

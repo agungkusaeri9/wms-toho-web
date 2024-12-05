@@ -5,7 +5,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title mb-3">Users</h4>
-                    <a href="{{ route('users.create') }}" class="btn my-2 mb-3 btn-sm py-2 btn-primary">Tambah
+                    <a href="{{ route('users.create') }}" class="btn my-2 mb-3 btn-sm py-2 btn-primary">Create
                         User</a>
                     <div class="table-responsive">
                         <table class="table dtTable table-hover">
@@ -17,7 +17,7 @@
                                     <th>Email</th>
                                     <th>Role</th>
                                     @canany(['User Edit', 'User Delete'])
-                                        <th>Aksi</th>
+                                        <th>Action</th>
                                     @endcanany
                                 </tr>
                             </thead>
@@ -50,7 +50,7 @@
                                                             @csrf
                                                             @method('delete')
                                                             <button class="btn btnDelete btn-sm py-2 btn-danger"
-                                                                data-action="{{ route('users.destroy', $user->id) }}">Hapus</button>
+                                                                data-action="{{ route('users.destroy', $user->id) }}">Delete</button>
                                                         </form>
                                                     @endcan
                                                 @else

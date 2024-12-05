@@ -186,7 +186,7 @@
                 form.action = '{{ route('qrcode-generator.product.print') }}';
                 form.target = '_blank'; // Membuka di tab baru
 
-                // Tambahkan setiap product_id sebagai input dengan name="product_ids[]"
+                // Createkan setiap product_id sebagai input dengan name="product_ids[]"
                 selectedIds.forEach(id => {
                     const input = document.createElement('input');
                     input.type = 'hidden';
@@ -195,7 +195,7 @@
                     form.appendChild(input);
                 });
 
-                // Tambahkan amount sebagai input
+                // Createkan amount sebagai input
                 const amountInput = document.createElement('input');
                 amountInput.type = 'hidden';
                 amountInput.name = 'amount';

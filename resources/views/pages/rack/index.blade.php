@@ -21,7 +21,7 @@
                                     <th>Description</th>
                                     <th>Status</th>
                                     @canany(['Rack Edit', 'Rack Delete'])
-                                        <th>Aksi</th>
+                                        <th>Action</th>
                                     @endcanany
                                 </tr>
                             </thead>

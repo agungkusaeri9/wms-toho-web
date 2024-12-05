@@ -4,7 +4,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-5">Tambah User</h4>
+                    <h4 class="card-title mb-5">Create User</h4>
                     <form action="{{ route('users.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class='form-group mb-3'>
@@ -73,7 +73,7 @@
                         </div>
                         <div class="form-group text-right">
                             <a href="{{ route('users.index') }}" class="btn btn-warning">Batal</a>
-                            <button class="btn btn-primary">Tambah User</button>
+                            <button class="btn btn-primary">Create User</button>
                         </div>
                     </form>
                 </div>

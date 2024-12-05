@@ -29,7 +29,7 @@ class PermissionController extends Controller
     public function create()
     {
         return view('pages.permission.create', [
-            'title' => 'Tambah item'
+            'title' => 'Create item'
         ]);
     }
 

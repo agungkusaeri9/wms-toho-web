@@ -16,7 +16,7 @@
                                     <th>No.</th>
                                     <th>Name</th>
                                     @canany(['Unit Edit', 'Unit Delete'])
-                                        <th>Aksi</th>
+                                        <th>Action</th>
                                     @endcanany
                                 </tr>
                             </thead>

@@ -4,7 +4,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-5">Tambah Permission</h4>
+                    <h4 class="card-title mb-5">Create Permission</h4>
                     <form action="{{ route('permissions.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class='form-group mb-3'>
@@ -19,7 +19,7 @@
                         </div>
                         <div class="form-group text-right">
                             <a href="{{ route('permissions.index') }}" class="btn btn-warning">Batal</a>
-                            <button class="btn btn-primary">Tambah Permission</button>
+                            <button class="btn btn-primary">Create Permission</button>
                         </div>
                     </form>
                 </div>

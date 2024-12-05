@@ -18,7 +18,7 @@
                                     <th>Type</th>
                                     <th>Description</th>
                                     @canany(['Area Edit', 'Area Delete', 'Rack Index'])
-                                        <th>Aksi</th>
+                                        <th>Action</th>
                                     @endcanany
                                 </tr>
                             </thead>

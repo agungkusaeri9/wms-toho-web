@@ -6,7 +6,7 @@
                 <div class="card-body">
                     <h4 class="card-title mb-3">Permission</h4>
                     @can('Permission Create')
-                        <a href="{{ route('permissions.create') }}" class="btn my-2 mb-3 btn-sm py-2 btn-primary">Tambah
+                        <a href="{{ route('permissions.create') }}" class="btn my-2 mb-3 btn-sm py-2 btn-primary">Create
                             Permission</a>
                     @endcan
                     <div class="table-responsive">
@@ -16,7 +16,7 @@
                                     <th>No.</th>
                                     <th>Nama</th>
                                     @canany(['Permission Edit', 'Permission Delete'])
-                                        <th>Aksi</th>
+                                        <th>Action</th>
                                     @endcanany
                                 </tr>
                             </thead>
@@ -37,7 +37,7 @@
                                                         @csrf
                                                         @method('delete')
                                                         <button class="btn btnDelete btn-sm py-2 btn-danger"
-                                                            data-action="{{ route('permissions.destroy', $item->id) }}">Hapus</button>
+                                                            data-action="{{ route('permissions.destroy', $item->id) }}">Delete</button>
                                                     </form>
                                                 @endcan
                                             </td>

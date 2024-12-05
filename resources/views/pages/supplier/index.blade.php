@@ -20,7 +20,7 @@
                                     <th>Phone</th>
                                     <th>Contact Person</th>
                                     @canany(['Supplier Edit', 'Supplier Delete'])
-                                        <th>Aksi</th>
+                                        <th>Action</th>
                                     @endcanany
                                 </tr>
                             </thead>

@@ -52,7 +52,7 @@ class RoleController extends Controller
 
 
         return view('pages.role.create', [
-            'title' => 'Tambah Role',
+            'title' => 'Create Role',
             'permissions' => $custom_permission
         ]);
     }

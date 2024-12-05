@@ -20,7 +20,7 @@ class Supplier extends Model
         if ($lastCode) {
             // Ambil angka terakhir dari kode (misal SPL001 -> 001)
             $lastNumber = intval(substr($lastCode, strlen($prefix)));
-            $newNumber = $lastNumber + 1; // Tambahkan 1
+            $newNumber = $lastNumber + 1; // Createkan 1
         } else {
             // Jika belum ada data, mulai dari 1
             $newNumber = 1;
