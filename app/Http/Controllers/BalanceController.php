@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class BalanceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:Report Balance')->only('index');
+    }
     public function index()
     {
         $product_id = request('product_id');

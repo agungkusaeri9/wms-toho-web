@@ -59,11 +59,10 @@ class RoleController extends Controller
 
     public function store()
     {
-
         request()->validate([
             'name' => ['required', 'unique:roles,name'],
             'guard_name' => ['required', 'in:web,api'],
-            // 'permissions' => ['required', 'array']
+            'permissions' => ['required', 'array']
         ]);
 
         DB::beginTransaction();
@@ -71,7 +70,7 @@ class RoleController extends Controller
             $permissions = request('permissions');
             $data = request()->only(['name', 'guard_name']);
             $role  = Role::create($data);
-            // $role->givePermissionTo($permissions);
+            $role->givePermissionTo($permissions);
             DB::commit();
             return redirect()->route('roles.index')->with('success', 'Role has been created successfully.');
         } catch (\Throwable $th) {
@@ -115,14 +114,13 @@ class RoleController extends Controller
     {
         request()->validate([
             'name' => ['required', 'unique:roles,name,' . $id . ''],
-            'guard_name' => ['required', 'in:web,api'],
             'permissions' => ['required', 'array']
         ]);
 
         DB::beginTransaction();
         try {
             $item = Role::findOrFail($id);
-            $data = request()->only(['name', 'guard_name']);
+            $data = request()->only(['name']);
             $permissions = request('permissions');
             $item->update($data);
             $item->syncPermissions($permissions);

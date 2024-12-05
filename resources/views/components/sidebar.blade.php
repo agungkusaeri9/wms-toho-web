@@ -24,7 +24,7 @@
                 </a>
             </li>
         @endcan
-        @canany(['Stock In Index', 'Stock Out'])
+        @canany(['Qr Generator Index'])
             <li class="nav-item @if (request()->is('/qr-code-generator')) active @endif">
                 <a class="nav-link" href="{{ route('qrcode-generator.product.index') }}">
                     <i class="typcn typcn-image menu-icon"></i>
@@ -32,7 +32,7 @@
                 </a>
             </li>
         @endcanany
-        @canany(['Scan Qr Index', 'Scan Qr Index'])
+        @canany(['Stock In Create', 'Stock Out Create'])
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#scan-ui" aria-expanded="false" aria-controls="scan-ui">
                     <i class="typcn typcn-archive  menu-icon"></i>
@@ -41,12 +41,12 @@
                 </a>
                 <div class="collapse" id="scan-ui">
                     <ul class="nav flex-column sub-menu">
-                        @can('Scan Qr Code Index')
+                        @can('Stock In Create')
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('stock-ins.create') }}">In</a>
                             </li>
                         @endcan
-                        @can('Scan Qr Code Index')
+                        @can('Stock Out Create')
                             <li class="nav-item ">
                                 <a class="nav-link" href="{{ route('stock-outs.create') }}">Out</a>
                             </li>
@@ -56,17 +56,17 @@
             </li>
         @endcanany
 
-        @canany(['Part Number Index', 'Product Index'])
-            <li class="nav-item @if (request()->is('products') || request()->is('part-numbers')) active @endif">
+        @canany(['Type Index', 'Part Number Index', 'Product Index'])
+            <li class="nav-item @if (request()->is('products') || request()->is('part-numbers') || request()->is('types')) active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#product-ui" aria-expanded="false"
                     aria-controls="product-ui">
                     <i class="typcn typcn-shopping-bag  menu-icon"></i>
                     <span class="menu-title">Product</span>
                     <i class="typcn typcn-chevron-right menu-arrow"></i>
                 </a>
-                <div class="collapse  @if (request()->is('products') || request()->is('part-numbers')) show @endif" id="product-ui">
+                <div class="collapse  @if (request()->is('products') || request()->is('part-numbers') || request()->is('types')) show @endif" id="product-ui">
                     <ul class="nav flex-column sub-menu">
-                        @can('Part Number Index')
+                        @can('Type Index')
                             <li class="nav-item @if (request()->is('types')) active @endif">
                                 <a class="nav-link" href="{{ route('types.index') }}">Type</a>
                             </li>
@@ -85,7 +85,7 @@
                 </div>
             </li>
         @endcanany
-        @canany(['Stock In Index', 'Stock Out'])
+        @canany(['Stock In Index', 'Stock Out Index'])
             <li class="nav-item @if (request()->is('stock-ins') || request()->is('stock-outs')) active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#stock-ui" aria-expanded="false" aria-controls="stock-ui">
                     <i class="typcn typcn-archive  menu-icon"></i>
@@ -108,27 +108,27 @@
                 </div>
             </li>
         @endcanany
-        @canany(['Report Stock In Index', 'Report Stock Out'])
-            <li class="nav-item @if (request()->is('report/stock-ins') || request()->is('report/stock-outs')) active @endif">
+        @canany(['Report Balance', 'Report Stock In', 'Report Stock Out'])
+            <li class="nav-item @if (request()->is('report/stock-ins') || request()->is('report/stock-outs') || request()->is('report/product')) active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#report-stock-ui" aria-expanded="false"
                     aria-controls="report-stock-ui">
                     <i class="typcn typcn-document  menu-icon"></i>
                     <span class="menu-title">Report</span>
                     <i class="typcn typcn-chevron-right menu-arrow"></i>
                 </a>
-                <div class="collapse @if (request()->is('report/stock-ins') || request()->is('report/stock-outs')) show @endif" id="report-stock-ui">
+                <div class="collapse @if (request()->is('report/stock-ins') || request()->is('report/stock-outs') || request()->is('report/product')) show @endif" id="report-stock-ui">
                     <ul class="nav flex-column sub-menu">
-                        @can('Report Product Index')
+                        @can('Report Balance')
                             <li class="nav-item @if (request()->is('report/product')) active @endif">
                                 <a class="nav-link" href="{{ route('products.report.index') }}">Balance</a>
                             </li>
                         @endcan
-                        @can('Report Stock In Index')
+                        @can('Report Stock In')
                             <li class="nav-item @if (request()->is('report/stock-ins')) active @endif">
                                 <a class="nav-link" href="{{ route('stock-ins.report.index') }}">Stock In</a>
                             </li>
                         @endcan
-                        @can('Report Stock Out Index')
+                        @can('Report Stock Out')
                             <li class="nav-item @if (request()->is('report/stock-outs')) active @endif">
                                 <a class="nav-link" href="{{ route('stock-outs.report.index') }}">Stock Out</a>
                             </li>
@@ -166,15 +166,15 @@
                 </div>
             </li>
         @endcanany
-        @canany(['Department Index', 'Unit Index', 'Area Index'])
-            <li class="nav-item @if (request()->is('departments') || request()->is('units') || request()->is('areas')) active @endif">
+        @canany(['Department Index', 'Unit Index', 'Area Index', 'Supplier Index'])
+            <li class="nav-item @if (request()->is('departments') || request()->is('units') || request()->is('areas') || request()->is('suppliers')) active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#master-ui" aria-expanded="false"
                     aria-controls="master-ui">
                     <i class="typcn typcn-database  menu-icon"></i>
                     <span class="menu-title">Master Data</span>
                     <i class="typcn typcn-chevron-right menu-arrow"></i>
                 </a>
-                <div class="collapse @if (request()->is('departments') || request()->is('units') || request()->is('areas')) show @endif" id="master-ui">
+                <div class="collapse @if (request()->is('departments') || request()->is('units') || request()->is('areas') || request()->is('suppliers')) show @endif" id="master-ui">
                     <ul class="nav flex-column sub-menu">
                         @can('Department Index')
                             <li class="nav-item @if (request()->is('departments')) active @endif">

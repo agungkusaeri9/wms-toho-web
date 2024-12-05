@@ -10,7 +10,7 @@
                             Supplier</a>
                     @endcan
                     <div class="table-responsive">
-                        <table class="table dtTable table-hover">
+                        <table class="table nowrap dtTable table-hover">
                             <thead>
                                 <tr>
                                     <th>No.</th>

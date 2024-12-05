@@ -21,8 +21,7 @@ class StockInController extends Controller
     {
         $this->middleware('can:Stock In Index')->only('index');
         $this->middleware('can:Stock In Create')->only(['create', 'store']);
-        $this->middleware('can:Stock In Edit')->only(['edit', 'update']);
-        $this->middleware('can:Stock In Delete')->only('destroy');
+        $this->middleware('can:Report Stock In')->only(['report_index', 'report_action']);
     }
 
     public function index()
@@ -78,36 +77,6 @@ class StockInController extends Controller
             'item' => $item
         ]);
     }
-
-    public function edit($id)
-    {
-        $item = StockIn::findOrFail($id);
-        return view('pages.stock-in.edit', [
-            'title' => 'Edit Stock In',
-            'item' => $item
-        ]);
-    }
-
-    public function update($id)
-    {
-        request()->validate([
-            'received_date' => ['required', 'date']
-        ]);
-
-        DB::beginTransaction();
-        try {
-            $item = StockIn::findOrFail($id);
-            $data = request()->only(['received_date', 'notes']);
-            $item->update($data);
-            DB::commit();
-            return redirect()->route('stock-ins.index')->with('success', 'Stock In has been updated successfully.');
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            // throw $th;
-            return redirect()->back()->with('error', $th->getMessage());
-        }
-    }
-
     public function report_index()
     {
         return view('pages.stock-in.report', [

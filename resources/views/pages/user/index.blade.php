@@ -5,8 +5,10 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title mb-3">Users</h4>
-                    <a href="{{ route('users.create') }}" class="btn my-2 mb-3 btn-sm py-2 btn-primary">Create
-                        User</a>
+                    @can('User Create')
+                        <a href="{{ route('users.create') }}" class="btn my-2 mb-3 btn-sm py-2 btn-primary">Create
+                            User</a>
+                    @endcan
                     <div class="table-responsive">
                         <table class="table dtTable table-hover">
                             <thead>
@@ -55,7 +57,7 @@
                                                     @endcan
                                                 @else
                                                     <div class="text-danger font-italic">
-                                                        Tidak Ada Akses
+                                                        No Access!
                                                     </div>
                                                 @endif
                                             </td>

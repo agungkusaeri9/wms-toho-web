@@ -29,8 +29,7 @@
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->type }}</td>
                                         <td>{{ $item->description }}</td>
-
-                                        @canany(['Area Edit', 'Area Delete'])
+                                        @canany(['Area Edit', 'Area Delete', 'Rack Index'])
                                             <td>
                                                 @can('Rack Index')
                                                     <a href="{{ route('racks.index', [

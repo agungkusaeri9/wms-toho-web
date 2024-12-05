@@ -55,7 +55,7 @@ class UserController extends Controller
             $user = User::create($data);
             $user->assignRole($role);
             DB::commit();
-            return redirect()->route('users.index')->with('success', 'User has been created successfully.');
+            return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan.');
         } catch (\Throwable $th) {
             // DB::rollBack();
             throw $th;
@@ -100,7 +100,7 @@ class UserController extends Controller
 
             $user->syncRoles($roles);
             DB::commit();
-            return redirect()->route('users.index')->with('success', 'User has been updated successfully.');
+            return redirect()->route('users.index')->with('success', 'User berhasil diupdate.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -116,7 +116,7 @@ class UserController extends Controller
         try {
             $user->delete();
             DB::commit();
-            return redirect()->route('users.index')->with('success', 'User has been deleted successfully.');
+            return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;

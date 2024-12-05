@@ -18,7 +18,7 @@
                                     <th>Part No.</th>
                                     <th>Part Name</th>
                                     <th>Unit</th>
-                                    @canany(['Product Edit', 'Product Delete', 'Rack Index'])
+                                    @canany(['Product Edit', 'Product Delete', 'Product Show'])
                                         <th>Action</th>
                                     @endcanany
                                 </tr>
@@ -34,7 +34,7 @@
                                         <td>{{ $item->part_number->name ?? '-' }}</td>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->unit->name }}</td>
-                                        @canany(['Product Edit', 'Product Delete'])
+                                        @canany(['Product Edit', 'Product Delete', 'Product Show'])
                                             <td>
                                                 @can('Product Show')
                                                     <a href="{{ route('products.show', $item->id) }}"

@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\DB;
 
 class QrCodeGeneratorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:Qr Generator Index')->only('index');
+        $this->middleware('can:Qr Generator Create')->only(['create', 'store']);
+        $this->middleware('can:Qr Generator Edit')->only(['edit', 'update']);
+        $this->middleware('can:Qr Generator Print')->only('print');
+    }
     public function index()
     {
         $type_id = request('type_id');

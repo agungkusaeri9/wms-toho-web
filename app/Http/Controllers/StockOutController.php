@@ -21,8 +21,7 @@ class StockOutController extends Controller
     {
         $this->middleware('can:Stock Out Index')->only('index');
         $this->middleware('can:Stock Out Create')->only(['create', 'store']);
-        $this->middleware('can:Stock Out Edit')->only(['edit', 'update']);
-        $this->middleware('can:Stock Out Delete')->only('destroy');
+        $this->middleware('can:Report Stock Out')->only(['report_index', 'report_action']);
     }
 
     public function index()
@@ -88,35 +87,6 @@ class StockOutController extends Controller
             'title' => 'Detail Stock Out',
             'item' => $item
         ]);
-    }
-
-    public function edit($id)
-    {
-        $item = StockOut::findOrFail($id);
-        return view('pages.stock-out.edit', [
-            'title' => 'Edit Stock Out',
-            'item' => $item
-        ]);
-    }
-
-    public function update($id)
-    {
-        request()->validate([
-            'date' => ['required', 'date']
-        ]);
-
-        DB::beginTransaction();
-        try {
-            $item = StockOut::findOrFail($id);
-            $data = request()->only(['date', 'notes']);
-            $item->update($data);
-            DB::commit();
-            return redirect()->route('stock-outs.index')->with('success', 'Stock Out has been updated successfully.');
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            // throw $th;
-            return redirect()->back()->with('error', $th->getMessage());
-        }
     }
 
     public function report_index()
