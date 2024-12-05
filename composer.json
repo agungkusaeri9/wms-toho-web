@@ -2,7 +2,10 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.1",
@@ -34,8 +37,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-        "app/Helpers/my_helper.php"
-    ]
+            "app/Helpers/my_helper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -55,6 +58,17 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "setup": [
+            "composer install",
+            "php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+            "php artisan key:generate",
+            "php artisan config:cache",
+            "php artisan migrate --seeder",
+            "php artisan storage:link",
+            "php artisan jwt:secret",
+            "npm install",
+            "npm run build"
         ]
     },
     "extra": {

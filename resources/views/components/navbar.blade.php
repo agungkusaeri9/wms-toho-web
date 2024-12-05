@@ -30,7 +30,8 @@
                         <i class="typcn typcn-cog text-primary"></i>
                         Edit Profile
                     </a>
-                    <a class="dropdown-item" onclick="document.getElementById('form-logout').submit()">
+                    <a href="javascript:void(0)" class="dropdown-item"
+                        onclick="document.getElementById('form-logout').submit()">
                         <i class="typcn typcn-power text-primary"></i>
                         Logout
                     </a>
