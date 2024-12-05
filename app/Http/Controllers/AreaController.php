@@ -47,7 +47,7 @@ class AreaController extends Controller
             Area::create($data);
 
             DB::commit();
-            return redirect()->route('areas.index')->with('success', 'Area berhasil ditambahkan.');
+            return redirect()->route('areas.index')->with('success', 'Area has been created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -79,7 +79,7 @@ class AreaController extends Controller
             $data = request()->only(['code', 'name', 'type', 'description']);
             $item->update($data);
             DB::commit();
-            return redirect()->route('areas.index')->with('success', 'Area berhasil diupdate.');
+            return redirect()->route('areas.index')->with('success', 'Area has been updated successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -94,7 +94,7 @@ class AreaController extends Controller
             $item = Area::findOrFail($id);
             $item->delete();
             DB::commit();
-            return redirect()->route('areas.index')->with('success', 'Area berhasil dihapus.');
+            return redirect()->route('areas.index')->with('success', 'Area has been deleted successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;

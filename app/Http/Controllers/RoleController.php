@@ -73,7 +73,7 @@ class RoleController extends Controller
             $role  = Role::create($data);
             // $role->givePermissionTo($permissions);
             DB::commit();
-            return redirect()->route('roles.index')->with('success', 'Role berhasil ditambahkan.');
+            return redirect()->route('roles.index')->with('success', 'Role has been created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -127,7 +127,7 @@ class RoleController extends Controller
             $item->update($data);
             $item->syncPermissions($permissions);
             DB::commit();
-            return redirect()->route('roles.index')->with('success', 'Role berhasil diupdate.');
+            return redirect()->route('roles.index')->with('success', 'Role has been updated successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -142,7 +142,7 @@ class RoleController extends Controller
             $item = Role::findById($id);
             $item->delete();
             DB::commit();
-            return redirect()->route('roles.index')->with('success', 'Role berhasil dihapus.');
+            return redirect()->route('roles.index')->with('success', 'Role has been deleted successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;

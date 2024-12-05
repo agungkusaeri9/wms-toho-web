@@ -44,7 +44,7 @@ class CategoryController extends Controller
             Category::create($data);
 
             DB::commit();
-            return redirect()->route('categories.index')->with('success', 'Category berhasil ditambahkan.');
+            return redirect()->route('categories.index')->with('success', 'Category has been created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -73,7 +73,7 @@ class CategoryController extends Controller
             $data = request()->only(['name']);
             $item->update($data);
             DB::commit();
-            return redirect()->route('categories.index')->with('success', 'Category berhasil diupdate.');
+            return redirect()->route('categories.index')->with('success', 'Category has been updated successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -88,7 +88,7 @@ class CategoryController extends Controller
             $item = Category::findOrFail($id);
             $item->delete();
             DB::commit();
-            return redirect()->route('categories.index')->with('success', 'Category berhasil dihapus.');
+            return redirect()->route('categories.index')->with('success', 'Category has been deleted successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;

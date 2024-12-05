@@ -94,7 +94,7 @@ class QrCodeGeneratorController extends Controller
             $item = Generate::findOrFail($id);
             $data = request()->only(['qty']);
             $item->update($data);
-            return redirect()->route('qrcode-generator.product.index')->with('success', 'Qr berhasil diupdate.');
+            return redirect()->route('qrcode-generator.product.index')->with('success', 'Qr has been updated successfully.');
         } catch (\Throwable $th) {
             //throw $th;
             return redirect()->back()->with('error', $th->getMessage());

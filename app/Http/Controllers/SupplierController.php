@@ -49,7 +49,7 @@ class SupplierController extends Controller
             Supplier::create($data);
 
             DB::commit();
-            return redirect()->route('suppliers.index')->with('success', 'Supplier berhasil ditambahkan.');
+            return redirect()->route('suppliers.index')->with('success', 'Supplier has been created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -83,7 +83,7 @@ class SupplierController extends Controller
             $item->update($data);
 
             DB::commit();
-            return redirect()->route('suppliers.index')->with('success', 'Supplier berhasil diupdate.');
+            return redirect()->route('suppliers.index')->with('success', 'Supplier has been updated successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -98,7 +98,7 @@ class SupplierController extends Controller
             $item = Supplier::findOrFail($id);
             $item->delete();
             DB::commit();
-            return redirect()->route('suppliers.index')->with('success', 'Supplier berhasil dihapus.');
+            return redirect()->route('suppliers.index')->with('success', 'Supplier has been deleted successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;

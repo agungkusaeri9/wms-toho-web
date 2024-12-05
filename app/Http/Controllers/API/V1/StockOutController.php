@@ -46,7 +46,7 @@ class StockOutController extends Controller
             }
             DB::commit();
 
-            return ResponseFormatter::success([], 'Stock Out Berhasil dibuat.');
+            return ResponseFormatter::success([], 'Stock Out has been created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             return ResponseFormatter::error([], $th->getMessage(), 500);

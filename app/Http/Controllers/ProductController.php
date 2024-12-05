@@ -82,7 +82,7 @@ class ProductController extends Controller
             Product::create($data);
 
             DB::commit();
-            return redirect()->route('products.index')->with('success', 'Product berhasil ditambahkan.');
+            return redirect()->route('products.index')->with('success', 'Product has been created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -132,7 +132,7 @@ class ProductController extends Controller
             $item->update($data);
 
             DB::commit();
-            return redirect()->route('products.index')->with('success', 'Product berhasil ditambahkan.');
+            return redirect()->route('products.index')->with('success', 'Product has been created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -150,7 +150,7 @@ class ProductController extends Controller
             }
             $item->delete();
             DB::commit();
-            return redirect()->route('products.index')->with('success', 'Product berhasil dihapus.');
+            return redirect()->route('products.index')->with('success', 'Product has been deleted successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;

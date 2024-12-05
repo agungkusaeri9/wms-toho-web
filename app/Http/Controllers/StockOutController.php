@@ -74,7 +74,7 @@ class StockOutController extends Controller
                 ]);
             }
             DB::commit();
-            return redirect()->back()->with('success', 'Stock Out Berhasil dibuat.');
+            return redirect()->back()->with('success', 'Stock Out has been created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->back()->with('error', $th->getMessage());
@@ -111,7 +111,7 @@ class StockOutController extends Controller
             $data = request()->only(['date', 'notes']);
             $item->update($data);
             DB::commit();
-            return redirect()->route('stock-outs.index')->with('success', 'Stock Out berhasil diupdate.');
+            return redirect()->route('stock-outs.index')->with('success', 'Stock Out has been updated successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;

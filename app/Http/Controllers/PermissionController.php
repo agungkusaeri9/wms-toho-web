@@ -46,7 +46,7 @@ class PermissionController extends Controller
             Permission::create($data);
 
             DB::commit();
-            return redirect()->route('permissions.index')->with('success', 'Permission berhasil ditambahkan.');
+            return redirect()->route('permissions.index')->with('success', 'Permission has been created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -76,7 +76,7 @@ class PermissionController extends Controller
             $item->update($data);
 
             DB::commit();
-            return redirect()->route('permissions.index')->with('success', 'Permission berhasil diupdate.');
+            return redirect()->route('permissions.index')->with('success', 'Permission has been updated successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -92,7 +92,7 @@ class PermissionController extends Controller
             $item = Permission::findById($id);
             $item->delete();
             DB::commit();
-            return redirect()->route('permissions.index')->with('success', 'Permission berhasil dihapus.');
+            return redirect()->route('permissions.index')->with('success', 'Permission has been deleted successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;

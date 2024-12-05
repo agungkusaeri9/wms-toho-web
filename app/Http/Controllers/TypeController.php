@@ -44,7 +44,7 @@ class TypeController extends Controller
             Type::create($data);
 
             DB::commit();
-            return redirect()->route('types.index')->with('success', 'Type berhasil ditambahkan.');
+            return redirect()->route('types.index')->with('success', 'Type has been created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -73,7 +73,7 @@ class TypeController extends Controller
             $data = request()->only(['name']);
             $item->update($data);
             DB::commit();
-            return redirect()->route('types.index')->with('success', 'Type berhasil diupdate.');
+            return redirect()->route('types.index')->with('success', 'Type has been updated successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -88,7 +88,7 @@ class TypeController extends Controller
             $item = Type::findOrFail($id);
             $item->delete();
             DB::commit();
-            return redirect()->route('types.index')->with('success', 'Type berhasil dihapus.');
+            return redirect()->route('types.index')->with('success', 'Type has been deleted successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;

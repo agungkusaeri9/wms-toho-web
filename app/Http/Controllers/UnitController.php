@@ -44,7 +44,7 @@ class UnitController extends Controller
             Unit::create($data);
 
             DB::commit();
-            return redirect()->route('units.index')->with('success', 'Unit berhasil ditambahkan.');
+            return redirect()->route('units.index')->with('success', 'Unit has been created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -74,7 +74,7 @@ class UnitController extends Controller
             $item->update($data);
 
             DB::commit();
-            return redirect()->route('units.index')->with('success', 'Unit berhasil diupdate.');
+            return redirect()->route('units.index')->with('success', 'Unit has been updated successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -90,7 +90,7 @@ class UnitController extends Controller
             $item = Unit::findOrFail($id);
             $item->delete();
             DB::commit();
-            return redirect()->route('units.index')->with('success', 'Unit berhasil dihapus.');
+            return redirect()->route('units.index')->with('success', 'Unit has been deleted successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;

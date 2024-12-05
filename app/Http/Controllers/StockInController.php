@@ -62,7 +62,7 @@ class StockInController extends Controller
             $stokIn = StockIn::create($data);
 
             DB::commit();
-            return redirect()->back()->with('success', 'Stock In Berhasil dibuat.');
+            return redirect()->back()->with('success', 'Stock In has been created successfully.');
         } catch (\Throwable $th) {
             // throw $th;
             DB::rollBack();
@@ -100,7 +100,7 @@ class StockInController extends Controller
             $data = request()->only(['received_date', 'notes']);
             $item->update($data);
             DB::commit();
-            return redirect()->route('stock-ins.index')->with('success', 'Stock In berhasil diupdate.');
+            return redirect()->route('stock-ins.index')->with('success', 'Stock In has been updated successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;

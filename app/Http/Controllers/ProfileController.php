@@ -38,7 +38,7 @@ class ProfileController extends Controller
             $user->update($data);
 
             DB::commit();
-            return redirect()->route('profile.index')->with('success', 'Profile berhasil diupdate.');
+            return redirect()->route('profile.index')->with('success', 'Profile has been updated successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

@@ -32,7 +32,7 @@ class StockInController extends Controller
             $data['code'] = StockIn::getNewCode();
             $stokIn = StockIn::create($data);
             DB::commit();
-            return ResponseFormatter::success($stokIn, 'Stock In Berhasil dibuat.');
+            return ResponseFormatter::success($stokIn, 'Stock In has been created successfully.');
         } catch (\Throwable $th) {
             // throw $th;
             DB::rollBack();

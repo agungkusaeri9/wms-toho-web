@@ -51,7 +51,7 @@ class RackController extends Controller
             $data = request()->only(['code', 'name', 'status', 'description', 'area_id']);
             Rack::create($data);
             DB::commit();
-            return redirect()->route('racks.index', ['area_id' => request('area_id')])->with('success', 'Rack berhasil ditambahkan.');
+            return redirect()->route('racks.index', ['area_id' => request('area_id')])->with('success', 'Rack has been created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
@@ -88,7 +88,7 @@ class RackController extends Controller
             DB::commit();
             return redirect()->route('racks.index', [
                 'area_id' => $item->area_id
-            ])->with('success', 'Rack berhasil diupdate.');
+            ])->with('success', 'Rack has been updated successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -106,7 +106,7 @@ class RackController extends Controller
             DB::commit();
             return redirect()->route('racks.index', [
                 'area_id' => $area_id
-            ])->with('success', 'Rack berhasil dihapus.');
+            ])->with('success', 'Rack has been deleted successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;

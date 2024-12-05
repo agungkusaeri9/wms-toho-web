@@ -44,7 +44,7 @@ class PartNumberController extends Controller
             PartNumber::create($data);
 
             DB::commit();
-            return redirect()->route('part-numbers.index')->with('success', 'Part Number berhasil ditambahkan.');
+            return redirect()->route('part-numbers.index')->with('success', 'Part Number has been created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -73,7 +73,7 @@ class PartNumberController extends Controller
             $data = request()->only(['name']);
             $item->update($data);
             DB::commit();
-            return redirect()->route('part-numbers.index')->with('success', 'Part Number berhasil diupdate.');
+            return redirect()->route('part-numbers.index')->with('success', 'Part Number has been updated successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -88,7 +88,7 @@ class PartNumberController extends Controller
             $item = PartNumber::findOrFail($id);
             $item->delete();
             DB::commit();
-            return redirect()->route('part-numbers.index')->with('success', 'Part Number berhasil dihapus.');
+            return redirect()->route('part-numbers.index')->with('success', 'Part Number has been deleted successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;

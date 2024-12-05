@@ -45,7 +45,7 @@ class DepartmentController extends Controller
             Department::create($data);
 
             DB::commit();
-            return redirect()->route('departments.index')->with('success', 'Department berhasil ditambahkan.');
+            return redirect()->route('departments.index')->with('success', 'Department has been created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -76,7 +76,7 @@ class DepartmentController extends Controller
             $item->update($data);
 
             DB::commit();
-            return redirect()->route('departments.index')->with('success', 'Department berhasil diupdate.');
+            return redirect()->route('departments.index')->with('success', 'Department has been updated successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
@@ -92,7 +92,7 @@ class DepartmentController extends Controller
             $item = Department::findOrFail($id);
             $item->delete();
             DB::commit();
-            return redirect()->route('departments.index')->with('success', 'Department berhasil dihapus.');
+            return redirect()->route('departments.index')->with('success', 'Department has been deleted successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
