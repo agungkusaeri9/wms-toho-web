@@ -62,7 +62,7 @@ class RoleController extends Controller
         request()->validate([
             'name' => ['required', 'unique:roles,name'],
             'guard_name' => ['required', 'in:web,api'],
-            'permissions' => ['required', 'array']
+            // 'permissions' => ['required', 'array']
         ]);
 
         DB::beginTransaction();

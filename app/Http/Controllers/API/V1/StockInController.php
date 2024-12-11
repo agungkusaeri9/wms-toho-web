@@ -15,8 +15,7 @@ class StockInController extends Controller
     public function store()
     {
         $validator = Validator::make(request()->all(), [
-            'code' => ['required'],
-            'qty' => ['required', 'numeric']
+            'code' => ['required']
         ]);
 
         if ($validator->fails()) {
@@ -24,9 +23,10 @@ class StockInController extends Controller
         }
         DB::beginTransaction();
         try {
+            $data = [];
             $generate = Generate::where('code', request('code'))->first();
-            $data = request()->only(['qty']);
             $data['product_id'] = $generate->product_id;
+              $data['qty'] = $generate->qty;
             $data['received_date'] = Carbon::now()->format('Y-m-d');
             $data['user_id'] = auth('api')->id();
             $data['code'] = StockIn::getNewCode();

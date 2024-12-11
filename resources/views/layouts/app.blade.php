@@ -15,7 +15,7 @@
     <!-- inject:css -->
     <link rel="stylesheet" href="{{ asset('assets') }}/css/vertical-layout-light/style.css">
     <!-- endinject -->
-    <link rel="shortcut icon" href="{{ asset('assets') }}/images/favicon.png" />
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo-toho3.png') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="{{ asset('assets/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
     @vite(['resources/js/app.js'])

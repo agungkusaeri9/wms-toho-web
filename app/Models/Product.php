@@ -64,6 +64,12 @@ class Product extends Model
         return $this->hasMany(StockOut::class);
     }
 
+    public function stock()
+    {
+        $stock = $this->stock_in->sum('qty') - $this->stock_out->sum('qty');
+        return $stock;
+    }
+
     public static function getNewCode()
     {
         $prefix = '';

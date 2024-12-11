@@ -12,12 +12,14 @@
             <span class="typcn typcn-th-menu"></span>
         </button>
     </div>
-    <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-        <ul class="mx-auto navbar-nav text-center">
-            <li>
-                WAREHOUSE MANAGEMENT SYSTEM
-            </li>
-        </ul>
+    <div class="navbar-menu-wrapper d-flex align-items-center justify-content-between">
+        <div class="w-100 d-flex justify-content-center">
+            <ul class="navbar-nav" style="list-style: none; margin: 0 120px 0 0; padding: 0;">
+                <li class="font-weight-normal">
+                    WAREHOUSE MANAGEMENT SYSTEM
+                </li>
+            </ul>
+        </div>
         <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item nav-profile dropdown">
                 <a class="nav-link dropdown-toggle  pl-0 pr-0" href="#" data-toggle="dropdown"
@@ -30,8 +32,7 @@
                         <i class="typcn typcn-cog text-primary"></i>
                         Edit Profile
                     </a>
-                    <a href="javascript:void(0)" class="dropdown-item"
-                        onclick="document.getElementById('form-logout').submit()">
+                    <a class="dropdown-item" onclick="document.getElementById('form-logout').submit()">
                         <i class="typcn typcn-power text-primary"></i>
                         Logout
                     </a>

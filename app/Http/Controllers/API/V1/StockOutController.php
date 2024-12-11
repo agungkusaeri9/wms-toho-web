@@ -36,7 +36,7 @@ class StockOutController extends Controller
             $data['user_id'] = auth('api')->id();
             $data['code'] = StockOut::getNewCode();
             $data['department_id'] = $generate->product->department_id;
-            StockOut::create($data);
+            $stockOut = StockOut::create($data);
 
             if ($generate->qty != request('qty')) {
                 $sisa = $generate->qty - request('qty');
@@ -46,7 +46,7 @@ class StockOutController extends Controller
             }
             DB::commit();
 
-            return ResponseFormatter::success([], 'Stock Out has been created successfully.');
+            return ResponseFormatter::success($stockOut, 'Stock Out has been created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             return ResponseFormatter::error([], $th->getMessage(), 500);
