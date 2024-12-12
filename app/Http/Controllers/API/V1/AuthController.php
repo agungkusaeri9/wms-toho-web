@@ -69,7 +69,7 @@ class AuthController extends Controller
             $credentials = request(['email', 'password']);
             // dd('ok');
             if (! $token = auth('api')->attempt($credentials)) {
-                return ResponseFormatter::error([], 'Email atau password salah', 401);
+                return ResponseFormatter::error([], "We couldn't find an account matching those credentials. Please try again.", 401);
             }
 
             return $this->respondWithToken($token);
@@ -106,7 +106,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return ResponseFormatter::success(auth()->user(),'User detail',200);
+        return ResponseFormatter::success(auth()->user(), 'User detail', 200);
     }
 
     /**

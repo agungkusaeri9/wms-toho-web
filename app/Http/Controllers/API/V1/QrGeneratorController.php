@@ -22,7 +22,7 @@ class QrGeneratorController extends Controller
         try {
             $item = Generate::with(['product.part_number', 'product.type', 'product.unit', 'product.department', 'product.rack', 'product.area'])->where('code', request('code'))->first();
             if (!$item) {
-                return ResponseFormatter::error('Qr Code not found', 404);
+                return ResponseFormatter::error(null, 'Qr Code not found', 404);
             }
             return ResponseFormatter::success($item, 'Qr Code valid');
         } catch (\Throwable $th) {

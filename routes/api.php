@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\V1\AuthController;
 use App\Http\Controllers\API\V1\CheckController;
+use App\Http\Controllers\API\V1\InformationController;
 use App\Http\Controllers\API\V1\ProductController;
 use App\Http\Controllers\API\V1\QrGeneratorController;
 use App\Http\Controllers\API\V1\StockInController;
@@ -33,4 +34,5 @@ Route::middleware(['auth.jwt', 'api'])->group(function () {
     Route::post('check-qr', [QrGeneratorController::class, 'checkQr']);
     Route::post('stock-in/create', [StockInController::class, 'store']);
     Route::post('stock-out/create', [StockOutController::class, 'store']);
+    Route::get('info-today', [InformationController::class, 'getInfoToday']);
 });

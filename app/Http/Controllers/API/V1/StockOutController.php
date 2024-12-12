@@ -16,17 +16,17 @@ class StockOutController extends Controller
     {
         $validator = Validator::make(request()->all(), [
             'code' => ['required'],
-            'qty' => ['required', 'numeric']
+            'qty' => ['required', 'numeric', 'min:1']
         ]);
-
         if ($validator->fails()) {
             return ResponseFormatter::validationError($validator->errors());
         }
-
         $generate = Generate::where('code', request('code'))->first();
-
+        if (!$generate) {
+            return ResponseFormatter::error(null, 'Qr Code not found', 404);
+        }
         if ($generate->qty < request('qty')) {
-            return ResponseFormatter::error([], 'Qty melebihi stock', 500);
+            return ResponseFormatter::error([], 'Quantity exceeds available stock', 500);
         }
         DB::beginTransaction();
         try {
@@ -38,14 +38,11 @@ class StockOutController extends Controller
             $data['department_id'] = $generate->product->department_id;
             $stockOut = StockOut::create($data);
 
-            if ($generate->qty != request('qty')) {
-                $sisa = $generate->qty - request('qty');
-                $generate->update([
-                    'qty' => $sisa
-                ]);
-            }
+            $sisa = $generate->qty - request('qty');
+            $generate->update([
+                'qty' => $sisa
+            ]);
             DB::commit();
-
             return ResponseFormatter::success($stockOut, 'Stock Out has been created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
