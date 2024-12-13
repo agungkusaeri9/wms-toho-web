@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <div class="row mb-3">
-        <div class="col-xl-3">
+        <div class="col-md-4">
             <div class="card">
                 <div class="card-body text-center">
                     <h5 class=" mb-3">Stock In Today</h5>
@@ -9,7 +9,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-3">
+        <div class="col-md-4">
             <div class="card">
                 <div class="card-body text-center">
                     <h5 class=" mb-3">Stock Out Today</h5>
@@ -18,7 +18,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-3">
+        <div class="col-md-4">
             <div class="card">
                 <div class="card-body text-center">
                     <h5 class=" mb-3">Total Product</h5>
