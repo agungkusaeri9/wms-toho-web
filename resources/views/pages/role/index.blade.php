@@ -29,16 +29,27 @@
                                             <td>
                                                 @if ($item->name !== 'superadmin')
                                                     @can('Role Edit')
-                                                        <a href="{{ route('roles.edit', $item->id) }}"
-                                                            class="btn btn-sm py-2 btn-info">Edit</a>
+                                                        @if ($item->guard_name === 'web')
+                                                            <a href="{{ route('roles.edit', $item->id) }}"
+                                                                class="btn btn-sm py-2 btn-info">Edit</a>
+                                                        @else
+                                                            <a disabled title="This role cannot be edited"
+                                                                class="btn btn-sm py-2 text-white btn-info">Edit</a>
+                                                        @endif
                                                     @endcan
                                                     @can('Role Delete')
                                                         <form action="javascript:void(0)" method="post" class="d-inline"
                                                             id="formDelete">
                                                             @csrf
                                                             @method('delete')
-                                                            <button class="btn btnDelete btn-sm py-2 btn-danger"
-                                                                data-action="{{ route('roles.destroy', $item->id) }}">Delete</button>
+
+                                                            @if ($item->guard_name === 'web')
+                                                                <button class="btn btnDelete btn-sm py-2 btn-danger"
+                                                                    data-action="{{ route('roles.destroy', $item->id) }}">Delete</button>
+                                                            @else
+                                                                <button title="This role cannot be deleted"
+                                                                    class="btn btn-sm py-2 btn-danger" disabled>Delete</button>
+                                                            @endif
                                                         </form>
                                                     @endcan
                                                 @else

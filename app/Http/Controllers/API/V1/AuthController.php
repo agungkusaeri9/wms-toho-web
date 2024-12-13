@@ -75,7 +75,7 @@ class AuthController extends Controller
             $user = auth('api')->getLastAttempted();
 
             // Cek role user
-            if ($user->getRoleNames()->first()  !== 'Mobile') {
+            if ($user->getRoleNames()->first()  !== 'mobile') {
                 return ResponseFormatter::error([], "You do not have the required role to access this resource.", 403);
             }
 

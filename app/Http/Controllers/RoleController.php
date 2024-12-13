@@ -83,8 +83,10 @@ class RoleController extends Controller
     public function edit($id)
     {
         DB::statement("SET SQL_MODE=''");
+        $item = Role::where('id', $id)->firstOrFail();
+        if ($item->guard_name === 'api')
+            return redirect()->back()->with('error', 'This role cannot be edited.');
         $role_permission = Permission::select('name', 'id')->groupBy('name')->get();
-
         $custom_permission = array();
         foreach ($role_permission as $per) {
             // Mencari indeks karakter spasi pertama
@@ -100,7 +102,6 @@ class RoleController extends Controller
             }
             $custom_permission[$key][] = $per;
         }
-        $item = Role::findById($id);
         if ($item->name === 'superadmin')
             return redirect()->back()->with('error', 'Tidak Ada Akses!');
         return view('pages.role.edit', [
@@ -137,7 +138,9 @@ class RoleController extends Controller
     {
         DB::beginTransaction();
         try {
-            $item = Role::findById($id);
+            $item = Role::where('id', $id)->firstOrFail();
+            if ($item->guard_name === 'api')
+                return redirect()->back()->with('error', 'This role cannot be deleted.');
             $item->delete();
             DB::commit();
             return redirect()->route('roles.index')->with('success', 'Role has been deleted successfully.');
