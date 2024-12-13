@@ -67,9 +67,21 @@ class AuthController extends Controller
 
         try {
             $credentials = request(['email', 'password']);
-            // dd('ok');
-            if (! $token = auth('api')->attempt($credentials)) {
+            if (!auth('api')->validate($credentials)) {
                 return ResponseFormatter::error([], "We couldn't find an account matching those credentials. Please try again.", 401);
+            }
+
+            // Ambil user berdasarkan kredensial yang valid
+            $user = auth('api')->getLastAttempted();
+
+            // Cek role user
+            if ($user->getRoleNames()->first()  !== 'Mobile') {
+                return ResponseFormatter::error([], "You do not have the required role to access this resource.", 403);
+            }
+
+            // Jika role sesuai, buat token
+            if (! $token = auth('api')->attempt($credentials)) {
+                return ResponseFormatter::error([], "Failed to generate token.", 500);
             }
 
             return $this->respondWithToken($token);
