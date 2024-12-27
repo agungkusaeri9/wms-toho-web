@@ -125,7 +125,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="" id="formSubmit" method="get">
+                <form action="" id="formSubmit" method="get" target="_blank">
                     <div class="modal-body">
                         <input type="hidden" name="code" id="code">
                         <div class='form-group mb-3'>
