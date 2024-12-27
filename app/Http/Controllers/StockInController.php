@@ -59,6 +59,7 @@ class StockInController extends Controller
             $data['user_id'] = auth()->id();
             $data['code'] = StockIn::getNewCode();
             $stokIn = StockIn::create($data);
+            $generate->increment('qty', $stokIn->qty);
 
             DB::commit();
             return redirect()->back()->with('success', 'Stock In has been created successfully.');

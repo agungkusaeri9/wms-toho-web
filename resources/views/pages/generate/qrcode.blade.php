@@ -1,70 +1,68 @@
 @extends('layouts.app')
 @section('content')
-    <div class="row justify-content-center">
-        @can('Qr Generator Create')
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title text-center mb-5">Qr Generator</h4>
-                        <form action="{{ route('qrcode-generator.product.store') }}" method="post">
-                            @csrf
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class='form-group'>
-                                        <label for='product_id'>Part Name</label>
-                                        <select name='product_id' id='product_id' class='form-control '>
-                                            <option value='' selected disabled>Pilih Part Name</option>
-                                            @foreach ($items as $item)
-                                                <option value='{{ $item->id }}'>
-                                                    {{ $item->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class='form-group mb-3'>
-                                                <label for='part_number' class='mb-2'>Part Number</label>
-                                                <input type='text' name='part_number' id='part_number' class='form-control'
-                                                    value='{{ old('part_number') }}' readonly>
-                                            </div>
+    <div class="row">
+        <div class="col-md-12">
+            @can('Qr Generator Create')
+                <div class="col-md-12 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title text-center mb-5">Qr Generator</h4>
+                            <form action="{{ route('qrcode-generator.product.store') }}" method="post">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class='form-group'>
+
+                                            <select name='product_id' id='product_id' class='form-control '>
+                                                <option value='' selected disabled>Select Part Name</option>
+                                                @foreach ($items as $item)
+                                                    <option value='{{ $item->id }}'>
+                                                        {{ $item->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
-                                        <div class="col-md">
-                                            <div class='form-group mb-3'>
-                                                <label for='unit' class='mb-2'>Unit</label>
-                                                <input type='text' name='unit' id='unit' class='form-control '
-                                                    value='{{ old('unit') }}' readonly>
-                                            </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class='form-group mb-3'>
+                                            <input type='text' name='part_number' id='part_number' class='form-control'
+                                                value='{{ old('part_number') }}' readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class='form-group mb-3'>
+                                            <input type='text' name='unit' id='unit' class='form-control '
+                                                value='{{ old('unit') }}' readonly>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class='form-group mb-3'>
-                                        <label for='lot_number' class='mb-2'>Lot Number</label>
-                                        <input type='text' name='lot_number' id='lot_number' class='form-control '
-                                            value='{{ old('lot_number') }}'>
+                                <div class="row">
+                                    <div class="col-md">
+                                        <div class='form-group mb-3'>
+                                            <input type='text' name='lot_number' id='lot_number' class='form-control '
+                                                placeholder="Lot Number" value='{{ old('lot_number') }}'>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class='form-group mb-3'>
+                                            <input type='number' name='qty' id='qty' class='form-control'
+                                                placeholder="Qty" value="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <button type="submit" class="btn btn-primary ">Generate</button>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class='form-group mb-3'>
-                                        <label for='qty'>Qty</label>
-                                        <input type='number' name='qty' id='qty' class='form-control'
-                                            placeholder="qty" value="">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <button type="submit" class="btn btn-primary ">Generate</button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-        @endcan
+            @endcan
+        </div>
+    </div>
+    <div class="row justify-content-center">
         @can('Qr Generator Index')
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title mb-3">Qr Generator List</h4>

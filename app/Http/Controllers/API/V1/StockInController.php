@@ -26,11 +26,12 @@ class StockInController extends Controller
             $data = [];
             $generate = Generate::where('code', request('code'))->first();
             $data['product_id'] = $generate->product_id;
-              $data['qty'] = $generate->qty;
+            $data['qty'] = $generate->qty;
             $data['received_date'] = Carbon::now()->format('Y-m-d');
             $data['user_id'] = auth('api')->id();
             $data['code'] = StockIn::getNewCode();
             $stokIn = StockIn::create($data);
+            $generate->increment('qty', $stokIn->qty);
             DB::commit();
             return ResponseFormatter::success($stokIn, 'Stock In has been created successfully.');
         } catch (\Throwable $th) {

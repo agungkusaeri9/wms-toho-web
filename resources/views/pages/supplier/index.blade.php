@@ -15,7 +15,6 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Supplier Name</th>
-                                    <th>Address</th>
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Contact Person</th>
@@ -29,7 +28,6 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $item->name }}</td>
-                                        <td>{{ $item->address }}</td>
                                         <td>{{ $item->email }}</td>
                                         <td>{{ $item->phone }}</td>
                                         <td>{{ $item->contact_person }}</td>

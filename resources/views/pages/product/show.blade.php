@@ -53,18 +53,6 @@
                         </li>
                         <li class="d-flex justify-content-between mb-1">
                             <div class="font-weight-bold">
-                                Initial Qty
-                            </div>
-                            <div>{{ $item->initial_qty }}</div>
-                        </li>
-                        <li class="d-flex justify-content-between mb-1">
-                            <div class="font-weight-bold">
-                                Qty
-                            </div>
-                            <div>{{ $item->qty }}</div>
-                        </li>
-                        <li class="d-flex justify-content-between mb-1">
-                            <div class="font-weight-bold">
                                 Area
                             </div>
                             <div>{{ $item->area->name ?? '-' }}</div>

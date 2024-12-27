@@ -25,7 +25,7 @@
             </li>
         @endcan
         @canany(['Qr Generator Index'])
-            <li class="nav-item @if (request()->is('/qr-code-generator')) active @endif">
+            <li class="nav-item @if (request()->is('/qrcode-generator/product')) active @endif">
                 <a class="nav-link" href="{{ route('qrcode-generator.product.index') }}">
                     <i class="typcn typcn-image menu-icon"></i>
                     <span class="menu-title">Qr Generator </span>
