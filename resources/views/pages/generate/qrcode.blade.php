@@ -97,8 +97,10 @@
                                                             class="btn btn-sm py-2 btn-info">Edit</a>
                                                     @endcan
                                                     @can('Qr Generator Print')
-                                                        <a href="{{ route('qrcode-generator.product.print', $generate->code) }}"
-                                                            target="_blank" class="btn btn-sm py-2 btn-secondary">Print</a>
+                                                        {{-- <a href="{{ route('qrcode-generator.product.print', $generate->code) }}"
+                                                            target="_blank" class="btn btn-sm py-2 btn-secondary">Print</a> --}}
+                                                        <a href="javascript:void(0)" data-code="{{ $generate->code }}"
+                                                            class="btn btn-sm py-2 btn-secondary btnPrint">Print</a>
                                                     @endcan
                                                 </td>
                                             @endcanany
@@ -113,6 +115,39 @@
         @endcan
     </div>
     <x-Datatable />
+
+    <div class="modal fade" id="modalPrint" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Print</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="" id="formSubmit" method="get">
+                    <div class="modal-body">
+                        <input type="hidden" name="code" id="code">
+                        <div class='form-group mb-3'>
+                            <label for='amount' class='mb-2'>Amount <span class='text-danger small'>*</span></label>
+                            <input type='text' name='amount' id='amount'
+                                class='form-control @error('amount') is-invalid @enderror'
+                                value='{{ 1 ?? old('amount') }}'>
+                            @error('amount')
+                                <div class='invalid-feedback'>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Print</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/vendors/select2/select2.min.css') }}">
@@ -176,6 +211,14 @@
                     console.log(err);
                 }
             })
+        })
+
+        $('.btnPrint').on('click', function() {
+            let code = $(this).data('code');
+            $('#modalPrint #code').val(code);
+            $('#modalPrint').modal('show');
+            $('#formSubmit').attr('action', '{{ route('qrcode-generator.product.print') }}');
+            $('#modalPrint').modal('show');
         })
     </script>
 @endpush

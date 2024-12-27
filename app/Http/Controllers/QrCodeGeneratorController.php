@@ -108,12 +108,15 @@ class QrCodeGeneratorController extends Controller
         }
     }
 
-    public function print($code)
+    public function print()
     {
+        $code  = request()->code;
+        $amount = request()->amount;
         $item = Generate::with('product')->where('code', $code)->first();
         return view('pages.generate.print-qrcode', [
             'title' => 'Generate Qr Code',
-            'item' => $item
+            'item' => $item,
+            'amount' => $amount
         ]);
     }
 

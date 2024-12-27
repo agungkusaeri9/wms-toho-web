@@ -67,7 +67,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md">
+        <div class="col-md-8">
             <div class="col-md-12 mb-3">
                 <div class="card">
                     <div class="card-body">
@@ -141,3 +141,4 @@
         </div>
     </div>
 @endsection
+<x-Datatable />

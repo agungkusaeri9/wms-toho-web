@@ -30,6 +30,8 @@
             display: flex;
             justify-content: center;
             text-align: center;
+            page-break-after: always;
+            /* Tambahkan ini */
         }
 
         .bagian1 {
@@ -63,20 +65,28 @@
             margin-bottom: 15px;
             text-transform: uppercase
         }
+
+        @media print {
+            .kotak {
+                page-break-after: always;
+            }
+        }
     </style>
 
 </head>
 
 <body onload="print()">
-    <div class="kotak" style="margin-top:10px;">
-        <div class="bagian1">
-            <div style="font-weight-bold">
-                {{ Carbon\Carbon::now()->translatedFormat('d-m-Y') . ' - ' . $item->product->code }}</div>
-            <div class="text-align:center !important;">
-                {!! QrCode::size(32)->generate($item->code) !!}
+    @for ($i = 0; $i < $amount; $i++)
+        <div class="kotak" style="margin-top:10px;">
+            <div class="bagian1">
+                <div style="font-weight-bold">
+                    {{ Carbon\Carbon::now()->translatedFormat('d-m-Y') . ' - ' . $item->product->code }}</div>
+                <div class="text-align:center !important;">
+                    {!! QrCode::size(32)->generate($item->code) !!}
+                </div>
             </div>
         </div>
-    </div>
+    @endfor
 </body>
 
 </html>

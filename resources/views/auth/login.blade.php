@@ -11,9 +11,9 @@
                         <div class="auth-form-light text-left py-5 px-4 px-sm-5">
                             <div class="text-center mb-4">
                                 <img src="{{ asset('assets/images/logo-toho2.png') }}" class="img-fluid"
-                                    style="max-height:80px" alt="">
+                                    style="max-height:40px" alt="">
                             </div>
-                            <h3 class="text-center mb-4">WAREHOUSE MANAGEMENT SYSTEM</h3>
+                            <h5 class="text-center mb-4">WAREHOUSE MANAGEMENT SYSTEM</h5>
                             <h6 class="font-weight-light">Sign in to continue.</h6>
                             <form class="pt-3" method="post" action="{{ route('login') }}">
                                 @csrf
@@ -37,11 +37,6 @@
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="mt-3">
-                                    <button type="submit"
-                                        class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">SIGN
-                                        IN</button>
-                                </div>
                                 <div class="my-2 d-flex justify-content-between align-items-center">
                                     <div class="form-check">
                                         <label class="form-check-label text-muted">
@@ -49,6 +44,11 @@
                                             Keep me signed in
                                         </label>
                                     </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button type="submit"
+                                        class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">SIGN
+                                        IN</button>
                                 </div>
                             </form>
                         </div>

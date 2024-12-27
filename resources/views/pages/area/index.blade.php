@@ -10,7 +10,7 @@
                             Area</a>
                     @endcan
                     <div class="table-responsive">
-                        <table class="table dtTable table-hover">
+                        <table class="table dtTable table-hover nowrap">
                             <thead>
                                 <tr>
                                     <th>No.</th>
