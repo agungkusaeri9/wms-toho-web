@@ -36,13 +36,13 @@
                             </div>
                             <div class="col-md-2">
                                 <div class='form-group'>
-                                    <label for='product_id'>Part/Lot</label>
+                                    <label for='product_id'>Part</label>
                                     <select name='product_id' id='product_id'
                                         class='form-control py-2 @error('product_id') is-invalid @enderror'>
-                                        <option value='' selected>Pilih Part/lot</option>
+                                        <option value='' selected>Pilih Part</option>
                                         @foreach ($products as $product)
                                             <option @selected($product->id == $product_id ?? '') value='{{ $product->id }}'>
-                                                {{ $product->name . '/' . $product->lot_number }}
+                                                {{ $product->name }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -89,7 +89,7 @@
                                         <td>{{ $item->code }}</td>
                                         <td>{{ $item->product->part_number->name ?? '-' }}</td>
                                         <td>{{ $item->product->name }}</td>
-                                        <td>{{ $item->product->lot_number }}</td>
+                                        <td>{{ $item->generate->lot_number }}</td>
                                         <td>{{ $item->qty }}</td>
                                         <td>{{ $item->product->unit->name }}</td>
                                         <td>{{ formatDate($item->created_at, 'd-m-Y H:i') }}</td>

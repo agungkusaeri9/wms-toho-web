@@ -171,9 +171,15 @@
                             code
                         },
                         success: function(response) {
-
                             if (response.status) {
+                                console.log(response.data.status)
                                 let data = response.data.product;
+                                if (response.data.status == 1) {
+                                    Swal.fire('Error',
+                                        'The QR code has already been used properly.',
+                                        'error');
+                                    return;
+                                }
                                 $('#qty').val(response.data.qty);
                                 $('#part_number').html(data.part_number.name);
                                 $('#part_name').html(data.name);

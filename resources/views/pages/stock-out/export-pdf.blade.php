@@ -128,7 +128,7 @@
                     <td>{{ $item->code }}</td>
                     <td>{{ $item->product->part_number->name ?? '-' }}</td>
                     <td>{{ $item->product->name }}</td>
-                    <td>{{ $item->product->lot_number }}</td>
+                    <td>{{ $item->generate->lot_number }}</td>
                     <td>{{ $item->product->unit->name }}</td>
                     <td>{{ $item->qty }}</td>
                     <td>{{ formatDate($item->date, 'd-m-Y H:i') }}</td>

@@ -53,14 +53,16 @@ class StockInController extends Controller
         DB::beginTransaction();
         try {
             $generate = Generate::where('code', request('generate_code'))->first();
+            $generate->update(['status' => 1]);
             $data = request()->only(['qty']);
             $data['product_id'] = $generate->product_id;
             $data['received_date'] = Carbon::now()->format('Y-m-d');
             $data['user_id'] = auth()->id();
             $data['code'] = StockIn::getNewCode();
+            $data['generate_id'] = $generate->id;
             $stokIn = StockIn::create($data);
             $generate->increment('qty', $stokIn->qty);
-
+            // $generate->product->increment('stock', $stokIn->qty);
             DB::commit();
             return redirect()->back()->with('success', 'Stock In has been created successfully.');
         } catch (\Throwable $th) {

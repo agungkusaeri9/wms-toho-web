@@ -87,7 +87,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $generate->product->part_number->name ?? '-' }}</td>
                                             <td>{{ $generate->product->name }}</td>
-                                            <td>{{ $generate->product->lot_number }}</td>
+                                            <td>{{ $generate->lot_number }}</td>
                                             <td>{{ $generate->product->unit->name }}</td>
                                             <td>{{ $generate->qty }}</td>
                                             @canany(['Qr Generator Edit', 'Qr Generator Print'])

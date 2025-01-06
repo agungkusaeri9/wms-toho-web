@@ -62,7 +62,8 @@ class StockOutController extends Controller
             $data['user_id'] = auth()->id();
             $data['code'] = StockOut::getNewCode();
             $data['department_id'] = $generate->product->department_id;
-            $stokIn = StockOut::create($data);
+            $data['generate_id'] = $generate->id;
+            $stockout = StockOut::create($data);
 
             if ($generate->qty != request('qty')) {
                 // jika qty tidak sama dengan stock
@@ -132,7 +133,7 @@ class StockOutController extends Controller
                 'product' => $product,
             ]);
             $fileName = "StockOut-Report-" . Carbon::now()->format('d-m-Y H:i:s') . '.pdf';
-            return $pdf->stream($fileName);
+            return $pdf->download($fileName);
         } elseif ($action === 'export_excel') {
             $arr = [
                 'start_date' => $start_date,

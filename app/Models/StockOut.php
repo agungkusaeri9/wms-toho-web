@@ -51,4 +51,8 @@ class StockOut extends Model
             $model->code = self::getNewCode();
         });
     }
+    public function generate()
+    {
+        return $this->belongsTo(Generate::class);
+    }
 }

@@ -51,26 +51,24 @@ class QrCodeGeneratorController extends Controller
         ]);
 
         // cek lot number
-        $cekLot = Product::where('lot_number', request('lot_number'))->first();
+        $cekLot = Generate::where('lot_number', request('lot_number'))->first();
         if ($cekLot) {
             return redirect()->back()->with('error', 'Lot No. sudah terpakai.');
         }
         $product = Product::with(['unit', 'part_number'])->where('id', request('product_id'))->first();
 
         // cek product in generate
-        $cekGenerate = Generate::where('product_id', request('product_id'))->first();
-        if ($cekGenerate) {
-            return redirect()->back()->with('error', 'Product sudah di generate.');
-        }
+        // $cekGenerate = Generate::where('product_id', request('product_id'))->first();
+        // if ($cekGenerate) {
+        //     return redirect()->back()->with('error', 'Product sudah di generate.');
+        // }
 
         DB::beginTransaction();
         try {
             // generate
             $generate =  Generate::create([
                 'product_id' => $product->id,
-                'qty' => request('qty')
-            ]);
-            $generate->product->update([
+                'qty' => request('qty'),
                 'lot_number' => request('lot_number')
             ]);
             DB::commit();
