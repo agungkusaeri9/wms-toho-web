@@ -38,9 +38,8 @@
                             @enderror
                         </div>
                         <div class='form-group mb-3'>
-                            <label for='password' class='mb-2'>Password <span class="small text-danger">Kosongkan jika
-                                    tidak ingin
-                                    merubah password!</span></label>
+                            <label for='password' class='mb-2'>Password <span class="small text-danger">If you do not want
+                                    to change the password, leave this field blank.!</span></label>
                             <input type='password' name='password'
                                 class='form-control @error('password') is-invalid @enderror' value='{{ old('password') }}'>
                             @error('password')
@@ -52,7 +51,7 @@
                         <div class='form-group mb-3'>
                             <label for='password_confirmation' class='mb-2'>Password Confirmation <span
                                     class="small text-danger">
-                                    Kosongkan jika tidak ingin merubah password!</span></label>
+                                    If you do not want to change the password, leave this field blank.!</span></label>
                             <input type='password' name='password_confirmation'
                                 class='form-control @error('password_confirmation') is-invalid @enderror'
                                 value='{{ old('password_confirmation') }}'>

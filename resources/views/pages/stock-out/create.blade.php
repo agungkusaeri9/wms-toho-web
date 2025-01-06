@@ -11,7 +11,8 @@
                             <label for='generate_code' class='mb-2'>Scan</label>
                             <input type='text' name='generate_code' id='generate_code'
                                 class='form-control @error('generate_code') is-invalid @enderror'
-                                value='{{ old('generate_code') }}' placeholder="Scan Qr Code" autofocus="true">
+                                value='{{ old('generate_code') }}' placeholder="Scan Qr Code" autofocus="true"
+                                onkeydown="disableEnterKey(event)">
                             @error('generate_code')
                                 <div class='invalid-feedback'>
                                     {{ $message }}
@@ -160,10 +161,15 @@
         let typingTimer;
         const doneTypingInterval = 500;
 
+        function disableEnterKey(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Mencegah tindakan default (submit form atau lainnya)
+            }
+        }
+
         $('#generate_code').on('input', function() {
             clearTimeout(typingTimer);
             let code = $(this).val();
-            $('#generate_code').attr('readonly', true);
             typingTimer = setTimeout(function() {
                 if (code.length > 0) {
                     $.ajax({

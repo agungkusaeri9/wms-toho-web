@@ -2,13 +2,13 @@
     @if (session('success'))
         <script>
             $(function() {
-                toastr.success('{{ session('success') }}', 'Berhasil!')
+                toastr.success('{{ session('success') }}', 'Success!')
             })
         </script>
     @elseif(session('error'))
         <script>
             $(function() {
-                toastr.error('{{ session('error') }}', 'Gagal!')
+                toastr.error('{{ session('error') }}', 'Failed!')
             })
         </script>
     @endif
