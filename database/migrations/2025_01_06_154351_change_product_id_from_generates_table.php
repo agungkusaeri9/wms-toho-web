@@ -12,12 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('generates', function (Blueprint $table) {
-            // $table->foreignId('product_id')->constrained('products');
+            $table->dropUnique(['product_id']);
+            $table->foreignId('product_id')->constrained('products')->change();
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void {}
+    public function down(): void
+    {
+        Schema::table('generates', function (Blueprint $table) {
+            $table->foreignId('product_id')->unique()->constrained('products')->change();
+        });
+    }
 };
