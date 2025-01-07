@@ -42,7 +42,7 @@
                         <div class='form-group mb-3'>
                             <label for='name' class='mb-2'>Lot No.</label>
                             <input type='text' name='name' class='form-control @error('name') is-invalid @enderror'
-                                value='{{ $item->product->lot_number ?? old('name') }}' readonly>
+                                value='{{ $item->lot_number ?? old('name') }}' readonly>
                             @error('name')
                                 <div class='invalid-feedback'>
                                     {{ $message }}

@@ -77,9 +77,9 @@
                         <td>{{ env('REPORT_COMPANY_NAME') }}</td>
                     </tr>
                     <tr>
-                        <td style="margin:0;padding:0">Part/Lot</td>
+                        <td style="margin:0;padding:0" colspan="2">Part Name</td>
                         <td>:</td>
-                        <td>{{ $product ? $product->name . '/' . $product->lot_number : '-' }}</td>
+                        <td>{{ $product ? $product->name : '-' }}</td>
                     </tr>
                     <tr>
                         <td style="margin:0;padding:0">Date Range</td>

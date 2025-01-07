@@ -39,7 +39,7 @@
                                     <label for='product_id'>Part</label>
                                     <select name='product_id' id='product_id'
                                         class='form-control py-2 @error('product_id') is-invalid @enderror'>
-                                        <option value='' selected>Pilih Part</option>
+                                        <option value='' selected>Pilih Part Name</option>
                                         @foreach ($products as $product)
                                             <option @selected($product->id == $product_id ?? old('product_id')) value='{{ $product->id }}'>
                                                 {{ $product->name }}

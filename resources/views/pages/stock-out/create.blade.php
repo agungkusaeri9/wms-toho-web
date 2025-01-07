@@ -180,13 +180,13 @@
                             code
                         },
                         success: function(response) {
-
+                            console.log(response)
                             if (response.status) {
                                 let data = response.data.product;
                                 $('#stock').val(response.data.qty);
                                 $('#part_number').html(data.part_number.name);
                                 $('#part_name').html(data.name);
-                                $('#lot_number').html(data.lot_number);
+                                $('#lot_number').html(response.data.lot_number);
                                 $('#type').html(data.type.name);
                                 $('#unit').html(data.unit.name);
                                 $('#description').html(data.description);

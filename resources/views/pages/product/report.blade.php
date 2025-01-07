@@ -71,7 +71,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md">
+                            {{-- <div class="col-md">
                                 <div class='form-group'>
                                     <label for='product_id'>Part/Lot</label>
                                     <select name='product_id' id='product_id'
@@ -79,7 +79,7 @@
                                         <option value='' selected>Pilih Part/Lot</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="row">
                             <div class="col-md align-self-center">
@@ -103,7 +103,6 @@
                                     <th>No.</th>
                                     <th>Part No.</th>
                                     <th>Part Name</th>
-                                    <th>Lot No.</th>
                                     <th>Unit</th>
                                     <th>Stock In</th>
                                     <th>Stock Out</th>
@@ -116,7 +115,6 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $item->part_number->name ?? '-' }}</td>
                                         <td>{{ $item->name }}</td>
-                                        <td>{{ $item->lot_number ?? '-' }}</td>
                                         <td>{{ $item->unit->name }}</td>
                                         <td>{{ $item->stock_in->sum('qty') }}</td>
                                         <td>{{ $item->stock_out->sum('qty') }}</td>

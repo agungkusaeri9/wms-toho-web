@@ -100,11 +100,6 @@
                         <td>{{ $part_number }}</td>
                     </tr>
                     <tr>
-                        <td style="margin:0;padding:0">Lot No.</td>
-                        <td>:</td>
-                        <td>{{ $lot_number }}</td>
-                    </tr>
-                    <tr>
                         <td style="margin:0;padding:0">Date</td>
                         <td>:</td>
                         <td>{{ Carbon\Carbon::now()->translatedFormat('d-m-Y H:i:s') }}</td>
@@ -124,10 +119,9 @@
                 <th style="width:5px !important">No</th>
                 <th>Part No.</th>
                 <th>Part Name</th>
-                <th>Lot No.</th>
                 <th>Unit</th>
-                <th>Stock In</th>
-                <th>Stock Out</th>
+                <th>In</th>
+                <th>Out</th>
                 <th>Remains Qty</th>
                 <th>Area</th>
                 <th>Rack</th>
@@ -139,7 +133,6 @@
                     <td style="width:5px !important">{{ $loop->iteration }}</td>
                     <td>{{ $item->part_number->name ?? '-' }}</td>
                     <td>{{ $item->name }}</td>
-                    <td>{{ $item->lot_number }}</td>
                     <td>{{ $item->unit->name }}</td>
                     <td>{{ $item->stock_in->sum('qty') }}</td>
                     <td>{{ $item->stock_out->sum('qty') }}</td>
@@ -149,7 +142,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="11" style="text-align:center;padding:5px 0;">Product Not Found!</td>
+                    <td colspan="10" style="text-align:center;padding:5px 0;">Product Not Found!</td>
                 </tr>
             @endforelse
         </tbody>

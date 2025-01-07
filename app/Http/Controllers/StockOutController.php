@@ -51,8 +51,8 @@ class StockOutController extends Controller
         ]);
         $generate = Generate::where('code', request('generate_code'))->first();
 
-        if ($generate->qty < request('qty')) {
-            return redirect()->back()->with('error', 'Qty melebihi stock');
+        if ($generate->qty < request('qty') || $generate->qty == 0) {
+            return redirect()->back()->with('error', 'The quantity exceeds the stock.');
         }
         DB::beginTransaction();
         try {
@@ -65,14 +65,8 @@ class StockOutController extends Controller
             $data['generate_id'] = $generate->id;
             $stockout = StockOut::create($data);
 
-            if ($generate->qty != request('qty')) {
-                // jika qty tidak sama dengan stock
-                // update sisa stok di generate
-                $sisa = $generate->qty - request('qty');
-                $generate->update([
-                    'qty' => $sisa
-                ]);
-            }
+            $generate->decrement('qty', request('qty'));
+            $generate->product->decrement('stock', $stockout->qty);
             DB::commit();
             return redirect()->back()->with('success', 'Stock Out has been created successfully.');
         } catch (\Throwable $th) {

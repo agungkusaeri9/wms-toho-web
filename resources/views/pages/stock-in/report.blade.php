@@ -36,7 +36,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class='form-group'>
-                                    <label for='product_id'>Part</label>
+                                    <label for='product_id'>Part Name</label>
                                     <select name='product_id' id='product_id'
                                         class='form-control py-2 @error('product_id') is-invalid @enderror'>
                                         <option value='' selected>Pilih Part</option>

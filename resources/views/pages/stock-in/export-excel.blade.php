@@ -20,9 +20,9 @@
         <td>PT. Toho Technology Indonesia</td>
     </tr>
     <tr>
-        <td style="margin:0;padding:0" colspan="2">Part/Lot</td>
+        <td style="margin:0;padding:0" colspan="2">Part Name</td>
         <td>:</td>
-        <td>{{ $product ? $product->name . '/' . $product->lot_number : '-' }}</td>
+        <td>{{ $product->name }}</td>
     </tr>
     <tr>
         <td style="margin:0;padding:0" colspan="2">Date Range</td>
@@ -70,7 +70,7 @@
             <td>'{{ $item->code }}</td>
             <td>{{ $item->product->part_number->name ?? '-' }}</td>
             <td>{{ $item->product->name }}</td>
-            <td>{{ $item->product->lot_number }}</td>
+            <td>{{ $item->generate->lot_number }}</td>
             <td>{{ $item->product->unit->name ?? '-' }}</td>
             <td style="text-align: center">{{ $item->qty }}</td>
             <td>{{ formatDate($item->created_at, 'd-m-Y H:i') }}</td>

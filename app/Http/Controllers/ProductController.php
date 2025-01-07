@@ -256,7 +256,7 @@ class ProductController extends Controller
             $items->where('id', $product_id);
         }
 
-        $data = $items->orderBy('id', 'DESC')->get();
+        $data = $items->orderBy('name', 'ASC')->get();
         $type = Type::find(request('type_id'));
         $lot_number = Product::find(request('product_id'));
         $part_number = PartNumber::find($part_number_id);
