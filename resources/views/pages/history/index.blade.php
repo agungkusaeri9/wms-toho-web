@@ -55,7 +55,7 @@
                     <h4 class="card-title mb-3">History</h4>
                     <div class="table-responsive">
                         <table class="table dtTable table-hover nowrap">
-                            <thead>
+                            {{-- <thead>
                                 <tr>
                                     <th>No.</th>
                                     <th>Part No.</th>
@@ -111,7 +111,33 @@
                             </tbody>
                             <tfoot>
 
-                            </tfoot>
+                            </tfoot> --}}
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Part No.</th>
+                                    <th>Part Name</th>
+                                    <th>Unit</th>
+                                    <th>Lot No.</th>
+                                    <th>Qty</th>
+                                    <th>Type</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($items as $item)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $item->product->part_number->name ?? '-' }}</td>
+                                        <td>{{ $item->product->name }}</td>
+                                        <td>{{ $item->product->unit->name }}</td>
+                                        <td>{{ $item->generate->lot_number }}</td>
+                                        <td>{{ $item->qty }}</td>
+                                        <td>{{ $item->type }}</td>
+                                        <td>{{ formatDate($item->created_at, 'd-m-Y H:i') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
