@@ -135,4 +135,28 @@ class QrCodeGeneratorController extends Controller
             }
         }
     }
+
+    public function getByProductId()
+    {
+        if (request()->ajax()) {
+            $product_id = request('product_id');
+            if ($product_id) {
+                $items = Generate::with(['product.part_number', 'product.type', 'product.unit', 'product.department', 'product.rack', 'product.area'])->where('product_id', $product_id)->get();
+            } else {
+                $items = Generate::with(['product.part_number', 'product.type', 'product.unit', 'product.department', 'product.rack', 'product.area'])->get();
+            }
+
+            if ($items) {
+                return response()->json([
+                    'status' => true,
+                    'data' => $items
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'data' => []
+                ]);
+            }
+        }
+    }
 }

@@ -76,7 +76,7 @@
                         <td>:</td>
                         <td>{{ env('REPORT_COMPANY_NAME') }}</td>
                     </tr>
-                    <tr>
+                    {{-- <tr>
                         <td style="margin:0;padding:0">Date Range</td>
                         <td>:</td>
                         <td>
@@ -88,16 +88,33 @@
                                 -
                             @endif
                         </td>
-                    </tr>
-                    <tr>
+                    </tr> --}}
+                    {{-- <tr>
                         <td style="margin:0;padding:0">Type</td>
                         <td>:</td>
                         <td>{{ $type }}</td>
+                    </tr> --}}
+                    <tr>
+                        <td style="margin:0;padding:0">Part Name</td>
+                        <td>:</td>
+                        <td>
+                            @if ($product)
+                                {{ $product->name }}
+                            @else
+                                -
+                            @endif
+                        </td>
                     </tr>
                     <tr>
-                        <td style="margin:0;padding:0">Part No.</td>
+                        <td style="margin:0;padding:0">Lot Number</td>
                         <td>:</td>
-                        <td>{{ $part_number }}</td>
+                        <td>
+                            @if ($generate)
+                                {{ $generate->lot_number }}
+                            @else
+                                -
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td style="margin:0;padding:0">Date</td>
@@ -120,6 +137,7 @@
                 <th>Part No.</th>
                 <th>Part Name</th>
                 <th>Unit</th>
+                <th>Lot Number</th>
                 <th>In</th>
                 <th>Out</th>
                 <th>Remains Qty</th>
@@ -131,14 +149,15 @@
             @forelse ($items as $item)
                 <tr>
                     <td style="width:5px !important">{{ $loop->iteration }}</td>
-                    <td>{{ $item->part_number->name ?? '-' }}</td>
-                    <td>{{ $item->name }}</td>
-                    <td>{{ $item->unit->name }}</td>
+                    <td>{{ $item->product->part_number->name ?? '-' }}</td>
+                    <td>{{ $item->product->name }}</td>
+                    <td>{{ $item->product->unit->name }}</td>
+                    <td>{{ $item->lot_number }}</td>
                     <td>{{ $item->stock_in->sum('qty') }}</td>
                     <td>{{ $item->stock_out->sum('qty') }}</td>
                     <td>{{ $item->remains() }}</td>
-                    <td>{{ $item->area->name ?? '-' }}</td>
-                    <td>{{ $item->rack->name ?? '-' }}</td>
+                    <td>{{ $item->product->area->name ?? '-' }}</td>
+                    <td>{{ $item->product->rack->name ?? '-' }}</td>
                 </tr>
             @empty
                 <tr>

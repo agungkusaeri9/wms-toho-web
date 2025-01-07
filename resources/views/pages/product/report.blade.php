@@ -8,7 +8,7 @@
                     <form action="{{ route('products.report.action') }}" method="post">
                         @csrf
                         <div class="row">
-                            <div class="col-md">
+                            {{-- <div class="col-md">
                                 <div class='form-group mb-3'>
                                     <label for='start_date' class='mb-2'>Start Date</label>
                                     <input type='date' name='start_date' id='start_date'
@@ -33,20 +33,20 @@
                                         </div>
                                     @enderror
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="col-md">
                                 <div class='form-group'>
-                                    <label for='type_id'>Type</label>
-                                    <select name='type_id' id='type_id'
-                                        class='form-control py-2 @error('type_id') is-invalid @enderror'>
-                                        <option value='' selected>Pilih Type</option>
-                                        @foreach ($types as $type)
-                                            <option @selected($type->id == $type_id ?? '') value='{{ $type->id }}'>
-                                                {{ $type->name }}
+                                    <label for='product_id'>Part Name</label>
+                                    <select name='product_id' id='product_id'
+                                        class='form-control py-2 @error('product_id') is-invalid @enderror'>
+                                        <option value='' selected>Pilih Part Name</option>
+                                        @foreach ($products as $product)
+                                            <option @selected($product->id == $product_id ?? '') value='{{ $product->id }}'>
+                                                {{ $product->name }}
                                             </option>
                                         @endforeach
                                     </select>
-                                    @error('type_id')
+                                    @error('product_id')
                                         <div class='invalid-feedback'>
                                             {{ $message }}
                                         </div>
@@ -55,31 +55,19 @@
                             </div>
                             <div class="col-md">
                                 <div class='form-group'>
-                                    <label for='part_number_id'>Part No.</label>
-                                    <select name='part_number_id' id='part_number_id'
-                                        class='form-control @error('part_number_id') is-invalid @enderror'>
-                                        <option value='' selected>Pilih Part No.</option>
-                                        @foreach ($part_numbers as $part_number)
-                                            <option @selected($part_number->id == $part_number_id ?? old('part_number_id')) value='{{ $part_number->id }}'>
-                                                {{ $part_number->name }}</option>
-                                        @endforeach
+                                    <label for='generate_id'>Lot Number.</label>
+                                    <select name='generate_id' id='generate_id'
+                                        class='form-control @error('generate_id') is-invalid @enderror'>
+                                        <option value='' selected>Pilih Lot Number</option>
+
                                     </select>
-                                    @error('part_number_id')
+                                    @error('generate_id')
                                         <div class='invalid-feedback'>
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
                             </div>
-                            {{-- <div class="col-md">
-                                <div class='form-group'>
-                                    <label for='product_id'>Part/Lot</label>
-                                    <select name='product_id' id='product_id'
-                                        class='form-control @error('product_id') is-invalid @enderror'>
-                                        <option value='' selected>Pilih Part/Lot</option>
-                                    </select>
-                                </div>
-                            </div> --}}
                         </div>
                         <div class="row">
                             <div class="col-md align-self-center">
@@ -104,6 +92,7 @@
                                     <th>Part No.</th>
                                     <th>Part Name</th>
                                     <th>Unit</th>
+                                    <th>Lot Number</th>
                                     <th>Stock In</th>
                                     <th>Stock Out</th>
                                     <th>Remains Qty</th>
@@ -113,9 +102,10 @@
                                 @foreach ($items as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->part_number->name ?? '-' }}</td>
-                                        <td>{{ $item->name }}</td>
-                                        <td>{{ $item->unit->name }}</td>
+                                        <td>{{ $item->product->part_number->name ?? '-' }}</td>
+                                        <td>{{ $item->product->name }}</td>
+                                        <td>{{ $item->product->unit->name }}</td>
+                                        <td>{{ $item->lot_number }}</td>
                                         <td>{{ $item->stock_in->sum('qty') }}</td>
                                         <td>{{ $item->stock_out->sum('qty') }}</td>
                                         <td>{{ $item->remains() }}</td>
@@ -170,36 +160,33 @@
         $('#type_id').select2({
             theme: 'bootstrap'
         });
-        $('#part_number_id').select2({
+        $('#generate_id').select2({
             theme: 'bootstrap'
         });
         $('#product_id').select2({
             theme: 'bootstrap'
         });
-        $('#type_id').on('change', function() {
-            let type_id = $(this).val();
-            let part_number_id = $('#part_number_id').val();
-            if (type_id) {
+        $('#product_id').on('change', function() {
+            let product_id = $(this).val();
+            if (product_id) {
                 $.ajax({
-                    url: '{{ route('products.getAllByTypePart') }}',
+                    url: '{{ route('qrcode-generator.getByProductId') }}',
                     type: 'GET',
                     dataType: 'JSON',
                     data: {
-                        type_id: type_id,
-                        part_number_id: null
+                        product_id: product_id,
                     },
-                    success: function(data) {
-                        $('#product_id').empty();
-                        $('#product_id').append('<option selected value="">Pilih Part/Lot</option>');
+                    success: function(response) {
+                        $('#generate_id').empty();
+                        $('#generate_id').append('<option selected value="">Pilih Lot Number</option>');
 
-                        if (data.length > 0) {
-                            data.forEach(product => {
-                                $('#product_id').append(
-                                    `<option value="${product.id}">${product.name}/${product.lot_number}</option>`
+                        if (response.data.length > 0) {
+                            response.data.forEach(generate => {
+                                $('#generate_id').append(
+                                    `<option value="${generate.id}">${generate.lot_number}</option>`
                                 )
                             });
                         }
-                        $('#part_number').val(data.part_number.name);
                     },
                     error: function(err) {
                         console.log(err);
@@ -207,25 +194,23 @@
                 })
             } else {
                 $.ajax({
-                    url: '{{ route('products.getAllByTypePart') }}',
+                    url: '{{ route('qrcode-generator.getByProductId') }}',
                     type: 'GET',
                     dataType: 'JSON',
                     data: {
-                        type_id: type_id,
-                        part_number_id: part_number_id,
+                        product_id: null,
                     },
                     success: function(data) {
-                        $('#product_id').empty();
-                        $('#product_id').append('<option selected value="">Pilih Product</option>');
+                        $('#generate_id').empty();
+                        $('#generate_id').append('<option selected value="">Pilih Lot Number</option>');
 
                         if (data.length > 0) {
-                            data.forEach(product => {
-                                $('#product_id').append(
-                                    `<option value="${product.id}">${product.name}/${product.lot_number}</option>`
+                            data.forEach(generate => {
+                                $('#generate_id').append(
+                                    `<option value="${generate.id}">${generate.lot_number}</option>`
                                 )
                             });
                         }
-                        $('#part_number').val(data.part_number.name);
                     },
                     error: function(err) {
                         console.log(err);
@@ -234,98 +219,38 @@
             }
         })
 
+        let generate_id2 = '{{ $generate_id ?? '' }}';
+        let product_id2 = '{{ $product_id ?? '' }}';
+        if (product_id2 || generate_id2) {
+            $.ajax({
+                url: '{{ route('qrcode-generator.getByProductId') }}',
+                type: 'GET',
+                dataType: 'JSON',
+                data: {
+                    product_id: product_id2,
+                },
+                success: function(response) {
+                    $('#generate_id').empty();
+                    $('#generate_id').append('<option selected value="">Pilih Lot Number</option>');
 
-        $('#part_number_id').on('change', function() {
-            let part_number_id = $(this).val();
-            let type_id = $('#type_id').val();
-            if (part_number_id) {
-                $.ajax({
-                    url: '{{ route('products.getAllByTypePart') }}',
-                    type: 'GET',
-                    dataType: 'JSON',
-                    data: {
-                        type_id: type_id,
-                        part_number_id: part_number_id,
-                    },
-                    success: function(data) {
-                        $('#product_id').empty();
-                        $('#product_id').append('<option selected value="">Pilih Part/Lot</option>');
-
-                        if (data.length > 0) {
-                            data.forEach(product => {
-                                $('#product_id').append(
-                                    `<option value="${product.id}">${product.name}/${product.lot_number}</option>`
+                    if (response.data.length > 0) {
+                        response.data.forEach(generate => {
+                            if (generate.id == generate_id2) {
+                                $('#generate_id').append(
+                                    `<option selected value="${generate.id}">${generate.lot_number}</option>`
                                 )
-                            });
-                        }
-                        $('#part_number').val(data.part_number.name);
-                    },
-                    error: function(err) {
-                        console.log(err);
-                    }
-                })
-            } else {
-                $.ajax({
-                    url: '{{ route('products.getAllByTypePart') }}',
-                    type: 'GET',
-                    dataType: 'JSON',
-                    data: {
-                        type_id: type_id,
-                        part_number_id: null,
-                    },
-                    success: function(data) {
-                        $('#product_id').empty();
-                        $('#product_id').append('<option selected value="">Pilih Part/Lot</option>');
-
-                        if (data.length > 0) {
-                            data.forEach(product => {
-                                $('#product_id').append(
-                                    `<option value="${product.id}">${product.name}/${product.lot_number}</option>`
+                            } else {
+                                $('#generate_id').append(
+                                    `<option value="${generate.id}">${generate.lot_number}</option>`
                                 )
-                            });
-                        }
-                        $('#part_number').val(data.part_number.name);
-                    },
-                    error: function(err) {
-                        console.log(err);
+                            }
+                        });
                     }
-                })
-            }
-        })
-
-        let type_id2 = '{{ $type_id }}';
-        let part_number_id2 = '{{ $part_number_id }}';
-        let product_id2 = '{{ $product_id }}';
-        $.ajax({
-            url: '{{ route('products.getAllByTypePart') }}',
-            type: 'GET',
-            dataType: 'JSON',
-            data: {
-                type_id: type_id2,
-                part_number_id: part_number_id2
-            },
-            success: function(data) {
-                $('#product_id').empty();
-                $('#product_id').append('<option selected value="">Pilih Part/Lot</option>');
-
-                if (data.length > 0) {
-                    data.forEach(product => {
-                        if (product.id == product_id2) {
-                            $('#product_id').append(
-                                `<option selected value="${product.id}">${product.name}/${product.lot_number}</option>`
-                            )
-                        } else {
-                            $('#product_id').append(
-                                `<option value="${product.id}">${product.name}/${product.lot_number}</option>`
-                            )
-                        }
-                    });
+                },
+                error: function(err) {
+                    console.log(err);
                 }
-                $('#part_number').val(data.part_number.name);
-            },
-            error: function(err) {
-                console.log(err);
-            }
-        })
+            })
+        }
     </script>
 @endpush

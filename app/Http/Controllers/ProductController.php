@@ -6,6 +6,7 @@ use App\Exports\ProductExport;
 use App\Imports\ProductImport;
 use App\Models\Area;
 use App\Models\Department;
+use App\Models\Generate;
 use App\Models\PartNumber;
 use App\Models\Product;
 use App\Models\StockIn;
@@ -215,6 +216,7 @@ class ProductController extends Controller
 
     public function report_index()
     {
+        $generates = Generate::with(['product'])->orderBy('created_at', 'DESC')->get();
         return view('pages.product.report', [
             'title' => 'Product Report',
             'part_numbers' => PartNumber::orderBy('name', 'ASC')->get(),
@@ -226,86 +228,76 @@ class ProductController extends Controller
             'type_id' => null,
             'product_id' => null,
             'start_date' => null,
-            'end_date' => null
+            'end_date' => null,
+            'generates' => $generates
         ]);
     }
 
     public function report_action()
     {
-        $type_id = request('type_id');
         $start_date = request('start_date');
         $end_date = request('end_date');
-        $part_number_id = request('part_number_id');
+        $generate_id = request('generate_id');
         $product_id = request('product_id');
         $action = request('action');
-        $items = Product::with(['part_number', 'unit', 'department']);
+        $items = Generate::with(['product', 'product.part_number', 'product.unit', 'product.department']);
 
-        if ($start_date && $end_date) {
-            $items->whereDate('created_at', '>=', $start_date)
-                ->whereDate('created_at', '<=', $end_date);
-        } elseif ($start_date && !$end_date) {
-            $items->whereDate('created_at', $start_date);
-        }
-        if ($type_id) {
-            $items->where('type_id', $type_id);
-        }
-        if ($part_number_id) {
-            $items->where('part_number_id', $part_number_id);
+        // if ($start_date && $end_date) {
+        //     $items->whereDate('created_at', '>=', $start_date)
+        //         ->whereDate('created_at', '<=', $end_date);
+        // } elseif ($start_date && !$end_date) {
+        //     $items->whereDate('created_at', $start_date);
+        // }
+        if ($generate_id) {
+            $items->where('id', $generate_id);
+            $generate = Generate::find($generate_id);
         }
         if ($product_id) {
-            $items->where('id', $product_id);
+            $items->where('product_id', $product_id);
+            $product = Product::find($product_id);
         }
 
-        $data = $items->orderBy('name', 'ASC')->get();
-        $type = Type::find(request('type_id'));
-        $lot_number = Product::find(request('product_id'));
-        $part_number = PartNumber::find($part_number_id);
+        $data = $items->latest()->get();
 
         if ($action === 'export_pdf') {
             $pdf = Pdf::loadView('pages.product.export-pdf', [
                 'title' => 'Export PDF Product',
                 'items' => $data,
-                'part_number' => $part_number ? $part_number->name : '-',
-                'type' => $type ? $type->name : '-',
-                'lot_number' => $lot_number ? $lot_number->name : '-',
+                'generate_id' => $generate_id,
                 'start_date' => $start_date,
                 'end_date' => $end_date,
+                'generate' => isset($generate) ? $generate : null,
+                'product' => isset($product) ? $product : null
             ]);
             $fileName = "Product-Report-" . Carbon::now()->format('d-m-Y H:i:s') . '.pdf';
             return $pdf->download($fileName);
         } elseif ($action === 'export_excel') {
             $arr = [
                 'items' => $data,
-                'part_number' => $part_number ? $part_number->name : '-',
+                'generate_id' => $generate_id,
                 'start_date' => $start_date,
                 'end_date' => $end_date,
-                'type' => $type ? $type->name : '-',
-                'lot_number' => $lot_number ? $lot_number->name : '-',
+                'generate' => isset($generate) ? $generate : null,
+                'product' => isset($product) ? $product : null
             ];
             $fileName = "Product-Report-" . Carbon::now()->format('d-m-Y H:i:s') . '.xlsx';
             return Excel::download(new ProductExport($arr), $fileName);
         } else {
             return view('pages.product.report', [
                 'title' => 'Product Report',
-                'part_numbers' => PartNumber::orderBy('name', 'ASC')->get(),
                 'items' => $data,
-                'part_number_id' => $part_number_id,
-                'part_number' => $part_number,
                 'types' => Type::orderBy('name', 'ASC')->get(),
                 'products' => Product::orderBy('name', 'ASC')->get(),
-                'type_id' => $type_id,
+                'generate_id' => $generate_id,
                 'product_id' => $product_id,
                 'start_date' => $start_date,
-                'end_date' => $end_date
+                'end_date' => $end_date,
             ]);
         }
     }
 
     public function import()
     {
-        // request()->validate([
-        //     'file' => ['required', 'file', 'mimes:xls,xlsx', 'max:12048']
-        // ]);
 
         Excel::import(new ProductImport, request()->file('file'));
         return redirect()->route('products.index')->with('success', 'Product has been imported successfully.');

@@ -80,6 +80,8 @@ Route::middleware('auth')->group(function () {
     Route::post('qrcode-generator/product', [QrCodeGeneratorController::class, 'store'])->name('qrcode-generator.product.store');
     Route::patch('qrcode-generator/product/{id}', [QrCodeGeneratorController::class, 'update'])->name('qrcode-generator.product.update');
     Route::get('qrcode-generator/product/print', [QrCodeGeneratorController::class, 'print'])->name('qrcode-generator.product.print');
+    Route::get('qrcode-generator/getByProductId', [QrCodeGeneratorController::class, 'getByProductId'])->name('qrcode-generator.getByProductId');
+
 
     Route::get('dashboard/chart', [DashboardController::class, 'getStockData'])->name('dashboard.chart');
     Route::get('/product-qty', [DashboardController::class, 'getProductQtyData'])->name('dashboard.product-qty');
