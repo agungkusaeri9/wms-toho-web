@@ -21,17 +21,23 @@ class StockInController extends Controller
         if ($validator->fails()) {
             return ResponseFormatter::validationError($validator->errors());
         }
+        $generate = Generate::where('code', request('code'))->first();
+        if ($generate->status == 1) {
+            return ResponseFormatter::error(null, 'The QR code has already been used properly.', 400);
+        }
+
         DB::beginTransaction();
         try {
             $data = [];
-            $generate = Generate::where('code', request('code'))->first();
+            $generate->update(['status' => 1]);
             $data['product_id'] = $generate->product_id;
             $data['qty'] = $generate->qty;
             $data['received_date'] = Carbon::now()->format('Y-m-d');
             $data['user_id'] = auth('api')->id();
             $data['code'] = StockIn::getNewCode();
+            $data['generate_id'] = $generate->id;
             $stokIn = StockIn::create($data);
-            $generate->increment('qty', $stokIn->qty);
+            $generate->product->increment('stock', $stokIn->qty);
             DB::commit();
             return ResponseFormatter::success($stokIn, 'Stock In has been created successfully.');
         } catch (\Throwable $th) {

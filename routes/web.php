@@ -5,6 +5,7 @@ use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\PartNumberController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
@@ -85,4 +86,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('dashboard/chart', [DashboardController::class, 'getStockData'])->name('dashboard.chart');
     Route::get('/product-qty', [DashboardController::class, 'getProductQtyData'])->name('dashboard.product-qty');
+
+    // ihstory
+    Route::get('history', [HistoryController::class, 'index'])->name('history.index');
 });

@@ -86,7 +86,7 @@
             </li>
         @endcanany
         @canany(['Stock In Index', 'Stock Out Index'])
-            <li class="nav-item @if (request()->is('stock-ins') || request()->is('stock-outs')) active @endif">
+            {{-- <li class="nav-item @if (request()->is('stock-ins') || request()->is('stock-outs')) active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#stock-ui" aria-expanded="false" aria-controls="stock-ui">
                     <i class="typcn typcn-archive  menu-icon"></i>
                     <span class="menu-title">Log History</span>
@@ -106,6 +106,12 @@
                         @endcan
                     </ul>
                 </div>
+            </li> --}}
+            <li class="nav-item @if (request()->is('/history')) active @endif">
+                <a class="nav-link" href="{{ route('history.index') }}">
+                    <i class="typcn typcn-archive menu-icon"></i>
+                    <span class="menu-title">Log History </span>
+                </a>
             </li>
         @endcanany
         @canany(['Report Balance', 'Report Stock In', 'Report Stock Out'])
@@ -139,8 +145,7 @@
         @endcanany
         @canany(['Role Index', 'Permission Index', 'User Index'])
             <li class="nav-item  @if (request()->is('users') || request()->is('roles') || request()->is('permissions')) active @endif">
-                <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false"
-                    aria-controls="ui-basic">
+                <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                     <i class="typcn typcn-group menu-icon"></i>
                     <span class="menu-title">Manajemen User</span>
                     <i class="typcn typcn-chevron-right menu-arrow"></i>
