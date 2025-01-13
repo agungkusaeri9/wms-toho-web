@@ -5,53 +5,53 @@ namespace App\Http\Controllers\API\V2;
 use App\Http\Controllers\API\V1\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Models\Generate;
-use App\Models\StockIn;
+use App\Models\StockOut;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class StockInController extends Controller
+class StockOutController extends Controller
 {
     public function store()
     {
         $validator = Validator::make(request()->all(), [
             'code' => ['required'],
+            'qty' => ['required', 'numeric', 'min:1'],
             'user_id' => ['required', 'numeric']
         ]);
         if ($validator->fails()) {
             return ResponseFormatter::validationError($validator->errors());
         }
         $generate = Generate::where('code', request('code'))->first();
-
-        if (!$generate)
-            return ResponseFormatter::error(null, 'Qr code not found', 404);
-
-        if ($generate->status == 1) {
-            return ResponseFormatter::error(null, 'The QR code has already been used properly.', 400);
+        if (!$generate) {
+            return ResponseFormatter::error(null, 'Qr Code not found', 404);
         }
-        // cek user id
+
+        if ($generate->qty < request('qty')) {
+            return ResponseFormatter::error([], 'Quantity exceeds available stock', 500);
+        }
+
         $cekUser = User::find(request('user_id'));
         if (!$cekUser)
             return ResponseFormatter::error(null, 'User or Employee not found', 404);
 
         DB::beginTransaction();
         try {
-            $data = [];
-            $generate->update(['status' => 1]);
+            $data = request()->only(['qty']);
             $data['product_id'] = $generate->product_id;
-            $data['qty'] = $generate->qty;
-            $data['received_date'] = Carbon::now()->format('Y-m-d');
+            $data['date'] = Carbon::now()->format('Y-m-d');
             $data['user_id'] = request('user_id');
-            $data['code'] = StockIn::getNewCode();
+            $data['code'] = StockOut::getNewCode();
+            $data['department_id'] = $generate->product->department_id;
             $data['generate_id'] = $generate->id;
-            $stokIn = StockIn::create($data);
-            $generate->product->increment('stock', $stokIn->qty);
+            $stockOut = StockOut::create($data);
+            $generate->decrement('qty', request('qty'));
+            $generate->product->decrement('stock', $stockOut->qty);
             DB::commit();
-            return ResponseFormatter::success($stokIn, 'Stock In has been created successfully.');
+            return ResponseFormatter::success($stockOut, 'Stock Out has been created successfully.');
         } catch (\Throwable $th) {
-            // throw $th;
             DB::rollBack();
             return ResponseFormatter::error([], $th->getMessage(), 500);
         }

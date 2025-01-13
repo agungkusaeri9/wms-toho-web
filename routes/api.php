@@ -5,9 +5,14 @@ use App\Http\Controllers\API\V1\CheckController;
 use App\Http\Controllers\API\V1\InformationController;
 use App\Http\Controllers\API\V1\ProductController;
 use App\Http\Controllers\API\V1\QrGeneratorController;
+use App\Http\Controllers\API\V1\ResponseFormatter;
 use App\Http\Controllers\API\V1\StockInController;
 use App\Http\Controllers\API\V1\StockOutController;
 use App\Http\Controllers\API\V2\EmployeeController;
+use App\Http\Controllers\API\V2\GenerateController;
+use App\Http\Controllers\API\V2\StockInController as V2StockInController;
+use App\Http\Controllers\API\V2\StockOutController as V2StockOutController;
+use App\Models\Generate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,7 +44,16 @@ Route::middleware(['auth.jwt', 'api'])->group(function () {
 });
 
 
-
 Route::prefix('v2')->group(function () {
     Route::get('employees', [EmployeeController::class, 'all']);
+    Route::post('stock-in', [V2StockInController::class, 'store']);
+    Route::post('stock-out', [V2StockOutController::class, 'store']);
+    Route::post('check-qr', [GenerateController::class, 'checkQr']);
+
+
+    // example
+    Route::get('/generates', function () {
+        $items = Generate::with('product')->latest()->get();
+        return ResponseFormatter::success($items, 'Fetch All Generates', 200);
+    });
 });
