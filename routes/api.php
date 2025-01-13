@@ -7,6 +7,7 @@ use App\Http\Controllers\API\V1\ProductController;
 use App\Http\Controllers\API\V1\QrGeneratorController;
 use App\Http\Controllers\API\V1\StockInController;
 use App\Http\Controllers\API\V1\StockOutController;
+use App\Http\Controllers\API\V2\EmployeeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,4 +36,10 @@ Route::middleware(['auth.jwt', 'api'])->group(function () {
     Route::post('stock-in/create', [StockInController::class, 'store']);
     Route::post('stock-out/create', [StockOutController::class, 'store']);
     Route::get('info-today', [InformationController::class, 'getInfoToday']);
+});
+
+
+
+Route::prefix('v2')->group(function () {
+    Route::get('employees', [EmployeeController::class, 'all']);
 });

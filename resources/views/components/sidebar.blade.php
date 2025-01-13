@@ -86,27 +86,6 @@
             </li>
         @endcanany
         @canany(['Stock In Index', 'Stock Out Index'])
-            {{-- <li class="nav-item @if (request()->is('stock-ins') || request()->is('stock-outs')) active @endif">
-                <a class="nav-link" data-toggle="collapse" href="#stock-ui" aria-expanded="false" aria-controls="stock-ui">
-                    <i class="typcn typcn-archive  menu-icon"></i>
-                    <span class="menu-title">Log History</span>
-                    <i class="typcn typcn-chevron-right menu-arrow"></i>
-                </a>
-                <div class="collapse @if (request()->is('stock-ins') || request()->is('stock-outs')) show @endif" id="stock-ui">
-                    <ul class="nav flex-column sub-menu">
-                        @can('Stock In Index')
-                            <li class="nav-item @if (request()->is('stock-ins')) active @endif">
-                                <a class="nav-link" href="{{ route('stock-ins.index') }}">In</a>
-                            </li>
-                        @endcan
-                        @can('Stock Out Index')
-                            <li class="nav-item @if (request()->is('stock-outs')) active @endif">
-                                <a class="nav-link" href="{{ route('stock-outs.index') }}">Out</a>
-                            </li>
-                        @endcan
-                    </ul>
-                </div>
-            </li> --}}
             <li class="nav-item @if (request()->is('/history')) active @endif">
                 <a class="nav-link" href="{{ route('history.index') }}">
                     <i class="typcn typcn-archive menu-icon"></i>
@@ -152,6 +131,11 @@
                 </a>
                 <div class="collapse  @if (request()->is('users') || request()->is('roles') || request()->is('permissions')) show @endif" id="ui-basic">
                     <ul class="nav flex-column sub-menu">
+                        @can('User Index')
+                            <li class="nav-item @if (request()->is('users')) active @endif">
+                                <a class="nav-link" href="{{ route('users.index') }}">User</a>
+                            </li>
+                        @endcan
                         @can('Role Index')
                             <li class="nav-item @if (request()->is('roles')) active @endif">
                                 <a class="nav-link" href="{{ route('roles.index') }}">Role</a>
@@ -160,11 +144,6 @@
                         @can('Permission Index')
                             <li class="nav-item @if (request()->is('permissions')) active @endif">
                                 <a class="nav-link" href="{{ route('permissions.index') }}">Permission</a>
-                            </li>
-                        @endcan
-                        @can('User Index')
-                            <li class="nav-item @if (request()->is('users')) active @endif">
-                                <a class="nav-link" href="{{ route('users.index') }}">User</a>
                             </li>
                         @endcan
                     </ul>
@@ -179,8 +158,17 @@
                     <span class="menu-title">Master Data</span>
                     <i class="typcn typcn-chevron-right menu-arrow"></i>
                 </a>
-                <div class="collapse @if (request()->is('departments') || request()->is('units') || request()->is('areas') || request()->is('suppliers')) show @endif" id="master-ui">
+                <div class="collapse @if (request()->is('departments') ||
+                        request()->is('employees') ||
+                        request()->is('units') ||
+                        request()->is('areas') ||
+                        request()->is('suppliers')) show @endif" id="master-ui">
                     <ul class="nav flex-column sub-menu">
+                        @can('Employee Index')
+                            <li class="nav-item @if (request()->is('employees')) active @endif">
+                                <a class="nav-link" href="{{ route('employees.index') }}">Employee</a>
+                            </li>
+                        @endcan
                         @can('Department Index')
                             <li class="nav-item @if (request()->is('departments')) active @endif">
                                 <a class="nav-link" href="{{ route('departments.index') }}">Department</a>

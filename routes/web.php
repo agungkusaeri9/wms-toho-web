@@ -5,6 +5,7 @@ use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\PartNumberController;
 use App\Http\Controllers\PermissionController;
@@ -89,4 +90,6 @@ Route::middleware('auth')->group(function () {
 
     // ihstory
     Route::get('history', [HistoryController::class, 'index'])->name('history.index');
+
+    Route::resource('employees', EmployeeController::class);
 });
