@@ -18,6 +18,20 @@
     <link rel="shortcut icon" href="{{ asset('assets/images/logo-toho3.png') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="{{ asset('assets/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+    <style>
+        /* Menyesuaikan tinggi input file Select2 agar sama dengan input Bootstrap */
+        .select2-container .select2-selection--single {
+            height: calc(1.5em + .75rem + 15px) !important;
+            /* Sesuaikan dengan height input Bootstrap */
+            line-height: 1.5 !important;
+            padding: .375rem .75rem !important;
+        }
+
+        /* Menyesuaikan lebar Select2 dengan lebar input file */
+        .select2-container {
+            width: 100% !important;
+        }
+    </style>
     @vite(['resources/js/app.js'])
     @stack('styles')
 </head>

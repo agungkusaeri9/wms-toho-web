@@ -55,26 +55,62 @@ class ProductController extends Controller
     public function store()
     {
         request()->validate([
-            'part_number_id' => ['required', 'exists:part_numbers,id'],
+            'part_number_id' => ['required'],
             'name' => ['required'],
-            'unit_id' => ['required', 'exists:units,id'],
+            'unit_id' => ['required'],
             'department_id' => ['required', 'exists:departments,id'],
-            'image' => ['image', 'mimes:jpg,jpeg,png,svg', 'max:2048'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,svg', 'max:2048'],
             'area_id' => ['required', 'exists:areas,id'],
             'rack_id' => ['required', 'exists:racks,id'],
             'supplier_id' => ['required', 'exists:suppliers,id'],
-            'type_id' => ['required', 'exists:types,id'],
+            'type_id' => ['required'],
         ]);
 
         // cek lot dan part number
-        $cekLotPart = Product::where('lot_number', request('lot_number'))->where('part_number_id', request('part_number_id'))->first();
-        if ($cekLotPart) {
-            return redirect()->back()->with('errors', 'Lot No. sudah terpakai di Part No.');
-        }
+        // $cekLotPart = Product::where('lot_number', request('lot_number'))->where('part_number_id', request('part_number_id'))->first();
+
+        // if ($cekLotPart) {
+        //     dd('ok');
+        //     return redirect()->back()->withErrors('errors', 'Lot No. sudah terpakai di Part No.');
+        // }
 
         DB::beginTransaction();
         try {
             $data = request()->only(['code', 'name', 'part_number_id', 'unit_id', 'department_id', 'initial_qty', 'description', 'area_id', 'rack_id', 'supplier_id', 'type_id']);
+
+            // cek partnumber apakah ada
+            $cekPartNumber = PartNumber::where('id', request('part_number_id'))->first();
+            if (!$cekPartNumber) {
+                $partNumber = PartNumber::create([
+                    'name' => request('part_number_id'),
+                ]);
+                $data['part_number_id'] = $partNumber->id;
+            } else {
+                $data['part_number_id'] = $cekPartNumber->id;
+            }
+
+            // cek type apakah ada
+            $cekType = Type::where('id', request('type_id'))->first();
+            if (!$cekType) {
+                $type = Type::create([
+                    'name' => request('type_id'),
+                ]);
+                $data['type_id'] = $type->id;
+            } else {
+                $data['type_id'] = $cekType->id;
+            }
+
+            // cek unit apakah ada
+            $cekUnit = Unit::where('id', request('unit_id'))->first();
+            if (!$cekUnit) {
+                $unit = Unit::create([
+                    'name' => request('unit_id'),
+                ]);
+                $data['unit_id'] = $unit->id;
+            } else {
+                $data['unit_id'] = $cekUnit->id;
+            }
+
             if (request()->file('image')) {
                 $data['image'] = request()->file('image')->store('prduct', 'public');
             }
@@ -84,7 +120,7 @@ class ProductController extends Controller
             return redirect()->route('products.index')->with('success', 'Product has been created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
-            // throw $th;
+            throw $th;
             return redirect()->back()->with('error', $th->getMessage());
         }
     }
