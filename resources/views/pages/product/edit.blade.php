@@ -21,7 +21,7 @@
                         <div class='form-group'>
                             <label for='part_number_id'>Part No.</label>
                             <select name='part_number_id' id='part_number_id'
-                                class='form-control @error('part_number_id') is-invalid @enderror'>
+                                class='form-control select2custom @error('part_number_id') is-invalid @enderror'>
                                 <option value='' selected disabled>Pilih Part No.</option>
                                 @foreach ($part_numbers as $part_number)
                                     <option @selected($part_number->id == $item->part_number_id ?? old('part_number_id')) value='{{ $part_number->id }}'>
@@ -38,7 +38,7 @@
                         <div class='form-group'>
                             <label for='type_id'>Type</label>
                             <select name='type_id' id='type_id'
-                                class='form-control @error('type_id') is-invalid @enderror'>
+                                class='form-control select2custom @error('type_id') is-invalid @enderror'>
                                 <option value='' selected disabled>Pilih Type</option>
                                 @foreach ($types as $type)
                                     <option @selected($type->id == $item->type_id ?? old('type_id')) value='{{ $type->id }}'>{{ $type->name }}
@@ -54,7 +54,7 @@
                         <div class='form-group'>
                             <label for='unit_id'>Unit</label>
                             <select name='unit_id' id='unit_id'
-                                class='form-control @error('unit_id') is-invalid @enderror'>
+                                class='form-control select2custom @error('unit_id') is-invalid @enderror'>
                                 <option value='' selected disabled>Pilih Unit</option>
                                 @foreach ($units as $unit)
                                     <option @selected($unit->id == $item->unit_id ?? old('unit_id')) value='{{ $unit->id }}'>{{ $unit->name }}
@@ -163,9 +163,18 @@
         </div>
     </div>
 @endsection
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/vendors/select2/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css') }}">
+@endpush
 @push('scripts')
+    <script src="{{ asset('assets/vendors/select2/select2.min.js') }}"></script>
     <script>
         $(function() {
+            $('.select2custom').select2({
+                theme: 'bootstrap',
+                tags: true
+            })
 
             let area_id = '{{ $item->area_id }}';
             let rack_id = '{{ $item->rack_id }}';
